@@ -4,14 +4,16 @@ namespace App\Entity;
 
 use App\Repository\ValidationStateRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Uid\UuidV6 as Uuid;
 
 #[ORM\Entity(repositoryClass: ValidationStateRepository::class)]
 class ValidationState
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Column(type: 'uuid', unique: true)]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
+    private ?Uuid $id = null;
 
     #[ORM\Column]
     private ?int $state = null;
@@ -23,7 +25,7 @@ class ValidationState
     #[ORM\JoinColumn(nullable: false)]
     private ?User $moderator = null;
 
-    public function getId(): ?int
+    public function getId(): ?Uuid
     {
         return $this->id;
     }

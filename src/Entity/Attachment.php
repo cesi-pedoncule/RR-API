@@ -4,14 +4,16 @@ namespace App\Entity;
 
 use App\Repository\AttachmentRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Uid\UuidV6 as Uuid;
 
 #[ORM\Entity(repositoryClass: AttachmentRepository::class)]
 class Attachment
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Column(type: 'uuid', unique: true)]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
+    private ?Uuid $id = null;
 
     #[ORM\Column(length: 255)]
     private ?string $filename = null;
@@ -33,7 +35,7 @@ class Attachment
     #[ORM\JoinColumn(nullable: false)]
     private ?Resource $resource = null;
 
-    public function getId(): ?int
+    public function getId(): ?Uuid
     {
         return $this->id;
     }
