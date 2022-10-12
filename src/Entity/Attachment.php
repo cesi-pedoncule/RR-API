@@ -6,6 +6,7 @@ use App\Repository\AttachmentRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\UuidV6 as Uuid;
 use ApiPlatform\Metadata\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: AttachmentRepository::class)]
 #[ApiResource]
@@ -15,22 +16,28 @@ class Attachment
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
+    #[Groups(['resource'])]
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['resource'])]
     private ?string $filename = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['resource'])]
     private ?string $type = null;
 
     #[ORM\Column]
+    #[Groups(['resource'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
+    #[Groups(['resource'])]
     private ?bool $isDeleted = null;
 
     #[ORM\ManyToOne(inversedBy: 'attachments')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['resource'])]
     private ?User $User = null;
 
     #[ORM\ManyToOne(inversedBy: 'Attachments')]

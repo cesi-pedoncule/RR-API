@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\UuidV6 as Uuid;
 use ApiPlatform\Metadata\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 #[ApiResource]
@@ -17,28 +18,35 @@ class Category
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
+    #[Groups(['resource'])]
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['resource'])]
     private ?string $name = null;
 
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Resource::class)]
     private Collection $resources;
 
     #[ORM\Column]
+    #[Groups(['resource'])]
     private ?bool $isVisible = null;
 
     #[ORM\Column]
+    #[Groups(['resource'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['resource'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'categories')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['resource'])]
     private ?User $creator = null;
 
     #[ORM\Column]
+    #[Groups(['resource'])]
     private ?bool $isDeleted = null;
 
     public function __construct()

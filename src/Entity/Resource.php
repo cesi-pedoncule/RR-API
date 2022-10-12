@@ -9,46 +9,58 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\UuidV6 as Uuid;
 use ApiPlatform\Metadata\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ResourceRepository::class)]
-#[ApiResource]
+#[ApiResource(normalizationContext: ['groups' => ['resource']])]
 class Resource
 {
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
+    #[Groups(['resource'])]
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['resource'])]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['resource'])]
     private ?string $description = null;
 
     #[ORM\OneToMany(mappedBy: 'resource', targetEntity: Attachment::class)]
+    #[Groups(['resource'])]
     private Collection $Attachments;
 
     #[ORM\Column]
+    #[Groups(['resource'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['resource'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'resources')]
+    #[Groups(['resource'])]
     private ?User $user = null;
 
     #[ORM\Column]
+    #[Groups(['resource'])]
     private ?bool $isPublic = null;
 
     #[ORM\Column]
+    #[Groups(['resource'])]
     private ?bool $isDeleted = null;
 
     #[ORM\ManyToOne(inversedBy: 'resources')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['resource'])]
     private ?Category $category = null;
 
     #[ORM\OneToMany(mappedBy: 'resource', targetEntity: Comment::class)]
+    #[Groups(['resource'])]
     private Collection $comments;
 
     public function __construct()

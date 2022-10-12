@@ -10,6 +10,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Uid\UuidV6 as Uuid;
 use ApiPlatform\Metadata\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ApiResource]
@@ -19,12 +20,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
+    #[Groups(['resource'])]
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Groups(['resource'])]
     private ?string $email = null;
 
     #[ORM\Column]
+    #[Groups(['resource'])]
     private array $roles = [];
 
     /**
@@ -34,18 +38,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['resource'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['resource'])]
     private ?string $firstname = null;
 
     #[ORM\Column]
+    #[Groups(['resource'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['resource'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column]
+    #[Groups(['resource'])]
     private ?bool $isBanned = null;
 
     #[ORM\OneToMany(mappedBy: 'User', targetEntity: Attachment::class)]

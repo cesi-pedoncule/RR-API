@@ -7,6 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\UuidV6 as Uuid;
 use ApiPlatform\Metadata\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
 #[ApiResource]
@@ -16,22 +17,27 @@ class Comment
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
+    #[Groups(['resource'])]
     private ?Uuid $id = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['resource'])]
     private ?string $comment = null;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['resource'])]
     private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
     private ?Resource $resource = null;
 
     #[ORM\Column]
+    #[Groups(['resource'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
+    #[Groups(['resource'])]
     private ?bool $isDeleted = null;
 
     public function getId(): ?Uuid
