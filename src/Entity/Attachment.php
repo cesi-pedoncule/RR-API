@@ -5,8 +5,10 @@ namespace App\Entity;
 use App\Repository\AttachmentRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\UuidV6 as Uuid;
+use ApiPlatform\Metadata\ApiResource;
 
 #[ORM\Entity(repositoryClass: AttachmentRepository::class)]
+#[ApiResource]
 class Attachment
 {
     #[ORM\Id]

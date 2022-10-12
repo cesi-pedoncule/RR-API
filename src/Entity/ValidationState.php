@@ -5,8 +5,10 @@ namespace App\Entity;
 use App\Repository\ValidationStateRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\UuidV6 as Uuid;
+use ApiPlatform\Metadata\ApiResource;
 
 #[ORM\Entity(repositoryClass: ValidationStateRepository::class)]
+#[ApiResource]
 class ValidationState
 {
     #[ORM\Id]
