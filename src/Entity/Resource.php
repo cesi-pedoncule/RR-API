@@ -32,7 +32,7 @@ class Resource
 
     #[ORM\OneToMany(mappedBy: 'resource', targetEntity: Attachment::class)]
     #[Groups(['resource'])]
-    private Collection $Attachments;
+    private Collection $attachments;
 
     #[ORM\Column]
     #[Groups(['resource'])]
@@ -65,7 +65,7 @@ class Resource
 
     public function __construct()
     {
-        $this->Attachments = new ArrayCollection();
+        $this->attachments = new ArrayCollection();
         $this->comments = new ArrayCollection();
     }
 
@@ -103,13 +103,13 @@ class Resource
      */
     public function getAttachments(): Collection
     {
-        return $this->Attachments;
+        return $this->attachments;
     }
 
     public function addAttachment(Attachment $attachment): self
     {
-        if (!$this->Attachments->contains($attachment)) {
-            $this->Attachments->add($attachment);
+        if (!$this->attachments->contains($attachment)) {
+            $this->attachments->add($attachment);
             $attachment->setResource($this);
         }
 
@@ -118,7 +118,7 @@ class Resource
 
     public function removeAttachment(Attachment $attachment): self
     {
-        if ($this->Attachments->removeElement($attachment)) {
+        if ($this->attachments->removeElement($attachment)) {
             // set the owning side to null (unless already changed)
             if ($attachment->getResource() === $this) {
                 $attachment->setResource(null);
