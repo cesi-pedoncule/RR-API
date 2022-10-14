@@ -12,7 +12,7 @@ use ApiPlatform\Metadata\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ResourceRepository::class)]
-#[ApiResource(normalizationContext: ['groups' => ['resource']])]
+#[ApiResource(formats: ['json'], normalizationContext: ['groups' => ['resource']])]
 class Resource
 {
     #[ORM\Id]

@@ -9,7 +9,7 @@ use ApiPlatform\Metadata\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: AttachmentRepository::class)]
-#[ApiResource(normalizationContext: ['groups' => ['attachment:read']])]
+#[ApiResource(formats: ['json'], normalizationContext: ['groups' => ['attachment:read']])]
 class Attachment
 {
     #[ORM\Id]

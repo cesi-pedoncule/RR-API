@@ -11,7 +11,7 @@ use ApiPlatform\Metadata\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ValidationStateRepository::class)]
-#[ApiResource]
+#[ApiResource(formats: ['json'])]
 class ValidationState
 {
     #[ORM\Id]
