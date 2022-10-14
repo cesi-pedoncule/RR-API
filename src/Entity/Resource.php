@@ -63,6 +63,11 @@ class Resource
     #[Groups(['resource'])]
     private Collection $comments;
 
+    #[ORM\ManyToOne(inversedBy: 'resources')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['resource'])]
+    private ?ValidationState $validationState = null;
+
     public function __construct()
     {
         $this->attachments = new ArrayCollection();
@@ -226,6 +231,18 @@ class Resource
                 $comment->setResource(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getValidationState(): ?ValidationState
+    {
+        return $this->validationState;
+    }
+
+    public function setValidationState(?ValidationState $validationState): self
+    {
+        $this->validationState = $validationState;
 
         return $this;
     }
