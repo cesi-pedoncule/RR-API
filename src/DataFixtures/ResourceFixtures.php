@@ -21,6 +21,7 @@ class ResourceFixtures extends Fixture implements DependentFixtureInterface
                 ->setCategory($this->getReference('category_' . rand(0, 4)))
                 ->setIsPublic((bool)rand(0, 1))
                 ->setIsDeleted(false)
+                ->setValidationState($this->getReference('validationState_' . rand(1, 3)))
                 ->setUser($this->getReference('user_' . rand(0, 9)));
                 $manager->persist($resource);
         }
@@ -32,6 +33,7 @@ class ResourceFixtures extends Fixture implements DependentFixtureInterface
         return [
             UserFixtures::class,
             CategoryFixtures::class,
+            ValidationStateFixtures::class,
         ];
     }
 }
