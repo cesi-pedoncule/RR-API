@@ -9,30 +9,30 @@ use ApiPlatform\Metadata\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: AttachmentRepository::class)]
-#[ApiResource]
+#[ApiResource(normalizationContext: ['groups' => ['attachment:read']])]
 class Attachment
 {
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
-    #[Groups(['resource'])]
+    #[Groups(['attachment:read', 'resource'])]
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['resource'])]
+    #[Groups(['attachment:read', 'resource'])]
     private ?string $filename = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['resource'])]
+    #[Groups(['attachment:read', 'resource'])]
     private ?string $type = null;
 
     #[ORM\Column]
-    #[Groups(['resource'])]
+    #[Groups(['attachment:read', 'resource'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
-    #[Groups(['resource'])]
+    #[Groups(['attachment:read', 'resource'])]
     private ?bool $isDeleted = null;
 
     #[ORM\ManyToOne(inversedBy: 'attachments')]
