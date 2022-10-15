@@ -25,7 +25,6 @@ class UserFixtures extends Fixture
                 ->setName($faker->lastname())
                 ->setFirstname($faker->firstname())
                 ->setRoles(['ROLE_USER'])
-                ->setCreatedAt(new \DateTimeImmutable())
                 ->setIsBanned(false);
             $this->addReference('user_' . $i, $user);
             $manager->persist($user);

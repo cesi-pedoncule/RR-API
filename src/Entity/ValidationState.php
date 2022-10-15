@@ -12,6 +12,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ValidationStateRepository::class)]
 #[ApiResource(formats: ['json'])]
+#[ORM\HasLifecycleCallbacks]
 class ValidationState
 {
     #[ORM\Id]
@@ -34,6 +35,18 @@ class ValidationState
 
     #[ORM\OneToMany(mappedBy: 'validationState', targetEntity: Resource::class)]
     private Collection $resources;
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue()
+    {
+        $this->updatedAt = new \DateTimeImmutable();
+    }
+
+    #[ORM\PreUpdate]
+    public function setUpdatedAtValue()
+    {
+        $this->updatedAt = new \DateTimeImmutable();
+    }
 
     public function __construct()
     {

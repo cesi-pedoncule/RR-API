@@ -15,22 +15,19 @@ class ValidationStateFixtures extends Fixture implements DependentFixtureInterfa
         // Create validations states
         $validationState1 = (new ValidationState())
             ->setState(1)
-            ->setModerator($this->getReference('user_0'))
-            ->setUpdatedAt(new \DateTimeImmutable());
+            ->setModerator($this->getReference('user_0'));
         $manager->persist($validationState1);
 
         // Create validations states
         $validationState2 = (new ValidationState())
             ->setState(2)
-            ->setModerator($this->getReference('user_0'))
-            ->setUpdatedAt(new \DateTimeImmutable());
+            ->setModerator($this->getReference('user_0'));
         $manager->persist($validationState2);
 
         // Create validations states
         $validationState3 = (new ValidationState())
             ->setState(3)
-            ->setModerator($this->getReference('user_0'))
-            ->setUpdatedAt(new \DateTimeImmutable());
+            ->setModerator($this->getReference('user_0'));
         
         $manager->persist($validationState3);
         $manager->flush();

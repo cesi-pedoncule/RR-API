@@ -10,6 +10,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: AttachmentRepository::class)]
 #[ApiResource(formats: ['json'], normalizationContext: ['groups' => ['attachment:read']])]
+#[ORM\HasLifecycleCallbacks]
 class Attachment
 {
     #[ORM\Id]
@@ -43,6 +44,12 @@ class Attachment
     #[ORM\ManyToOne(inversedBy: 'Attachments')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Resource $resource = null;
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+    }
 
     public function getId(): ?Uuid
     {

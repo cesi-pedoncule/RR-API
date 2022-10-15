@@ -17,7 +17,6 @@ class ResourceFixtures extends Fixture implements DependentFixtureInterface
             $resource = (new Resource())
                 ->setTitle($faker->sentence(3))
                 ->setDescription($faker->paragraph(3))
-                ->setCreatedAt(new \DateTimeImmutable())
                 ->setCategory($this->getReference('category_' . rand(0, 4)))
                 ->setIsPublic((bool)rand(0, 1))
                 ->setIsDeleted(false)

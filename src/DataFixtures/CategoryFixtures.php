@@ -16,7 +16,6 @@ class CategoryFixtures extends Fixture implements DependentFixtureInterface
         for ($i=0; $i < 20; $i++) { 
             $category = (new Category())
                 ->setName($faker->sentence(3))
-                ->setCreatedAt(new \DateTimeImmutable())
                 ->setIsVisible(true)
                 ->setCreator($this->getReference('user_' . rand(0, 9)))
                 ->setIsDeleted(false);

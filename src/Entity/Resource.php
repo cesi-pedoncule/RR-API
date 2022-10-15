@@ -13,6 +13,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ResourceRepository::class)]
 #[ApiResource(formats: ['json'], normalizationContext: ['groups' => ['resource']])]
+#[ORM\HasLifecycleCallbacks]
 class Resource
 {
     #[ORM\Id]
@@ -67,6 +68,18 @@ class Resource
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['resource'])]
     private ?ValidationState $validationState = null;
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+    }
+
+    #[ORM\PreUpdate]
+    public function setUpdatedAtValue()
+    {
+        $this->updatedAt = new \DateTimeImmutable();
+    }
 
     public function __construct()
     {
