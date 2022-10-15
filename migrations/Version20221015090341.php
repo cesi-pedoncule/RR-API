@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20221014225024 extends AbstractMigration
+final class Version20221015090341 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -42,14 +42,17 @@ final class Version20221014225024 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_9474526C89329D25 ON comment (resource_id)');
         $this->addSql('CREATE TABLE resource (id BLOB NOT NULL --(DC2Type:uuid)
         , user_id BLOB DEFAULT NULL --(DC2Type:uuid)
-        , category_id BLOB NOT NULL --(DC2Type:uuid)
         , validation_state_id BLOB NOT NULL --(DC2Type:uuid)
         , title VARCHAR(255) NOT NULL, description CLOB DEFAULT NULL, created_at DATETIME NOT NULL --(DC2Type:datetime_immutable)
         , updated_at DATETIME DEFAULT NULL --(DC2Type:datetime_immutable)
-        , is_public BOOLEAN NOT NULL, is_deleted BOOLEAN NOT NULL, PRIMARY KEY(id), CONSTRAINT FK_BC91F416A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) NOT DEFERRABLE INITIALLY IMMEDIATE, CONSTRAINT FK_BC91F41612469DE2 FOREIGN KEY (category_id) REFERENCES category (id) NOT DEFERRABLE INITIALLY IMMEDIATE, CONSTRAINT FK_BC91F416E271949B FOREIGN KEY (validation_state_id) REFERENCES validation_state (id) NOT DEFERRABLE INITIALLY IMMEDIATE)');
+        , is_public BOOLEAN NOT NULL, is_deleted BOOLEAN NOT NULL, PRIMARY KEY(id), CONSTRAINT FK_BC91F416A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) NOT DEFERRABLE INITIALLY IMMEDIATE, CONSTRAINT FK_BC91F416E271949B FOREIGN KEY (validation_state_id) REFERENCES validation_state (id) NOT DEFERRABLE INITIALLY IMMEDIATE)');
         $this->addSql('CREATE INDEX IDX_BC91F416A76ED395 ON resource (user_id)');
-        $this->addSql('CREATE INDEX IDX_BC91F41612469DE2 ON resource (category_id)');
         $this->addSql('CREATE INDEX IDX_BC91F416E271949B ON resource (validation_state_id)');
+        $this->addSql('CREATE TABLE resource_category (resource_id BLOB NOT NULL --(DC2Type:uuid)
+        , category_id BLOB NOT NULL --(DC2Type:uuid)
+        , PRIMARY KEY(resource_id, category_id), CONSTRAINT FK_A8C0D36C89329D25 FOREIGN KEY (resource_id) REFERENCES resource (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE, CONSTRAINT FK_A8C0D36C12469DE2 FOREIGN KEY (category_id) REFERENCES category (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE)');
+        $this->addSql('CREATE INDEX IDX_A8C0D36C89329D25 ON resource_category (resource_id)');
+        $this->addSql('CREATE INDEX IDX_A8C0D36C12469DE2 ON resource_category (category_id)');
         $this->addSql('CREATE TABLE user (id BLOB NOT NULL --(DC2Type:uuid)
         , email VARCHAR(180) NOT NULL, roles CLOB NOT NULL --(DC2Type:json)
         , password VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, firstname VARCHAR(255) NOT NULL, created_at DATETIME NOT NULL --(DC2Type:datetime_immutable)
@@ -70,6 +73,7 @@ final class Version20221014225024 extends AbstractMigration
         $this->addSql('DROP TABLE category');
         $this->addSql('DROP TABLE comment');
         $this->addSql('DROP TABLE resource');
+        $this->addSql('DROP TABLE resource_category');
         $this->addSql('DROP TABLE user');
         $this->addSql('DROP TABLE validation_state');
     }

@@ -55,10 +55,9 @@ class Resource
     #[Groups(['resource'])]
     private ?bool $isDeleted = null;
 
-    #[ORM\ManyToOne(inversedBy: 'resources')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'resources')]
     #[Groups(['resource'])]
-    private ?Category $category = null;
+    private Collection $categories;
 
     #[ORM\OneToMany(mappedBy: 'resource', targetEntity: Comment::class)]
     #[Groups(['resource'])]
@@ -85,6 +84,7 @@ class Resource
     {
         $this->attachments = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->categories = new ArrayCollection();
     }
 
     public function getId(): ?Uuid
@@ -206,18 +206,6 @@ class Resource
         return $this;
     }
 
-    public function getCategory(): ?Category
-    {
-        return $this->category;
-    }
-
-    public function setCategory(?Category $category): self
-    {
-        $this->category = $category;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Comment>
      */
@@ -256,6 +244,30 @@ class Resource
     public function setValidationState(?ValidationState $validationState): self
     {
         $this->validationState = $validationState;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Category>
+     */
+    public function getCategories(): Collection
+    {
+        return $this->categories;
+    }
+
+    public function addCategory(Category $category): self
+    {
+        if (!$this->categories->contains($category)) {
+            $this->categories->add($category);
+        }
+
+        return $this;
+    }
+
+    public function removeCategory(Category $category): self
+    {
+        $this->categories->removeElement($category);
 
         return $this;
     }

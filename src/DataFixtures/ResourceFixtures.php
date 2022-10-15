@@ -17,7 +17,7 @@ class ResourceFixtures extends Fixture implements DependentFixtureInterface
             $resource = (new Resource())
                 ->setTitle($faker->sentence(3))
                 ->setDescription($faker->paragraph(3))
-                ->setCategory($this->getReference('category_' . rand(0, 4)))
+                ->addCategory($this->getReference('category_' . rand(0, 4)))
                 ->setIsPublic((bool)rand(0, 1))
                 ->setIsDeleted(false)
                 ->setValidationState($this->getReference('validationState_' . rand(1, 3)))

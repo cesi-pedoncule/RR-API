@@ -26,7 +26,7 @@ class Category
     #[Groups(['resource'])]
     private ?string $name = null;
 
-    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Resource::class)]
+    #[ORM\ManyToMany(targetEntity: Resource::class, mappedBy: 'categories')]
     private Collection $resources;
 
     #[ORM\Column]
@@ -96,7 +96,7 @@ class Category
     {
         if (!$this->resources->contains($resource)) {
             $this->resources->add($resource);
-            $resource->setCategory($this);
+            $resource->addCategory($this);
         }
 
         return $this;
@@ -105,10 +105,7 @@ class Category
     public function removeResource(Resource $resource): self
     {
         if ($this->resources->removeElement($resource)) {
-            // set the owning side to null (unless already changed)
-            if ($resource->getCategory() === $this) {
-                $resource->setCategory(null);
-            }
+            $resource->removeCategory($this);
         }
 
         return $this;
