@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20221015090341 extends AbstractMigration
+final class Version20221015131157 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -40,6 +40,8 @@ final class Version20221015090341 extends AbstractMigration
         , is_deleted BOOLEAN NOT NULL, PRIMARY KEY(id), CONSTRAINT FK_9474526CA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) NOT DEFERRABLE INITIALLY IMMEDIATE, CONSTRAINT FK_9474526C89329D25 FOREIGN KEY (resource_id) REFERENCES resource (id) NOT DEFERRABLE INITIALLY IMMEDIATE)');
         $this->addSql('CREATE INDEX IDX_9474526CA76ED395 ON comment (user_id)');
         $this->addSql('CREATE INDEX IDX_9474526C89329D25 ON comment (resource_id)');
+        $this->addSql('CREATE TABLE refresh_tokens (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, refresh_token VARCHAR(128) NOT NULL, username VARCHAR(255) NOT NULL, valid DATETIME NOT NULL)');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_9BACE7E1C74F2195 ON refresh_tokens (refresh_token)');
         $this->addSql('CREATE TABLE resource (id BLOB NOT NULL --(DC2Type:uuid)
         , user_id BLOB DEFAULT NULL --(DC2Type:uuid)
         , validation_state_id BLOB NOT NULL --(DC2Type:uuid)
@@ -72,6 +74,7 @@ final class Version20221015090341 extends AbstractMigration
         $this->addSql('DROP TABLE attachment');
         $this->addSql('DROP TABLE category');
         $this->addSql('DROP TABLE comment');
+        $this->addSql('DROP TABLE refresh_tokens');
         $this->addSql('DROP TABLE resource');
         $this->addSql('DROP TABLE resource_category');
         $this->addSql('DROP TABLE user');
