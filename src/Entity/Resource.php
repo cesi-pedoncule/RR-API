@@ -67,7 +67,7 @@ class Resource
     private ?string $description = null;
 
     #[ORM\OneToMany(mappedBy: 'resource', targetEntity: Attachment::class)]
-    #[Groups(['resource:read'])]
+    #[Groups(['resource:read', 'resource:write'])]
     private Collection $attachments;
 
     #[ORM\Column]
