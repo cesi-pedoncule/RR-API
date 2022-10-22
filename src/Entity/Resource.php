@@ -9,12 +9,44 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\UuidV6 as Uuid;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\put;
+use ApiPlatform\Metadata\post;
+use ApiPlatform\Metadata\get;
+use ApiPlatform\Metadata\GetCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ResourceRepository::class)]
 #[ApiResource(
     formats: ['json'], 
     normalizationContext: ['groups' => ['resource:read']],
+    denormalizationContext: ['groups' => ['resource:write']],
+    operations: [
+        new Get(),
+        new GetCollection(),
+        new Post(
+            denormalizationContext: ['groups' => ['resource:write']],
+            normalizationContext: ['groups' => ['resource:read']],
+            name: 'post',
+            uriTemplate: '/resources',
+            security: 'is_granted("ROLE_USER")',
+            securityMessage: 'Only authenticated users can create resources.',
+        ),
+        new Put(
+            denormalizationContext: ['groups' => ['resource:write']],
+            normalizationContext: ['groups' => ['resource:read']],
+            name: 'put',
+            uriTemplate: '/resources/{id}',
+            security: 'is_granted("ROLE_ADMIN") or object.getCreator() == user',
+            securityMessage: 'Only admins can edit other users resources.',
+        ),
+        new Delete(
+            name: 'delete',
+            uriTemplate: '/resources/{id}',
+            security: 'is_granted("ROLE_ADMIN") or object.getCreator() == user',
+            securityMessage: 'Only admins can delete other users resources.',
+        )
+    ],
 )]
 #[ORM\HasLifecycleCallbacks]
 class Resource
@@ -27,11 +59,11 @@ class Resource
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['resource:read', 'user:read'])]
+    #[Groups(['resource:read', 'resource:write', 'user:read'])]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['resource:read'])]
+    #[Groups(['resource:read', 'resource:write'])]
     private ?string $description = null;
 
     #[ORM\OneToMany(mappedBy: 'resource', targetEntity: Attachment::class)]
@@ -50,16 +82,16 @@ class Resource
     #[Groups(['resource:read'])]
     private ?User $user = null;
 
-    #[ORM\Column]
-    #[Groups(['resource:read'])]
+    #[ORM\Column(options: ['default' => true])]
+    #[Groups(['resource:read', 'resource:write'])]
     private ?bool $isPublic = null;
 
-    #[ORM\Column]
+    #[ORM\Column(options: ['default' => false])]
     #[Groups(['resource:read'])]
     private ?bool $isDeleted = null;
 
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'resources')]
-    #[Groups(['resource:read'])]
+    #[Groups(['resource:read', 'resource:write'])]
     private Collection $categories;
 
     #[ORM\OneToMany(mappedBy: 'resource', targetEntity: Comment::class)]
@@ -68,7 +100,7 @@ class Resource
 
     #[ORM\ManyToOne(inversedBy: 'resources')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['resource:read'])]
+    #[Groups(['resource:read', 'resource:write'])]
     private ?ValidationState $validationState = null;
 
     #[ORM\PrePersist]
