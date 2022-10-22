@@ -19,6 +19,7 @@ use ApiPlatform\Metadata\Put;
 use Symfony\Component\Serializer\Annotation\Groups;
 use App\Controller\User\GetCurrentUserController;
 use App\Controller\User\DeleteUserController;
+use Symfony\Component\PasswordHasher\PasswordHasherInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ApiResource(
@@ -41,6 +42,7 @@ use App\Controller\User\DeleteUserController;
             name: 'user_post',
             normalizationContext: ['groups' => ['user:read']],
             denormalizationContext: ['groups' => ['user:write']],
+            write: true,
         ),
         new GetCollection(uriTemplate: '/users', normalizationContext: ['groups' => ['user:read']]),
         new Put(
@@ -72,7 +74,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['resource:read', 'user:read'])]
+    #[Groups(['resource:read', 'user:read', 'user:write'])]
     private ?string $email = null;
 
     #[ORM\Column]
@@ -83,14 +85,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[Groups(['user:write'])]
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['resource:read', 'user:read'])]
+    #[Groups(['resource:read', 'user:read', 'user:write'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['resource:read', 'user:read'])]
+    #[Groups(['resource:read', 'user:read', 'user:write'])]
     private ?string $firstname = null;
 
     #[ORM\Column]
@@ -101,9 +104,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['resource:read', 'user:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\Column]
+    #[ORM\Column(options: ['default' => false])]
     #[Groups(['resource:read', 'user:read'])]
-    private ?bool $isBanned = null;
+    private ?bool $isBanned = false;
 
     #[ORM\OneToMany(mappedBy: 'User', targetEntity: Attachment::class)]
     private Collection $attachments;
@@ -124,12 +127,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\PrePersist]
     public function setCreatedAtValue()
     {
+        $this->password = $this->hashPassword($this->password);
         $this->createdAt = new \DateTimeImmutable();
     }
 
     #[ORM\PreUpdate]
     public function setUpdatedAtValue()
     {
+        // TODO : if the password change hash it
         $this->updatedAt = new \DateTimeImmutable();
     }
 
@@ -194,6 +199,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getPassword(): string
     {
         return $this->password;
+    }
+
+    public function hashPassword(string $password): string
+    {
+        return password_hash($password, PASSWORD_BCRYPT);
     }
 
     public function setPassword(string $password): self
