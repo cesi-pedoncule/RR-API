@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiProperty;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -10,10 +11,46 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Uid\UuidV6 as Uuid;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use Symfony\Component\Serializer\Annotation\Groups;
+use App\Controller\GetCurrentUserController;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ApiResource(formats: ['json'], normalizationContext: ['groups' => ['user:read']])]
+#[ApiResource(
+    formats: ['json'], 
+    normalizationContext: ['groups' => ['user:read']],
+    denormalizationContext: ['groups' => ['user:write']],
+    operations: [
+        new GetCollection(
+            name: 'current_user_get',
+            uriTemplate: '/users/me',
+            controller: GetCurrentUserController::class,
+            normalizationContext: ['groups' => ['user:read']],
+            denormalizationContext: ['groups' => ['user:write']],
+            security: 'is_granted("ROLE_USER")',
+            securityMessage: 'Only authenticated users can access this resource.',
+        ),
+        new Get(uriTemplate: '/users/{id}', name: 'user_get', normalizationContext: ['groups' => ['user:read']]),
+        new Post(
+            uriTemplate: '/users',
+            name: 'user_post',
+            normalizationContext: ['groups' => ['user:read']],
+            denormalizationContext: ['groups' => ['user:write']],
+        ),
+        new GetCollection(uriTemplate: '/users', normalizationContext: ['groups' => ['user:read']]),
+        new Put(
+            uriTemplate: '/users/{id}',
+            name: 'user_put',
+            normalizationContext: ['groups' => ['user:read']],
+            denormalizationContext: ['groups' => ['user:write']],
+        ),
+        new Delete(uriTemplate: '/users/{id}', name: 'user_delete', normalizationContext: ['groups' => ['user:read']]),
+    ],
+)]
 #[ORM\HasLifecycleCallbacks]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
