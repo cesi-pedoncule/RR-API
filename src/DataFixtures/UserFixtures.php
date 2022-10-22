@@ -26,6 +26,11 @@ class UserFixtures extends Fixture
                 ->setFirstname($faker->firstname())
                 ->setRoles(['ROLE_USER'])
                 ->setIsBanned(false);
+
+            if ($i == 0) {
+                $user->setRoles(['ROLE_ADMIN']);
+            }
+
             $this->addReference('user_' . $i, $user);
             $manager->persist($user);
         }
