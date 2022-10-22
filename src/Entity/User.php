@@ -17,7 +17,8 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use Symfony\Component\Serializer\Annotation\Groups;
-use App\Controller\GetCurrentUserController;
+use App\Controller\User\GetCurrentUserController;
+use App\Controller\User\DeleteUserController;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ApiResource(
@@ -47,8 +48,17 @@ use App\Controller\GetCurrentUserController;
             name: 'user_put',
             normalizationContext: ['groups' => ['user:read']],
             denormalizationContext: ['groups' => ['user:write']],
+            security: 'is_granted("ROLE_ADMIN") or object == user',
+            securityMessage: 'Only authenticated users can access this resource.',
         ),
-        new Delete(uriTemplate: '/users/{id}', name: 'user_delete', normalizationContext: ['groups' => ['user:read']]),
+        new Delete(
+            uriTemplate: '/users/{id}', 
+            name: 'user_delete', 
+            controller: DeleteUserController::class,
+            security: 'is_granted("ROLE_ADMIN") or object == user',
+            securityMessage: 'Only the current user or an admin can delete it.',
+            normalizationContext: ['groups' => ['user:read']],
+        ),
     ],
 )]
 #[ORM\HasLifecycleCallbacks]
