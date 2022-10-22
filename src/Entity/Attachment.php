@@ -9,7 +9,12 @@ use ApiPlatform\Metadata\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: AttachmentRepository::class)]
-#[ApiResource(formats: ['json'], normalizationContext: ['groups' => ['attachment:read']])]
+#[ApiResource(
+    formats: ['json'], 
+    normalizationContext: [
+        'groups' => ['attachment:read']
+    ]
+)]
 #[ORM\HasLifecycleCallbacks]
 class Attachment
 {
@@ -17,28 +22,28 @@ class Attachment
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
-    #[Groups(['attachment:read', 'resource'])]
+    #[Groups(['attachment:read', 'resource:read'])]
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['attachment:read', 'resource'])]
+    #[Groups(['attachment:read', 'resource:read'])]
     private ?string $filename = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['attachment:read', 'resource'])]
+    #[Groups(['attachment:read', 'resource:read'])]
     private ?string $type = null;
 
     #[ORM\Column]
-    #[Groups(['attachment:read', 'resource'])]
+    #[Groups(['attachment:read', 'resource:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
-    #[Groups(['attachment:read', 'resource'])]
+    #[Groups(['attachment:read', 'resource:read'])]
     private ?bool $isDeleted = null;
 
     #[ORM\ManyToOne(inversedBy: 'attachments')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['resource'])]
+    #[Groups(['resource:read'])]
     private ?User $User = null;
 
     #[ORM\ManyToOne(inversedBy: 'Attachments')]

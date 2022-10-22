@@ -12,7 +12,10 @@ use ApiPlatform\Metadata\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ResourceRepository::class)]
-#[ApiResource(formats: ['json'], normalizationContext: ['groups' => ['resource']])]
+#[ApiResource(
+    formats: ['json'], 
+    normalizationContext: ['groups' => ['resource:read']],
+)]
 #[ORM\HasLifecycleCallbacks]
 class Resource
 {
@@ -20,52 +23,52 @@ class Resource
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
-    #[Groups(['resource', 'user:read'])]
+    #[Groups(['resource:read', 'user:read'])]
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['resource', 'user:read'])]
+    #[Groups(['resource:read', 'user:read'])]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['resource'])]
+    #[Groups(['resource:read'])]
     private ?string $description = null;
 
     #[ORM\OneToMany(mappedBy: 'resource', targetEntity: Attachment::class)]
-    #[Groups(['resource'])]
+    #[Groups(['resource:read'])]
     private Collection $attachments;
 
     #[ORM\Column]
-    #[Groups(['resource'])]
+    #[Groups(['resource:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['resource'])]
+    #[Groups(['resource:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'resources')]
-    #[Groups(['resource'])]
+    #[Groups(['resource:read'])]
     private ?User $user = null;
 
     #[ORM\Column]
-    #[Groups(['resource'])]
+    #[Groups(['resource:read'])]
     private ?bool $isPublic = null;
 
     #[ORM\Column]
-    #[Groups(['resource'])]
+    #[Groups(['resource:read'])]
     private ?bool $isDeleted = null;
 
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'resources')]
-    #[Groups(['resource'])]
+    #[Groups(['resource:read'])]
     private Collection $categories;
 
     #[ORM\OneToMany(mappedBy: 'resource', targetEntity: Comment::class)]
-    #[Groups(['resource'])]
+    #[Groups(['resource:read'])]
     private Collection $comments;
 
     #[ORM\ManyToOne(inversedBy: 'resources')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['resource'])]
+    #[Groups(['resource:read'])]
     private ?ValidationState $validationState = null;
 
     #[ORM\PrePersist]

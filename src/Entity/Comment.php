@@ -18,27 +18,27 @@ class Comment
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
-    #[Groups(['resource'])]
+    #[Groups(['resource:read'])]
     private ?Uuid $id = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['resource'])]
+    #[Groups(['resource:read'])]
     private ?string $comment = null;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['resource'])]
+    #[Groups(['resource:read'])]
     private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
     private ?Resource $resource = null;
 
     #[ORM\Column]
-    #[Groups(['resource'])]
+    #[Groups(['resource:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
-    #[Groups(['resource'])]
+    #[Groups(['resource:read'])]
     private ?bool $isDeleted = null;
 
     #[ORM\PrePersist]

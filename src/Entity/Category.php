@@ -19,35 +19,35 @@ class Category
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
-    #[Groups(['resource'])]
+    #[Groups(['resource:read'])]
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['resource'])]
+    #[Groups(['resource:read'])]
     private ?string $name = null;
 
     #[ORM\ManyToMany(targetEntity: Resource::class, mappedBy: 'categories')]
     private Collection $resources;
 
     #[ORM\Column]
-    #[Groups(['resource'])]
+    #[Groups(['resource:read'])]
     private ?bool $isVisible = null;
 
     #[ORM\Column]
-    #[Groups(['resource'])]
+    #[Groups(['resource:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['resource'])]
+    #[Groups(['resource:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'categories')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['resource'])]
+    #[Groups(['resource:read'])]
     private ?User $creator = null;
 
     #[ORM\Column]
-    #[Groups(['resource'])]
+    #[Groups(['resource:read'])]
     private ?bool $isDeleted = null;
 
     #[ORM\PrePersist]

@@ -21,15 +21,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
-    #[Groups(['resource', 'user:read'])]
+    #[Groups(['resource:read', 'user:read'])]
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['resource', 'user:read'])]
+    #[Groups(['resource:read', 'user:read'])]
     private ?string $email = null;
 
     #[ORM\Column]
-    #[Groups(['resource', 'user:read'])]
+    #[Groups(['resource:read', 'user:read'])]
     private array $roles = [];
 
     /**
@@ -39,23 +39,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['resource', 'user:read'])]
+    #[Groups(['resource:read', 'user:read'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['resource', 'user:read'])]
+    #[Groups(['resource:read', 'user:read'])]
     private ?string $firstname = null;
 
     #[ORM\Column]
-    #[Groups(['resource', 'user:read'])]
+    #[Groups(['resource:read', 'user:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['resource', 'user:read'])]
+    #[Groups(['resource:read', 'user:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column]
-    #[Groups(['resource', 'user:read'])]
+    #[Groups(['resource:read', 'user:read'])]
     private ?bool $isBanned = null;
 
     #[ORM\OneToMany(mappedBy: 'User', targetEntity: Attachment::class)]

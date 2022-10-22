@@ -19,14 +19,15 @@ class ValidationState
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
-    #[Groups(['resource'])]
+    #[Groups(['resource:read'])]
     private ?Uuid $id = null;
 
     #[ORM\Column]
-    #[Groups(['resource'])]
+    #[Groups(['resource:read'])]
     private ?int $state = null;
 
     #[ORM\Column]
+    #[Groups(['resource:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'validationStates')]
