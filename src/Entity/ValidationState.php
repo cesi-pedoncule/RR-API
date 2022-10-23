@@ -8,10 +8,40 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\UuidV6 as Uuid;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ValidationStateRepository::class)]
-#[ApiResource(formats: ['json'])]
+#[ApiResource(
+    formats: ['json'],
+    normalizationContext: ['groups' => ['validationState:read']],
+    denormalizationContext: ['groups' => ['validationState:write']],
+    operations: [
+        new Get(),
+        new GetCollection(),
+        new Post(
+            denormalizationContext: ['groups' => ['validationState:write']],
+            normalizationContext: ['groups' => ['validationState:read']],
+            name: 'post',
+            uriTemplate: '/validation_states',
+            security: 'is_granted("ROLE_USER")',
+            securityMessage: 'Only authenticated users can create validationStates.',
+        ),
+        new Put(
+            denormalizationContext: ['groups' => ['validationState:write']],
+            normalizationContext: ['groups' => ['validationState:read']],
+            name: 'put',
+            uriTemplate: '/validation_states/{id}',
+            security: 'is_granted("ROLE_ADMIN") or object.getCreator() == user',
+            securityMessage: 'Only admins can edit other users validationStates.',
+        )
+    ]
+
+
+)]
 #[ORM\HasLifecycleCallbacks]
 class ValidationState
 {
@@ -23,7 +53,7 @@ class ValidationState
     private ?Uuid $id = null;
 
     #[ORM\Column]
-    #[Groups(['resource:read'])]
+    #[Groups(['resource:read', 'resource:write'])]
     private ?int $state = null;
 
     #[ORM\Column]

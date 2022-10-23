@@ -6,13 +6,43 @@ use App\Repository\AttachmentRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\UuidV6 as Uuid;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: AttachmentRepository::class)]
 #[ApiResource(
     formats: ['json'], 
-    normalizationContext: [
-        'groups' => ['attachment:read']
+    normalizationContext: ['groups' => ['attachment:read']],
+    denormalizationContext: ['groups' => ['attachment:write']],
+    operations: [
+        new Get(),
+        new GetCollection(),
+        new Post(
+            denormalizationContext: ['groups' => ['attachment:write']],
+            normalizationContext: ['groups' => ['attachment:read']],
+            name: 'post',
+            uriTemplate: '/attachments',
+            security: 'is_granted("ROLE_USER")',
+            securityMessage: 'Only authenticated users can create attachments.',
+        ),
+        new Put(
+            denormalizationContext: ['groups' => ['attachment:write']],
+            normalizationContext: ['groups' => ['attachment:read']],
+            name: 'put',
+            uriTemplate: '/attachments/{id}',
+            security: 'is_granted("ROLE_ADMIN") or object.getCreator() == user',
+            securityMessage: 'Only admins can edit other users attachments.',
+        ),
+        new Delete(
+            name: 'delete',
+            uriTemplate: '/attachments/{id}',
+            security: 'is_granted("ROLE_ADMIN") or object.getCreator() == user',
+            securityMessage: 'Only admins can delete other users attachments.',
+        )
     ]
 )]
 #[ORM\HasLifecycleCallbacks]
@@ -26,7 +56,7 @@ class Attachment
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['attachment:read', 'resource:read'])]
+    #[Groups(['attachment:read', 'attachment:write', 'resource:read'])]
     private ?string $filename = null;
 
     #[ORM\Column(length: 255)]
@@ -48,6 +78,7 @@ class Attachment
 
     #[ORM\ManyToOne(inversedBy: 'Attachments')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['attachment:read', 'attachment:write'])]
     private ?Resource $resource = null;
 
     #[ORM\PrePersist]
