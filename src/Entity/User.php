@@ -68,15 +68,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
-    #[Groups(['resource:read', 'user:read', 'category:read', 'validationState:read'])]
+    #[Groups(['resource:read', 'user:read', 'category:read', 'validationState:read', 'comment:read'])]
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['resource:read', 'user:read', 'user:write', 'validationState:read'])]
+    #[Groups(['resource:read', 'user:read', 'user:write', 'validationState:read', 'comment:read'])]
     private ?string $email = null;
 
     #[ORM\Column]
-    #[Groups(['resource:read', 'user:read', 'validationState:read'])]
+    #[Groups(['resource:read', 'user:read', 'validationState:read', 'comment:read'])]
     private array $roles = [];
 
     /**
@@ -87,23 +87,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['resource:read', 'user:read', 'user:write', 'category:read', 'validationState:read'])]
+    #[Groups(['resource:read', 'user:read', 'user:write', 'category:read', 'validationState:read', 'comment:read'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['resource:read', 'user:read', 'user:write', 'category:read', 'validationState:read'])]
+    #[Groups(['resource:read', 'user:read', 'user:write', 'category:read', 'validationState:read', 'comment:read'])]
     private ?string $firstname = null;
 
     #[ORM\Column]
-    #[Groups(['resource:read', 'user:read', 'validationState:read'])]
+    #[Groups(['resource:read', 'user:read', 'validationState:read', 'comment:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['resource:read', 'user:read', 'validationState:read'])]
+    #[Groups(['resource:read', 'user:read', 'validationState:read', 'comment:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column(options: ['default' => false])]
-    #[Groups(['resource:read', 'user:read', 'validationState:read'])]
+    #[Groups(['resource:read', 'user:read', 'validationState:read', 'comment:read'])]
     private ?bool $isBanned = false;
 
     #[ORM\OneToMany(mappedBy: 'User', targetEntity: Attachment::class)]
