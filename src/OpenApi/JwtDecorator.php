@@ -26,6 +26,19 @@ final class JwtDecorator implements OpenApiFactoryInterface
                 ],
             ],
         ]);
+        $schemas['TokenRefresh'] = new \ArrayObject([
+            'type' => 'object',
+            'properties' => [
+                'token' => [
+                    'type' => 'string',
+                    'readOnly' => true,
+                ],
+                'refresh_token' => [
+                    'type' => 'string',
+                    'readOnly' => true,
+                ],
+            ],
+        ]);
         $schemas['Credentials'] = new \ArrayObject([
             'type' => 'object',
             'properties' => [
@@ -36,6 +49,16 @@ final class JwtDecorator implements OpenApiFactoryInterface
                 'password' => [
                     'type' => 'string',
                     'example' => 'apassword',
+                ],
+            ],
+        ]);
+
+        $schemas['Refresh'] = new \ArrayObject([
+            'type' => 'object',
+            'properties' => [
+                'refresh_token' => [
+                    'type' => 'string',
+                    'example' => 'xxxxxxxxxx',
                 ],
             ],
         ]);
@@ -78,7 +101,39 @@ final class JwtDecorator implements OpenApiFactoryInterface
                 security: [],
             ),
         );
+        $pathItemRefresh = new Model\PathItem(
+            ref: 'JWT Token',
+            post: new Model\Operation(
+                operationId: 'postCredentialsItem',
+                tags: ['Token'],
+                responses: [
+                    '200' => [
+                        'description' => 'Get JWT token',
+                        'content' => [
+                            'application/json' => [
+                                'schema' => [
+                                    '$ref' => '#/components/schemas/Token',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                summary: 'Renew the RefreshToken.',
+                requestBody: new Model\RequestBody(
+                    description: 'Renew Refresh token and generate new JWT Token',
+                    content: new \ArrayObject([
+                        'application/json' => [
+                            'schema' => [
+                                '$ref' => '#/components/schemas/Refresh',
+                            ],
+                        ],
+                    ]),
+                ),
+                security: [],
+            ),
+        );
         $openApi->getPaths()->addPath('/api/login_check', $pathItem);
+        $openApi->getPaths()->addPath('/api/token/refresh', $pathItemRefresh);
  
         return $openApi;
     }
