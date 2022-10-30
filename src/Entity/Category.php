@@ -11,7 +11,10 @@ use ApiPlatform\Metadata\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
-#[ApiResource(formats: ['json'])]
+#[ApiResource(
+    formats: ['json'],
+    normalizationContext: ['groups' => ['category:read']],
+)]
 #[ORM\HasLifecycleCallbacks]
 class Category
 {
@@ -19,35 +22,36 @@ class Category
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
-    #[Groups(['resource:read'])]
+    #[Groups(['category:read', 'resource:read'])]
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['resource:read'])]
+    #[Groups(['category:read', 'resource:read'])]
     private ?string $name = null;
 
     #[ORM\ManyToMany(targetEntity: Resource::class, mappedBy: 'categories')]
+    #[Groups(['category:read'])]
     private Collection $resources;
 
     #[ORM\Column]
-    #[Groups(['resource:read'])]
+    #[Groups(['category:read', 'resource:read'])]
     private ?bool $isVisible = null;
 
     #[ORM\Column]
-    #[Groups(['resource:read'])]
+    #[Groups(['category:read', 'resource:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['resource:read'])]
+    #[Groups(['category:read', 'resource:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'categories')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['resource:read'])]
+    #[Groups(['category:read', 'resource:read'])]
     private ?User $creator = null;
 
     #[ORM\Column]
-    #[Groups(['resource:read'])]
+    #[Groups(['category:read', 'resource:read'])]
     private ?bool $isDeleted = null;
 
     #[ORM\PrePersist]

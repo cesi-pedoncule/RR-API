@@ -55,15 +55,15 @@ class Resource
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
-    #[Groups(['resource:read', 'user:read', 'attachment:read'])]
+    #[Groups(['resource:read', 'user:read', 'attachment:read', 'category:read'])]
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['resource:read', 'resource:write', 'user:read', 'attachment:read'])]
+    #[Groups(['resource:read', 'resource:write', 'user:read', 'attachment:read', 'category:read'])]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['resource:read', 'resource:write', 'attachment:read'])]
+    #[Groups(['resource:read', 'resource:write', 'attachment:read', 'category:read'])]
     private ?string $description = null;
 
     #[ORM\OneToMany(mappedBy: 'resource', targetEntity: Attachment::class)]
@@ -71,23 +71,23 @@ class Resource
     private Collection $attachments;
 
     #[ORM\Column]
-    #[Groups(['resource:read', 'attachment:read'])]
+    #[Groups(['resource:read', 'attachment:read', 'category:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['resource:read', 'attachment:read'])]
+    #[Groups(['resource:read', 'attachment:read', 'category:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'resources')]
-    #[Groups(['resource:read', 'attachment:read'])]
+    #[Groups(['resource:read', 'attachment:read', 'category:read'])]
     private ?User $user = null;
 
     #[ORM\Column(options: ['default' => true])]
-    #[Groups(['resource:read', 'resource:write', 'attachment:read'])]
+    #[Groups(['resource:read', 'resource:write', 'attachment:read', 'category:read'])]
     private ?bool $isPublic = null;
 
     #[ORM\Column(options: ['default' => false])]
-    #[Groups(['resource:read', 'attachment:read'])]
+    #[Groups(['resource:read', 'attachment:read', 'category:read'])]
     private ?bool $isDeleted = null;
 
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'resources')]
@@ -100,7 +100,7 @@ class Resource
 
     #[ORM\ManyToOne(inversedBy: 'resources')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['resource:read', 'resource:write'])]
+    #[Groups(['resource:read', 'resource:write', 'category:read'])]
     private ?ValidationState $validationState = null;
 
     #[ORM\PrePersist]

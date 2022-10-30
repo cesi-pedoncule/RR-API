@@ -68,7 +68,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
-    #[Groups(['resource:read', 'user:read', 'attachment:read'])]
+    #[Groups(['resource:read', 'user:read', 'attachment:read', 'category:read'])]
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
@@ -87,11 +87,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['resource:read', 'user:read', 'user:write', 'attachment:read'])]
+    #[Groups(['resource:read', 'user:read', 'user:write', 'attachment:read', 'category:read'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['resource:read', 'user:read', 'user:write', 'attachment:read'])]
+    #[Groups(['resource:read', 'user:read', 'user:write', 'attachment:read', 'category:read'])]
     private ?string $firstname = null;
 
     #[ORM\Column]

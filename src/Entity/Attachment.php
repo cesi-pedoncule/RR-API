@@ -73,8 +73,8 @@ class Attachment
 
     #[ORM\ManyToOne(inversedBy: 'attachments')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['resource:read'])]
-    private ?User $User = null;
+    #[Groups(['attachment:read'])]
+    private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'Attachments')]
     #[ORM\JoinColumn(nullable: false)]
@@ -142,12 +142,12 @@ class Attachment
 
     public function getUser(): ?User
     {
-        return $this->User;
+        return $this->user;
     }
 
-    public function setUser(?User $User): self
+    public function setUser(?User $user): self
     {
-        $this->User = $User;
+        $this->user = $user;
 
         return $this;
     }
