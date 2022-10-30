@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Delete;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ValidationStateRepository::class)]
@@ -37,6 +38,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
             uriTemplate: '/validation_states/{id}',
             security: 'is_granted("ROLE_ADMIN") or object.getCreator() == user',
             securityMessage: 'Only admins can edit other users validationStates.',
+        ),
+        new Delete(
+            name: 'delete_validation_state',
+            uriTemplate: '/validation_states/{id}',
+            security: 'is_granted("ROLE_ADMIN") or object.getCreator() == user',
+            securityMessage: 'Only admins can delete other users validationStates.',
         )
     ]
 
