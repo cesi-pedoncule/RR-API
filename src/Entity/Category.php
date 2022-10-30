@@ -8,12 +8,54 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\UuidV6 as Uuid;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 #[ApiResource(
     formats: ['json'],
     normalizationContext: ['groups' => ['category:read']],
+    denormalizationContext: ['groups' => ['category:write']],
+    operations: [
+        new Get(
+            normalizationContext: ['groups' => ['category:read']],
+            denormalizationContext: ['groups' => ['category:write']],
+            name: 'get_category',
+            uriTemplate: '/categories/{id}'
+        ),
+        new GetCollection(
+            normalizationContext: ['groups' => ['category:read']],
+            denormalizationContext: ['groups' => ['category:write']],
+            name: 'get_categories',
+            uriTemplate: '/categories'
+        ),
+        new Post(
+            denormalizationContext: ['groups' => ['category:write']],
+            normalizationContext: ['groups' => ['category:read']],
+            name: 'post_category',
+            uriTemplate: '/categories',
+            security: 'is_granted("ROLE_ADMIN")',
+            securityMessage: 'Only admins can create categories.',
+        ),
+        new Put(
+            denormalizationContext: ['groups' => ['category:write']],
+            normalizationContext: ['groups' => ['category:read']],
+            name: 'put_category',
+            uriTemplate: '/categories/{id}',
+            security: 'is_granted("ROLE_ADMIN")',
+            securityMessage: 'Only admins can edit categories.',
+        ),
+        new Delete(
+            name: 'delete_category',
+            uriTemplate: '/categories/{id}',
+            security: 'is_granted("ROLE_ADMIN")',
+            securityMessage: 'Only admins can delete categories.',
+        )
+    ]
 )]
 #[ORM\HasLifecycleCallbacks]
 class Category
@@ -26,7 +68,7 @@ class Category
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['category:read', 'resource:read'])]
+    #[Groups(['category:read', 'resource:read', 'category:write'])]
     private ?string $name = null;
 
     #[ORM\ManyToMany(targetEntity: Resource::class, mappedBy: 'categories')]
