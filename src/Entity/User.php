@@ -68,15 +68,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
-    #[Groups(['resource:read', 'user:read', 'attachment:read'])]
+    #[Groups(['resource:read', 'user:read', 'attachment:read', 'validationState:read'])]
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['resource:read', 'user:read', 'user:write', 'attachment:read'])]
+    #[Groups(['resource:read', 'user:read', 'user:write', 'attachment:read', 'validationState:read'])]
     private ?string $email = null;
 
     #[ORM\Column]
-    #[Groups(['resource:read', 'user:read', 'attachment:read'])]
+    #[Groups(['resource:read', 'user:read', 'attachment:read', 'validationState:read'])]
     private array $roles = [];
 
     /**
@@ -87,23 +87,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['resource:read', 'user:read', 'user:write', 'attachment:read'])]
+    #[Groups(['resource:read', 'user:read', 'user:write', 'attachment:read', 'validationState:read'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['resource:read', 'user:read', 'user:write', 'attachment:read'])]
+    #[Groups(['resource:read', 'user:read', 'user:write', 'attachment:read', 'validationState:read'])]
     private ?string $firstname = null;
 
     #[ORM\Column]
-    #[Groups(['resource:read', 'user:read', 'attachment:read'])]
+    #[Groups(['resource:read', 'user:read', 'attachment:read', 'validationState:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['resource:read', 'user:read', 'attachment:read'])]
+    #[Groups(['resource:read', 'user:read', 'attachment:read', 'validationState:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column(options: ['default' => false])]
-    #[Groups(['resource:read', 'user:read', 'attachment:read'])]
+    #[Groups(['resource:read', 'user:read', 'attachment:read', 'validationState:read'])]
     private ?bool $isBanned = false;
 
     #[ORM\OneToMany(mappedBy: 'User', targetEntity: Attachment::class)]

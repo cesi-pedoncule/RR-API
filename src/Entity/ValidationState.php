@@ -21,8 +21,16 @@ use Symfony\Component\Serializer\Annotation\Groups;
     normalizationContext: ['groups' => ['validationState:read']],
     denormalizationContext: ['groups' => ['validationState:write']],
     operations: [
-        new Get(),
-        new GetCollection(),
+        new Get(
+            normalizationContext: ['groups' => ['validationState:read']],
+            name: 'get_validation_state',
+            uriTemplate: '/validation_states/{id}',
+        ),
+        new GetCollection(
+            normalizationContext: ['groups' => ['validationState:read']],
+            name: 'get_validation_states',
+            uriTemplate: '/validation_states',
+        ),
         new Post(
             denormalizationContext: ['groups' => ['validationState:write']],
             normalizationContext: ['groups' => ['validationState:read']],
@@ -56,19 +64,20 @@ class ValidationState
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
-    #[Groups(['resource:read'])]
+    #[Groups(['resource:read', 'validationState:read'])]
     private ?Uuid $id = null;
 
     #[ORM\Column]
-    #[Groups(['resource:read', 'resource:write'])]
+    #[Groups(['resource:read', 'resource:write', 'validationState:read', 'validationState:write'])]
     private ?int $state = null;
 
     #[ORM\Column]
-    #[Groups(['resource:read'])]
+    #[Groups(['resource:read', 'validationState:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'validationStates')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
+    #[Groups(['resource:read', 'validationState:read'])]
     private ?User $moderator = null;
 
     #[ORM\OneToMany(mappedBy: 'validationState', targetEntity: Resource::class)]
