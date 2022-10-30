@@ -19,6 +19,12 @@ class UserManager {
      */
     public function checkIfNewUserEmailIsAvailable(string $email): bool
     {
+        // Check if the email is valid
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return false;
+        } 
+
+        // Check if the email is already used
         $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
 
         return $user === null;
