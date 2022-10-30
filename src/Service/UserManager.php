@@ -97,7 +97,7 @@ class UserManager {
      * @param User $userToDisable
      * @return false|User
      */
-    public function disableUser(User $currentUser, User $userToDisable): User
+    public function disableUser(User $currentUser, User $userToDisable): false|User
     {
         // Check if the current user is the user to disable or if the current user is an admin, disable the user else throw exception
         if ($currentUser === $userToDisable || in_array('ROLE_ADMIN', $currentUser->getRoles())) {
@@ -106,6 +106,7 @@ class UserManager {
             $this->entityManager->flush();
         } else {
             throw new \Exception('You are not allowed to disable this user');
+            return false;
         }
         
         // Disable the user
@@ -114,5 +115,17 @@ class UserManager {
         $this->entityManager->flush();
 
         return $userToDisable;
+    }
+
+    /**
+     * Return user Entity from the user email
+     * 
+     * @param string $email
+     * @return false|User
+     */
+    public function findUserByEmail(string $email): false|User
+    {
+        $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
+        return $user;
     }
 }
