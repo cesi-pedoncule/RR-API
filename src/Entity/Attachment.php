@@ -24,7 +24,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Post(
             denormalizationContext: ['groups' => ['attachment:write']],
             normalizationContext: ['groups' => ['attachment:read']],
-            name: 'post',
+            name: 'post_attachment',
             uriTemplate: '/attachments',
             security: 'is_granted("ROLE_USER")',
             securityMessage: 'Only authenticated users can create attachments.',
@@ -32,13 +32,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Put(
             denormalizationContext: ['groups' => ['attachment:write']],
             normalizationContext: ['groups' => ['attachment:read']],
-            name: 'put',
+            name: 'put_attachment',
             uriTemplate: '/attachments/{id}',
             security: 'is_granted("ROLE_ADMIN") or object.getCreator() == user',
             securityMessage: 'Only admins can edit other users attachments.',
         ),
         new Delete(
-            name: 'delete',
+            name: 'delete_attachment',
             uriTemplate: '/attachments/{id}',
             security: 'is_granted("ROLE_ADMIN") or object.getCreator() == user',
             securityMessage: 'Only admins can delete other users attachments.',
