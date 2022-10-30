@@ -22,12 +22,22 @@ use Symfony\Component\Serializer\Annotation\Groups;
     normalizationContext: ['groups' => ['resource:read']],
     denormalizationContext: ['groups' => ['resource:write']],
     operations: [
-        new Get(),
-        new GetCollection(),
+        new Get(
+            normalizationContext: ['groups' => ['resource:read']],
+            denormalizationContext: ['groups' => ['resource:write']],
+            name: 'get_resource',
+            uriTemplate: '/resources/{id}'
+        ),
+        new GetCollection(
+            normalizationContext: ['groups' => ['resource:read']],
+            denormalizationContext: ['groups' => ['resource:write']],
+            name: 'get_resources',
+            uriTemplate: '/resources'
+        ),
         new Post(
             denormalizationContext: ['groups' => ['resource:write']],
             normalizationContext: ['groups' => ['resource:read']],
-            name: 'post',
+            name: 'post_resource',
             uriTemplate: '/resources',
             security: 'is_granted("ROLE_USER")',
             securityMessage: 'Only authenticated users can create resources.',
@@ -35,13 +45,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Put(
             denormalizationContext: ['groups' => ['resource:write']],
             normalizationContext: ['groups' => ['resource:read']],
-            name: 'put',
+            name: 'put_resource',
             uriTemplate: '/resources/{id}',
             security: 'is_granted("ROLE_ADMIN") or object.getCreator() == user',
             securityMessage: 'Only admins can edit other users resources.',
         ),
         new Delete(
-            name: 'delete',
+            name: 'delete_resource',
             uriTemplate: '/resources/{id}',
             security: 'is_granted("ROLE_ADMIN") or object.getCreator() == user',
             securityMessage: 'Only admins can delete other users resources.',
