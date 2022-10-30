@@ -68,7 +68,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
+<<<<<<< HEAD
     #[Groups(['resource:read', 'user:read', 'attachment:read', 'validationState:read'])]
+=======
+    #[Groups(['resource:read', 'user:read', 'attachment:read', 'category:read'])]
+>>>>>>> 6d6bfac8a322bd93898f73445d12df5b97cf868e
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
@@ -87,11 +91,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
+<<<<<<< HEAD
     #[Groups(['resource:read', 'user:read', 'user:write', 'attachment:read', 'validationState:read'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
     #[Groups(['resource:read', 'user:read', 'user:write', 'attachment:read', 'validationState:read'])]
+=======
+    #[Groups(['resource:read', 'user:read', 'user:write', 'attachment:read', 'category:read'])]
+    private ?string $name = null;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['resource:read', 'user:read', 'user:write', 'attachment:read', 'category:read'])]
+>>>>>>> 6d6bfac8a322bd93898f73445d12df5b97cf868e
     private ?string $firstname = null;
 
     #[ORM\Column]
