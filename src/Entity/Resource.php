@@ -10,9 +10,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\UuidV6 as Uuid;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
-use ApiPlatform\Metadata\put;
-use ApiPlatform\Metadata\post;
-use ApiPlatform\Metadata\get;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
