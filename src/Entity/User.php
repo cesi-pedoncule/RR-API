@@ -125,6 +125,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\PrePersist]
     public function setCreatedAtValue()
     {
+        $this->password = $this->hashPassword($this->password);
         $this->createdAt = new \DateTimeImmutable();
     }
 
