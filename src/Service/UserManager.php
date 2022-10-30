@@ -91,26 +91,28 @@ class UserManager {
     }
 
     /**
-     * Ban the user account
+     * Disable a user account
      * 
-     * @param User $user
-     * @return void
+     * @param User $currentUser
+     * @param User $userToDisable
+     * @return false|User
      */
-    public function banUser(User $user): void
+    public function disableUser(User $currentUser, User $userToDisable): User
     {
-        $user->setIsBanned(true);
+        // Check if the current user is the user to disable or if the current user is an admin, disable the user else throw exception
+        if ($currentUser === $userToDisable || in_array('ROLE_ADMIN', $currentUser->getRoles())) {
+            $userToDisable->setIsBanned(true);
+            $this->entityManager->persist($userToDisable);
+            $this->entityManager->flush();
+        } else {
+            throw new \Exception('You are not allowed to disable this user');
+        }
+        
+        // Disable the user
+        $userToDisable->setIsBanned(true);
+        $this->entityManager->persist($userToDisable);
         $this->entityManager->flush();
-    }
 
-    /**
-     * Unban the user account
-     * 
-     * @param User $user
-     * @return void
-     */
-    public function unbanUser(User $user): void
-    {
-        $user->setIsBanned(false);
-        $this->entityManager->flush();
+        return $userToDisable;
     }
 }
