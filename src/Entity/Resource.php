@@ -281,18 +281,6 @@ class Resource
         return $this;
     }
 
-    // public function getValidationState(): ?ValidationState
-    // {
-    //     return $this->validationState;
-    // }
-
-    // public function setValidationState(?ValidationState $validationState): self
-    // {
-    //     $this->validationState = $validationState;
-
-    //     return $this;
-    // }
-
     /**
      * @return Collection<int, ValidationState>
      */
