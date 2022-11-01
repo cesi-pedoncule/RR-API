@@ -20,7 +20,7 @@ class ResourceFixtures extends Fixture implements DependentFixtureInterface
                 ->addCategory($this->getReference('category_' . rand(0, 4)))
                 ->setIsPublic((bool)rand(0, 1))
                 ->setIsDeleted(false)
-                ->setValidationState($this->getReference('validationState_' . rand(1, 3)))
+                ->addValidationState($this->getReference('validationState_' . rand(1, 3)))
                 ->setUser($this->getReference('user_' . rand(0, 9)));
             $manager->persist($resource);
             $this->addReference('resource_' . $i, $resource);

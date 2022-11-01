@@ -108,10 +108,9 @@ class Resource
     #[Groups(['resource:read'])]
     private Collection $comments;
 
-    #[ORM\ManyToOne(inversedBy: 'resources')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\OneToMany(mappedBy: 'validationState', targetEntity: ValidationState::class)]
     #[Groups(['resource:read', 'resource:write', 'category:read'])]
-    private ?ValidationState $validationState = null;
+    private Collection $validationStates;
 
     #[ORM\PrePersist]
     public function setCreatedAtValue()
@@ -130,6 +129,7 @@ class Resource
         $this->attachments = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->categories = new ArrayCollection();
+        $this->validationStates = new ArrayCollection();
     }
 
     public function getId(): ?Uuid
@@ -281,14 +281,44 @@ class Resource
         return $this;
     }
 
-    public function getValidationState(): ?ValidationState
+    // public function getValidationState(): ?ValidationState
+    // {
+    //     return $this->validationState;
+    // }
+
+    // public function setValidationState(?ValidationState $validationState): self
+    // {
+    //     $this->validationState = $validationState;
+
+    //     return $this;
+    // }
+
+    /**
+     * @return Collection<int, ValidationState>
+     */
+    public function getValidationStates(): Collection
     {
-        return $this->validationState;
+        return $this->validationStates;
     }
 
-    public function setValidationState(?ValidationState $validationState): self
+    public function addValidationState(ValidationState $validationState): self
     {
-        $this->validationState = $validationState;
+        if (!$this->validationStates->contains($validationState)) {
+            $this->validationStates->add($validationState);
+            $validationState->setResource($this);
+        }
+
+        return $this;
+    }
+
+    public function removeValidationState(ValidationState $validationState): self
+    {
+        if ($this->validationStates->removeElement($validationState)) {
+            // set the owning side to null (unless already changed)
+            if ($validationState->getResource() === $this) {
+                $validationState->setResource(null);
+            }
+        }
 
         return $this;
     }

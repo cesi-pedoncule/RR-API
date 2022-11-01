@@ -80,8 +80,8 @@ class ValidationState
     #[Groups(['resource:read', 'validationState:read'])]
     private ?User $moderator = null;
 
-    #[ORM\OneToMany(mappedBy: 'validationState', targetEntity: Resource::class)]
-    private Collection $resources;
+    #[ORM\ManyToOne(inversedBy: 'validationStates')]
+    private Resource $resource;
 
     #[ORM\PrePersist]
     public function setCreatedAtValue()
@@ -141,33 +141,16 @@ class ValidationState
         return $this;
     }
 
-    /**
-     * @return Collection<int, Resource>
-     */
-    public function getResources(): Collection
+    public function getResource(): ?Resource
     {
-        return $this->resources;
+        return $this->resource;
     }
 
-    public function addResource(Resource $resource): self
+    public function setResource(?Resource $resource): self
     {
-        if (!$this->resources->contains($resource)) {
-            $this->resources->add($resource);
-            $resource->setValidationState($this);
-        }
+        $this->resource = $resource;
 
         return $this;
     }
 
-    public function removeResource(Resource $resource): self
-    {
-        if ($this->resources->removeElement($resource)) {
-            // set the owning side to null (unless already changed)
-            if ($resource->getValidationState() === $this) {
-                $resource->setValidationState(null);
-            }
-        }
-
-        return $this;
-    }
 }
