@@ -60,6 +60,16 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\HasLifecycleCallbacks]
 class ValidationState
 {
+    public const VALIDATION_STATES = [
+        self::VALIDATION_STATE_PENDING,
+        self::VALIDATION_STATE_VALIDATED,
+        self::VALIDATION_STATE_REJECTED,
+    ];
+
+    public const VALIDATION_STATE_PENDING = 1;
+    public const VALIDATION_STATE_VALIDATED = 2;
+    public const VALIDATION_STATE_REJECTED = 3;
+
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
