@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use App\Repository\ValidationStateRepository;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\UuidV6 as Uuid;
 use ApiPlatform\Metadata\ApiResource;
@@ -77,9 +76,11 @@ class ValidationState
     #[Groups(['resource:read', 'validationState:read'])]
     private ?Uuid $id = null;
 
-    #[ORM\Column]
+    
+    #[ORM\ManyToOne(inversedBy: 'validationStates')]
+    #[ORM\JoinColumn(nullable: false)]
     #[Groups(['resource:read', 'resource:write', 'validationState:read', 'validationState:write'])]
-    private ?int $state = null;
+    private ?State $state = null;
 
     #[ORM\Column]
     #[Groups(['resource:read', 'validationState:read'])]
@@ -115,12 +116,12 @@ class ValidationState
         return $this->id;
     }
 
-    public function getState(): ?int
+    public function getState(): ?State
     {
         return $this->state;
     }
 
-    public function setState(int $state): self
+    public function setState(?State $state): self
     {
         $this->state = $state;
 
