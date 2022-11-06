@@ -56,12 +56,21 @@ class CategoryManager {
 
     /**
      * Find a category by name property
+     * 
+     * @param string $name
+     * @return Category|null
      */
     public function findCategoryByName(string $name): ?Category
     {
         return $this->entityManager->getRepository(Category::class)->findOneBy(['name' => $name]);
     }
 
+    /**
+     * Disable a category
+     * 
+     * @param Category $category
+     * @return void
+     */
     public function disableCategory(Category $category): void
     {
         // Disable the category

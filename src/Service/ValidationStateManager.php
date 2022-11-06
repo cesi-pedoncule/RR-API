@@ -10,14 +10,22 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class ValidationStateManager
 {
-    public function __construct(private EntityManagerInterface $em)
+    public function __construct(private EntityManagerInterface $em, private StateManager $stateManager)
     {
     }
 
+    /**
+     * Create a new validation state
+     *
+     * @param integer $validationState
+     * @param Resource $resource
+     * @param User $moderator
+     * @return void
+     */
     public function addValidationState(int $validationState, Resource $resource, User $moderator): void
     {
         $validationState = (new ValidationState())
-            ->setState($validationState)
+            ->setState($this->stateManager->getStateById($validationState))
             ->setModerator($moderator)
             ->setResource($resource)
             ->setUpdatedAt(new DateTimeImmutable());

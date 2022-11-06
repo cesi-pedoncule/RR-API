@@ -11,6 +11,11 @@ class StateManager
     {
     }
 
+    /**
+     * Create default states for the application
+     *
+     * @return void
+     */
     public function createDefaultStates(): void
     {
         $state_pending = new State();
@@ -26,5 +31,27 @@ class StateManager
         $this->manager->persist($state_rejected);
 
         $this->manager->flush();
+    }
+
+    /**
+     * Get the state by id
+     *
+     * @param string $id
+     * @return State|null
+     */
+    public function getStateById(int $id): ?State
+    {
+        return $this->manager->getRepository(State::class)->find($id);
+    }
+
+    /**
+     * Get the state by label
+     *
+     * @param string $label
+     * @return State|null
+     */
+    public function getStateByLabel(string $label): ?State
+    {
+        return $this->manager->getRepository(State::class)->findOneBy(['label' => $label]);
     }
 }
