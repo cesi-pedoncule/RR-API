@@ -4,6 +4,7 @@ namespace App\Command\Resource;
 
 use App\Service\CategoryManager;
 use App\Service\ResourceManager;
+use App\Service\UserManager;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -16,7 +17,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class CreateResourceCommand extends Command
 {
-    public function __construct(private ResourceManager $resourceManager, private CategoryManager $categoryManager)
+    public function __construct(private ResourceManager $resourceManager, private CategoryManager $categoryManager, private UserManager $userManager)
     {
         parent::__construct();
     }
@@ -28,6 +29,16 @@ class CreateResourceCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
+
+        $userEmail = $io->ask('What is your email address?');
+        $user = $this->userManager->findUserByEmail($userEmail);
+
+        if ($user === null) {
+            $io->error('User not found');
+
+            return Command::FAILURE;
+        }
+
         $title = $io->ask('What is the resource name?');
         $resource = $this->resourceManager->findResourceByTitle($title);
         
@@ -52,7 +63,7 @@ class CreateResourceCommand extends Command
 
         $categories[] = $category;
 
-        $resource = $this->resourceManager->createResource($title, $description, $attachments, $isPublic, $categories);
+        $resource = $this->resourceManager->createResource($title, $description, $attachments, $isPublic, $categories, $user);
 
         if ($resource === null) {
             $io->error('The resource could not be created');

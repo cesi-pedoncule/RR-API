@@ -91,7 +91,7 @@ class ValidationState
     #[Groups(['resource:read', 'validationState:read'])]
     private ?User $moderator = null;
 
-    #[ORM\ManyToOne(inversedBy: 'validationStates')]
+    #[ORM\ManyToOne(inversedBy: 'validationStates', cascade: ['persist'])]
     private Resource $resource;
 
     #[ORM\PrePersist]

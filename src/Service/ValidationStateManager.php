@@ -20,9 +20,9 @@ class ValidationStateManager
      * @param integer $validationState
      * @param Resource $resource
      * @param User $moderator
-     * @return void
+     * @return ValidationState|null
      */
-    public function addValidationState(int $validationState, Resource $resource, User $moderator): void
+    public function addValidationState(int $validationState, Resource $resource, User $moderator): ?ValidationState
     {
         $validationState = (new ValidationState())
             ->setState($this->stateManager->getStateById($validationState))
@@ -32,5 +32,7 @@ class ValidationStateManager
 
         $this->em->persist($validationState);
         $this->em->flush();
+
+        return $validationState;
     }
 }

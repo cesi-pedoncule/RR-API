@@ -3,11 +3,12 @@
 namespace App\Service;
 
 use App\Entity\Resource;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ResourceManager
 {
-    public function __construct(private EntityManagerInterface $em)
+    public function __construct(private EntityManagerInterface $em, private ValidationStateManager $validationStateManager)
     {
     }
 
@@ -32,7 +33,7 @@ class ResourceManager
      * @param array $categories
      * @return Resource|null
      */
-    public function createResource(string $title, ?string $description, array $attachments, bool $isPublic, array $categories): ?Resource
+    public function createResource(string $title, ?string $description, array $attachments, bool $isPublic, array $categories, User $moderator): ?Resource
     {
         // Check if the resource already exists
         if ($this->findResourceByTitle($title) !== null) {
@@ -55,6 +56,8 @@ class ResourceManager
         foreach ($categories as $category) {
             $resource->addCategory($category);
         }
+
+        $validationState = $this->validationStateManager->addValidationState(1, $resource, $moderator);
 
         $this->em->persist($resource);
         $this->em->flush();
