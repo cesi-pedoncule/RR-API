@@ -92,7 +92,8 @@ class ValidationState
     private ?User $moderator = null;
 
     #[ORM\ManyToOne(inversedBy: 'validationStates', cascade: ['persist'])]
-    private Resource $resource;
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Resource $resource = null;
 
     #[ORM\PrePersist]
     public function setCreatedAtValue()
