@@ -44,5 +44,5 @@ jobs:
       run: php bin/console d:f:l --no-interaction --env=test
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       env:
-        DATABASE_URL: sqlite:///%kernel.project_dir%/data/database_test.db
+        DATABASE_URL: sqlite:///%kernel.project_dir%/var/database_test.db
       run: vendor/bin/phpunit
