@@ -109,7 +109,7 @@ class Resource
     private Collection $comments;
 
     #[ORM\OneToMany(mappedBy: 'validationState', targetEntity: ValidationState::class)]
-    #[Groups(['resource:write', 'category:read'])]
+    #[Groups(['resource:write'])]
     private Collection $validationStates;
 
     #[ORM\PrePersist]
