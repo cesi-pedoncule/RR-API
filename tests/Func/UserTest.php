@@ -2,19 +2,35 @@
 
 namespace App\Tests\Func;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
 
-class UserTest extends AbstractEndPoint
+class UserTest extends ApiTestCase
 {
+    private string $jwtToken;
+
+    public static function userLoggedIn(): string 
+    {
+        $response = static::createClient()->request('POST', '/api/login_check', ['json' => [
+            'username' => 'user0@example.com',
+            'password' => 'password',
+        ]]);
+        return $response->toArray()['token'];
+    }
+
     public function testGetUsers(): void
     {
-        $response = $this->getResponseFromRequest(Request::METHOD_GET, '/api/users');
-        $responseContent = $response->getContent();
-        $responseContent = json_decode($responseContent);
+        // Test GET /api/users without auth
+        $response = static::createClient()->request('GET', '/api/users', ['headers' => ['Accept' => 'application/json']]);
+        $this->assertResponseStatusCodeSame(401);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+        $this->assertJsonContains(['code' => 401, 'message' => 'JWT Token not found']);
 
+        // Test GET /api/users with auth
+        $this->jwtToken = self::userLoggedIn();
+
+        $response = static::createClient()->request('GET', '/api/users', ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
         $this->assertResponseIsSuccessful();
-        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
-        $this->assertCount(10, $responseContent);
+        $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
+        $this->assertCount(10, $response->toArray());
     }
 }
