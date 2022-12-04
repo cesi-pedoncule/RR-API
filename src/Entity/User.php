@@ -42,7 +42,12 @@ use App\Controller\User\DeleteUserController;
             denormalizationContext: ['groups' => ['user:write']],
             write: true,
         ),
-        new GetCollection(uriTemplate: '/users', normalizationContext: ['groups' => ['user:read']]),
+        new GetCollection(
+            uriTemplate: '/users', 
+            normalizationContext: ['groups' => ['user:read']],
+            security: 'is_granted("ROLE_ADMIN")',
+            securityMessage: 'Only admins can access this resource.',
+        ),
         new Put(
             uriTemplate: '/users/{id}',
             name: 'user_put',
