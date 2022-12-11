@@ -76,6 +76,7 @@ class Comment
     private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
+    #[Groups(['comment:read', 'comment:write'])]
     private ?Resource $resource = null;
 
     #[ORM\Column]
@@ -83,7 +84,7 @@ class Comment
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
-    #[Groups(['resource:read', 'comment:read'])]
+    #[Groups(['resource:read', 'comment:read', 'comment:write'])]
     private ?bool $isDeleted = null;
 
     #[ORM\PrePersist]
