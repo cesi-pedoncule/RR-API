@@ -47,13 +47,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
             normalizationContext: ['groups' => ['resource:read']],
             name: 'put_resource',
             uriTemplate: '/resources/{id}',
-            security: 'is_granted("ROLE_ADMIN") or object.getCreator() == user',
+            security: 'is_granted("ROLE_ADMIN") or object.getUser() == user',
             securityMessage: 'Only admins can edit other users resources.',
         ),
         new Delete(
+            denormalizationContext: ['groups' => ['resource:write']],
+            normalizationContext: ['groups' => ['resource:read']],
             name: 'delete_resource',
             uriTemplate: '/resources/{id}',
-            security: 'is_granted("ROLE_ADMIN") or object.getCreator() == user',
+            security: 'is_granted("ROLE_ADMIN") or object.getUser() == user',
             securityMessage: 'Only admins can delete other users resources.',
         )
     ],
@@ -97,7 +99,7 @@ class Resource
     private ?bool $isPublic = null;
 
     #[ORM\Column(options: ['default' => false])]
-    #[Groups(['resource:read', 'attachment:read', 'category:read'])]
+    #[Groups(['resource:read', 'resource:write', 'attachment:read', 'category:read'])]
     private ?bool $isDeleted = null;
 
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'resources')]
