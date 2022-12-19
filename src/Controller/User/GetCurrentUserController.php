@@ -9,7 +9,6 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 #[AsController]
 class GetCurrentUserController extends AbstractController
 {
-
     public function __invoke(): User
     {
         return $this->getUser();

@@ -109,10 +109,10 @@ class ResourceTest extends ApiTestCase
 
         // TODO: Fix this test
         // Test DELETE /api/resources/{id} without authentication
-        // $response = static::createClient()->request('DELETE', '/api/resources/' . $last_resource['id'], ['headers' => ['Accept' => 'application/json']]);
-        // $this->assertResponseStatusCodeSame(401);
-        // $this->assertResponseHeaderSame('content-type', 'application/json');
-        // $this->assertJsonContains(['code' => 401, 'message' => 'JWT Token not found']);
+        $response = static::createClient()->request('DELETE', '/api/resources/' . $last_resource['id'], ['headers' => ['Accept' => 'application/json']]);
+        $this->assertResponseStatusCodeSame(401);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+        $this->assertJsonContains(['code' => 401, 'message' => 'JWT Token not found']);
 
         // Test DELETE /api/resources/{id} with authentication
         $this->jwtToken = UserTest::userLoggedIn();

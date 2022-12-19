@@ -64,4 +64,23 @@ class ResourceManager
 
         return $resource;
     }
+
+    /**
+     * Disable a resource
+     * 
+     * @param User $user
+     * @param Resource $resource
+     * @return Resource|null
+     */
+    public function disableResource(User $user, Resource $resource): ?Resource
+    {
+        // Check if the user is the resource owner or an admin
+        if (in_array('ROLE_ADMIN', $user->getRoles()) || $resource->getUser() === $user) {
+            $resource->setIsDeleted(true);
+            $this->em->persist($resource);
+            $this->em->flush();
+            return $resource;
+        }
+        return null;
+    }
 }

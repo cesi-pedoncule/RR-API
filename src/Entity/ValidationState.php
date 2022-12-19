@@ -21,11 +21,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
     denormalizationContext: ['groups' => ['validationState:write']],
     operations: [
         new Get(
+            denormalizationContext: ['groups' => ['validationState:write']],
             normalizationContext: ['groups' => ['validationState:read']],
             name: 'get_validation_state',
             uriTemplate: '/validation_states/{id}',
         ),
         new GetCollection(
+            denormalizationContext: ['groups' => ['validationState:write']],
             normalizationContext: ['groups' => ['validationState:read']],
             name: 'get_validation_states',
             uriTemplate: '/validation_states',
