@@ -127,8 +127,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Comment::class)]
     private Collection $comments;
 
-    #[ORM\ManyToMany(targetEntity: UserLike::class, mappedBy: 'user')]
-    private Collection $ResourceLikes;
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserLike::class)]
+    private Collection $resourceLikes;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserFollow::class)]
+    private Collection $userFollows;
+
+    #[ORM\OneToMany(mappedBy: 'follower', targetEntity: UserFollow::class)]
+    private Collection $userFollowers;
 
     #[ORM\PrePersist]
     public function setCreatedAtValue()
@@ -151,7 +157,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->validationStates = new ArrayCollection();
         $this->categories = new ArrayCollection();
         $this->comments = new ArrayCollection();
-        $this->ResourceLikes = new ArrayCollection();
+        $this->resourceLikes = new ArrayCollection();
+        $this->userFollows = new ArrayCollection();
+        $this->userFollowers = new ArrayCollection();
     }
 
     public function getId(): ?Uuid
@@ -449,9 +457,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addResourceLike(UserLike $resourceLike): self
     {
-        if (!$this->ResourceLikes->contains($resourceLike)) {
-            $this->ResourceLikes->add($resourceLike);
-            $resourceLike->addUser($this);
+        if (!$this->resourceLikes->contains($resourceLike)) {
+            $this->resourceLikes->add($resourceLike);
+            $resourceLike->setUser($this);
         }
 
         return $this;
@@ -459,8 +467,71 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeResourceLike(UserLike $resourceLike): self
     {
-        if ($this->ResourceLikes->removeElement($resourceLike)) {
-            $resourceLike->removeUser($this);
+        if ($this->resourceLikes->removeElement($resourceLike)) {
+            // set the owning side to null (unless already changed)
+            if ($resourceLike->getUser() === $this) {
+                $resourceLike->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserFollow>
+     */
+    public function getUserFollows(): Collection
+    {
+        return $this->userFollows;
+    }
+
+    public function addUserFollow(UserFollow $userFollow): self
+    {
+        if (!$this->userFollows->contains($userFollow)) {
+            $this->userFollows->add($userFollow);
+            $userFollow->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserFollow(UserFollow $userFollow): self
+    {
+        if ($this->userFollows->removeElement($userFollow)) {
+            // set the owning side to null (unless already changed)
+            if ($userFollow->getUser() === $this) {
+                $userFollow->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserFollow>
+     */
+    public function getUserFollowers(): Collection
+    {
+        return $this->userFollowers;
+    }
+
+    public function addUserFollower(UserFollow $userFollower): self
+    {
+        if (!$this->userFollowers->contains($userFollower)) {
+            $this->userFollowers->add($userFollower);
+            $userFollower->setFollower($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserFollower(UserFollow $userFollower): self
+    {
+        if ($this->userFollowers->removeElement($userFollower)) {
+            // set the owning side to null (unless already changed)
+            if ($userFollower->getFollower() === $this) {
+                $userFollower->setFollower(null);
+            }
         }
 
         return $this;

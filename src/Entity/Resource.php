@@ -116,7 +116,7 @@ class Resource
     #[Groups(['resource:write'])]
     private Collection $validationStates;
 
-    #[ORM\ManyToMany(targetEntity: UserLike::class, mappedBy: 'resource')]
+    #[ORM\OneToMany(mappedBy: 'resource', targetEntity: UserLike::class)]
     private Collection $userLikes;
 
     #[ORM\PrePersist]
@@ -355,7 +355,7 @@ class Resource
     {
         if (!$this->userLikes->contains($userLike)) {
             $this->userLikes->add($userLike);
-            $userLike->addResource($this);
+            $userLike->setResource($this);
         }
 
         return $this;
@@ -364,7 +364,10 @@ class Resource
     public function removeUserLike(UserLike $userLike): self
     {
         if ($this->userLikes->removeElement($userLike)) {
-            $userLike->removeResource($this);
+            // set the owning side to null (unless already changed)
+            if ($userLike->getResource() === $this) {
+                $userLike->setResource(null);
+            }
         }
 
         return $this;
