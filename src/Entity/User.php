@@ -67,6 +67,7 @@ use App\Controller\User\DeleteUserController;
     ],
 )]
 #[ORM\HasLifecycleCallbacks]
+#[ORM\Table(name: '`user`')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]

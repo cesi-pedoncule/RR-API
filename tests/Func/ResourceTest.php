@@ -32,20 +32,24 @@ class ResourceTest extends ApiTestCase
     public function testGetResource(): void
     {
         $this->testGetResources();
+
+        $firstResource = array_shift($this->resources);
+
+
         // Test GET /api/resources/{id} without authentication
-        $response = static::createClient()->request('GET', '/api/resources/' . array_shift($this->resources[0]), ['headers' => ['Accept' => 'application/json']]);
+        $response = static::createClient()->request('GET', '/api/resources/' . $firstResource['id'], ['headers' => ['Accept' => 'application/json']]);
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
-        $this->assertJsonContains(array_shift($this->resources));
-
+        $this->assertJsonContains(['title' => $firstResource['title'], 'description' => $firstResource['description'], 'createdAt' => $firstResource['createdAt'], 'isPublic' => $firstResource['isPublic'], 'isDeleted' => $firstResource['isDeleted']]);
+        
         // Test GET /api/resources/{id} with authentication
         $this->jwtToken = UserTest::userLoggedIn();
-        $response = static::createClient()->request('GET', '/api/resources/' . array_shift($this->resources[0]), ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
-
+        $response = static::createClient()->request('GET', '/api/resources/' . $firstResource['id'], ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
+        
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
-        $this->assertJsonContains(array_shift($this->resources));
+        $this->assertJsonContains(['title' => $firstResource['title'], 'description' => $firstResource['description'], 'createdAt' => $firstResource['createdAt'], 'isPublic' => $firstResource['isPublic'], 'isDeleted' => $firstResource['isDeleted']]);
     }
 
     public function testCreateResource(): void
