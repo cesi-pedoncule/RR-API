@@ -13,10 +13,15 @@ jobs:
   symfony-tests:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: isbang/compose-action@v1.4.1
-      with:
-        compose-file: "./docker-compose.yml"
-        
-      - name: Init Application in Test env
-        run: make tests
+    - name: Checkout
+      uses: actions/checkout@v1
+
+    - name: Start containers
+      run: docker-compose -f "docker-compose.yml" up -d --build
+
+    - name: Init Application in Test env
+      run: make tests
+
+    - name: Stop containers
+      if: always()
+      run: docker-compose -f "docker-compose.yml" down
