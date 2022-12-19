@@ -33,19 +33,21 @@ class CategoryTest extends ApiTestCase
     public function testGetCategorie(): void
     {
         $this->testGetCategories();
+        $firstCategory = array_shift($this->categories);
+        
         // Test GET /api/categories/{id} without authentication
-        $response = static::createClient()->request('GET', '/api/categories/' . array_shift($this->categories[0]), ['headers' => ['Accept' => 'application/json']]);
+        $response = static::createClient()->request('GET', '/api/categories/' . $firstCategory['id'], ['headers' => ['Accept' => 'application/json']]);
         
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
-        $this->assertJsonContains(array_shift($this->categories));
-
+        $this->assertJsonContains(['id' => $firstCategory['id'], 'name' => $firstCategory['name'], 'isVisible' => $firstCategory['isVisible'], 'isDeleted' => $firstCategory['isDeleted']]);
+        
         // Test GET /api/categories/{id} with authentication
         $this->jwtToken = UserTest::userLoggedIn();
-        $response = static::createClient()->request('GET', '/api/categories/' . array_shift($this->categories[0]), ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
-
+        $response = static::createClient()->request('GET', '/api/categories/' . $firstCategory['id'], ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
+        
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
-        $this->assertJsonContains(array_shift($this->categories));
+        $this->assertJsonContains(['id' => $firstCategory['id'], 'name' => $firstCategory['name'], 'isVisible' => $firstCategory['isVisible'], 'isDeleted' => $firstCategory['isDeleted']]);
     }
 }
