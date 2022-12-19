@@ -127,6 +127,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Comment::class)]
     private Collection $comments;
 
+    #[ORM\ManyToMany(targetEntity: UserLike::class, mappedBy: 'user')]
+    private Collection $ResourceLikes;
+
     #[ORM\PrePersist]
     public function setCreatedAtValue()
     {
@@ -148,6 +151,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->validationStates = new ArrayCollection();
         $this->categories = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->ResourceLikes = new ArrayCollection();
     }
 
     public function getId(): ?Uuid
@@ -430,6 +434,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             if ($comment->getUser() === $this) {
                 $comment->setUser(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserLike>
+     */
+    public function getResourceLikes(): Collection
+    {
+        return $this->ResourceLikes;
+    }
+
+    public function addResourceLike(UserLike $resourceLike): self
+    {
+        if (!$this->ResourceLikes->contains($resourceLike)) {
+            $this->ResourceLikes->add($resourceLike);
+            $resourceLike->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeResourceLike(UserLike $resourceLike): self
+    {
+        if ($this->ResourceLikes->removeElement($resourceLike)) {
+            $resourceLike->removeUser($this);
         }
 
         return $this;

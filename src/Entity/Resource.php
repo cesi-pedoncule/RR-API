@@ -116,6 +116,9 @@ class Resource
     #[Groups(['resource:write'])]
     private Collection $validationStates;
 
+    #[ORM\ManyToMany(targetEntity: UserLike::class, mappedBy: 'resource')]
+    private Collection $userLikes;
+
     #[ORM\PrePersist]
     public function setCreatedAtValue()
     {
@@ -134,6 +137,7 @@ class Resource
         $this->comments = new ArrayCollection();
         $this->categories = new ArrayCollection();
         $this->validationStates = new ArrayCollection();
+        $this->userLikes = new ArrayCollection();
     }
 
     public function getId(): ?Uuid
@@ -335,6 +339,33 @@ class Resource
     public function removeCategory(Category $category): self
     {
         $this->categories->removeElement($category);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserLike>
+     */
+    public function getUserLikes(): Collection
+    {
+        return $this->userLikes;
+    }
+
+    public function addUserLike(UserLike $userLike): self
+    {
+        if (!$this->userLikes->contains($userLike)) {
+            $this->userLikes->add($userLike);
+            $userLike->addResource($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserLike(UserLike $userLike): self
+    {
+        if ($this->userLikes->removeElement($userLike)) {
+            $userLike->removeResource($this);
+        }
 
         return $this;
     }
