@@ -94,7 +94,7 @@ class ValidationState
     private ?User $moderator = null;
 
     #[ORM\ManyToOne(inversedBy: 'validationStates', cascade: ['persist'])]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Resource $resource = null;
 
     #[ORM\PrePersist]
