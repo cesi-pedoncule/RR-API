@@ -40,7 +40,6 @@ use App\Controller\User\DeleteUserController;
         ),
         new GetCollection(
             uriTemplate: '/users', 
-            normalizationContext: ['groups' => ['user:read']],
             security: 'is_granted("ROLE_ADMIN")',
             securityMessage: 'Only admins can access this resource.',
         ),
@@ -56,7 +55,6 @@ use App\Controller\User\DeleteUserController;
             controller: DeleteUserController::class,
             security: 'is_granted("ROLE_ADMIN") or object == user',
             securityMessage: 'Only the current user or an admin can delete it.',
-            normalizationContext: ['groups' => ['user:read']],
         ),
     ],
 )]
