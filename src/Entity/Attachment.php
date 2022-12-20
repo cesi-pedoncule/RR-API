@@ -28,8 +28,6 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
         new Get(),
         new GetCollection(),
         new Post(
-            denormalizationContext: ['groups' => ['attachment:write']],
-            normalizationContext: ['groups' => ['attachment:read']],
             name: 'post_attachment',
             uriTemplate: '/attachments/resource',
             controller: UploadFileAttachmentController::class,

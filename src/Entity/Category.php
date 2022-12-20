@@ -22,28 +22,20 @@ use Symfony\Component\Serializer\Annotation\Groups;
     denormalizationContext: ['groups' => ['category:write']],
     operations: [
         new Get(
-            normalizationContext: ['groups' => ['category:read']],
-            denormalizationContext: ['groups' => ['category:write']],
             name: 'get_category',
             uriTemplate: '/categories/{id}'
         ),
         new GetCollection(
-            normalizationContext: ['groups' => ['category:read']],
-            denormalizationContext: ['groups' => ['category:write']],
             name: 'get_categories',
             uriTemplate: '/categories'
         ),
         new Post(
-            denormalizationContext: ['groups' => ['category:write']],
-            normalizationContext: ['groups' => ['category:read']],
             name: 'post_category',
             uriTemplate: '/categories',
             security: 'is_granted("ROLE_ADMIN")',
             securityMessage: 'Only admins can create categories.',
         ),
         new Put(
-            denormalizationContext: ['groups' => ['category:write']],
-            normalizationContext: ['groups' => ['category:read']],
             name: 'put_category',
             uriTemplate: '/categories/{id}',
             security: 'is_granted("ROLE_ADMIN")',

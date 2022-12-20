@@ -24,36 +24,26 @@ use Symfony\Component\Serializer\Annotation\Groups;
     denormalizationContext: ['groups' => ['resource:write']],
     operations: [
         new Get(
-            normalizationContext: ['groups' => ['resource:read']],
-            denormalizationContext: ['groups' => ['resource:write']],
             name: 'get_resource',
             uriTemplate: '/resources/{id}'
         ),
         new GetCollection(
-            normalizationContext: ['groups' => ['resource:read']],
-            denormalizationContext: ['groups' => ['resource:write']],
             name: 'get_resources',
             uriTemplate: '/resources'
         ),
         new Post(
-            denormalizationContext: ['groups' => ['resource:write']],
-            normalizationContext: ['groups' => ['resource:read']],
             name: 'post_resource',
             uriTemplate: '/resources',
             security: 'is_granted("ROLE_USER")',
             securityMessage: 'Only authenticated users can create resources.',
         ),
         new Put(
-            denormalizationContext: ['groups' => ['resource:write']],
-            normalizationContext: ['groups' => ['resource:read']],
             name: 'put_resource',
             uriTemplate: '/resources/{id}',
             security: 'is_granted("ROLE_ADMIN") or object.getUser() == user',
             securityMessage: 'Only admins can edit other users resources.',
         ),
         new Delete(
-            denormalizationContext: ['groups' => ['resource:write']],
-            normalizationContext: ['groups' => ['resource:read']],
             name: 'delete_resource',
             controller: DeleteResourceController::class,
             uriTemplate: '/resources/{id}',

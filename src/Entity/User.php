@@ -29,8 +29,6 @@ use App\Controller\User\DeleteUserController;
             name: 'current_user_get',
             uriTemplate: '/users/me',
             controller: GetCurrentUserController::class,
-            normalizationContext: ['groups' => ['user:read']],
-            denormalizationContext: ['groups' => ['user:write']],
             security: 'is_granted("ROLE_USER")',
             securityMessage: 'Only authenticated users can access this resource.',
         ),
@@ -38,8 +36,6 @@ use App\Controller\User\DeleteUserController;
         new Post(
             uriTemplate: '/users',
             name: 'user_post',
-            normalizationContext: ['groups' => ['user:read']],
-            denormalizationContext: ['groups' => ['user:write']],
             write: true,
         ),
         new GetCollection(
@@ -51,8 +47,6 @@ use App\Controller\User\DeleteUserController;
         new Put(
             uriTemplate: '/users/{id}',
             name: 'user_put',
-            normalizationContext: ['groups' => ['user:read']],
-            denormalizationContext: ['groups' => ['user:write']],
             security: 'is_granted("ROLE_ADMIN") or object == user',
             securityMessage: 'Only authenticated users can access this resource.',
         ),

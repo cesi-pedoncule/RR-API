@@ -21,28 +21,20 @@ use Symfony\Component\Serializer\Annotation\Groups;
     denormalizationContext: ['groups' => ['comment:write']],
     operations: [
         new Get(
-            normalizationContext: ['groups' => ['comment:read']],
-            denormalizationContext: ['groups' => ['comment:write']],
             name: 'get_comment',
             uriTemplate: '/comments/{id}'
         ),
         new GetCollection(
-            normalizationContext: ['groups' => ['comment:read']],
-            denormalizationContext: ['groups' => ['comment:write']],
             name: 'get_comments',
             uriTemplate: '/comments'
         ),
         new Post(
-            denormalizationContext: ['groups' => ['comment:write']],
-            normalizationContext: ['groups' => ['comment:read']],
             name: 'post_comment',
             uriTemplate: '/comments',
             security: 'is_granted("ROLE_USER")',
             securityMessage: 'Only authenticated users can create comments.',
         ),
         new Put(
-            denormalizationContext: ['groups' => ['comment:write']],
-            normalizationContext: ['groups' => ['comment:read']],
             name: 'put_comment',
             uriTemplate: '/comments/{id}',
             security: 'is_granted("ROLE_ADMIN") or object.getUser() == user',

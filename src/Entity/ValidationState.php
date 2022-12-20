@@ -21,28 +21,20 @@ use Symfony\Component\Serializer\Annotation\Groups;
     denormalizationContext: ['groups' => ['validationState:write']],
     operations: [
         new Get(
-            denormalizationContext: ['groups' => ['validationState:write']],
-            normalizationContext: ['groups' => ['validationState:read']],
             name: 'get_validation_state',
             uriTemplate: '/validation_states/{id}',
         ),
         new GetCollection(
-            denormalizationContext: ['groups' => ['validationState:write']],
-            normalizationContext: ['groups' => ['validationState:read']],
             name: 'get_validation_states',
             uriTemplate: '/validation_states',
         ),
         new Post(
-            denormalizationContext: ['groups' => ['validationState:write']],
-            normalizationContext: ['groups' => ['validationState:read']],
             name: 'post_validation_state',
             uriTemplate: '/validation_states',
             security: 'is_granted("ROLE_USER")',
             securityMessage: 'Only authenticated users can create validationStates.',
         ),
         new Put(
-            denormalizationContext: ['groups' => ['validationState:write']],
-            normalizationContext: ['groups' => ['validationState:read']],
             name: 'put_validation_state',
             uriTemplate: '/validation_states/{id}',
             security: 'is_granted("ROLE_ADMIN") or object.getModerator() == user',
