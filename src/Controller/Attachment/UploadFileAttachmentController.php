@@ -24,7 +24,7 @@ class UploadFileAttachmentController extends AbstractController
         $resource = $this->em->getRepository(Resource::class)->findOneBy([], ['id' => 'DESC']); // Todo : replace by the resource id
         
         $attachment = (new Attachment())
-            ->setFilename($file->getClientOriginalName())
+            ->setFileName($file->getClientOriginalName())
             ->setType($file->getMimeType())
             ->setFile($file)
             ->setUser($this->getUser())

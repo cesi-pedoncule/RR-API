@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20221219144831 extends AbstractMigration
+final class Version20221220102243 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -24,7 +24,7 @@ final class Version20221219144831 extends AbstractMigration
         $this->addSql('CREATE SEQUENCE state_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE user_follow_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE user_like_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE TABLE attachment (id UUID NOT NULL, user_id UUID NOT NULL, resource_id UUID NOT NULL, file_path VARCHAR(255) DEFAULT NULL, filename VARCHAR(255) NOT NULL, type VARCHAR(255) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, is_deleted BOOLEAN NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE attachment (id UUID NOT NULL, user_id UUID NOT NULL, resource_id UUID NOT NULL, file_path VARCHAR(255) DEFAULT NULL, file_name VARCHAR(255) NOT NULL, type VARCHAR(255) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, is_deleted BOOLEAN NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_795FD9BBA76ED395 ON attachment (user_id)');
         $this->addSql('CREATE INDEX IDX_795FD9BB89329D25 ON attachment (resource_id)');
         $this->addSql('COMMENT ON COLUMN attachment.id IS \'(DC2Type:uuid)\'');

@@ -56,17 +56,15 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             securityMessage: 'Only authenticated users can create attachments.',
         ),
         new Put(
-            denormalizationContext: ['groups' => ['attachment:write']],
-            normalizationContext: ['groups' => ['attachment:read']],
             name: 'put_attachment',
             uriTemplate: '/attachments/{id}',
-            security: 'is_granted("ROLE_ADMIN") or object.getCreator() == user',
+            security: 'is_granted("ROLE_ADMIN") or object.getUser() == user',
             securityMessage: 'Only admins can edit other users attachments.',
         ),
         new Delete(
             name: 'delete_attachment',
             uriTemplate: '/attachments/{id}',
-            security: 'is_granted("ROLE_ADMIN") or object.getCreator() == user',
+            security: 'is_granted("ROLE_ADMIN") or object.getUser() == user',
             securityMessage: 'Only admins can delete other users attachments.',
         )
     ]
@@ -92,7 +90,7 @@ class Attachment
 
     #[ORM\Column(length: 255)]
     #[Groups(['attachment:read', 'attachment:write', 'resource:read'])]
-    private ?string $filename = null;
+    private ?string $fileName = null;
 
     #[ORM\Column(length: 255)]
     #[Groups(['attachment:read', 'resource:read'])]
@@ -163,14 +161,14 @@ class Attachment
         return $this;
     }
 
-    public function getFilename(): ?string
+    public function getFileName(): ?string
     {
-        return $this->filename;
+        return $this->fileName;
     }
 
-    public function setFilename(string $filename): self
+    public function setFileName(string $fileName): self
     {
-        $this->filename = $filename;
+        $this->fileName = $fileName;
 
         return $this;
     }
