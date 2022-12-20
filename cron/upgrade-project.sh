@@ -6,7 +6,7 @@
 
 # Install the latest version of the API
 echo "Updating the project..."
-git pull
+git pull origin main
 
 # Run the docker compose file
 echo "Building the docker containers..."
