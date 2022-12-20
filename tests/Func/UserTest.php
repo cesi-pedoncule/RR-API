@@ -9,6 +9,11 @@ class UserTest extends ApiTestCase
     private string $jwtToken;
     private array $users;
 
+    /**
+     * Return a JWT token for a user
+     *
+     * @return string
+     */
     public static function userLoggedIn(): string 
     {
         $response = static::createClient()->request('POST', '/api/login_check', ['json' => [
@@ -18,6 +23,25 @@ class UserTest extends ApiTestCase
         return $response->toArray()['token'];
     }
 
+    /**
+     * Return a JWT refresh token for a user
+     *
+     * @return string
+     */
+    public static function userRefresh(): string
+    {
+        $response = static::createClient()->request('POST', '/api/login_check', ['json' => [
+            'username' => 'user0@example.com',
+            'password' => 'password',
+        ]]);
+        return $response->toArray()['refresh_token'];
+    }
+
+    /**
+     * Return the first user id
+     * 
+     * @return string
+     */
     public static function getUserTestId(): string
     {
         $jwtToken = self::userLoggedIn();
@@ -63,6 +87,46 @@ class UserTest extends ApiTestCase
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
         $this->assertJsonContains(['id' => $first_user['id'], 'email' => $first_user['email']]);
+    }
+
+    public function testGetMe(): void
+    {
+        // Test GET /api/users/me without auth
+        $response = static::createClient()->request('GET', '/api/users/me', ['headers' => ['Accept' => 'application/json']]);
+        $this->assertResponseStatusCodeSame(401);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+        $this->assertJsonContains(['code' => 401, 'message' => 'JWT Token not found']);
+
+        // Test GET /api/users/me with auth
+        $this->jwtToken = self::userLoggedIn();
+
+        $response = static::createClient()->request('GET', '/api/users/me', ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
+        $this->assertJsonContains(['email' => 'user0@example.com']);
+    }
+
+    public function testUserLogin(): void
+    {
+        // Test POST /api/login_check without auth
+        $response = static::createClient()->request('POST', '/api/login_check', ['json' => [
+            'username' => 'user0@example.com',
+            'password' => 'password',
+        ]]);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+    }
+
+    public function testUserRefresh(): void
+    {
+        // Test POST /api/token/refresh without auth
+        $response = static::createClient()->request('POST', '/api/token/refresh', ['json' => [
+            'refresh_token' => UserTest::userRefresh(),
+        ]]);
+
+        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
     }
 
     public function testCreateUser(): void
