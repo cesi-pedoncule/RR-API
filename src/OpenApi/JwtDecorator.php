@@ -76,7 +76,7 @@ final class JwtDecorator implements OpenApiFactoryInterface
                 operationId: 'postCredentialsItem',
                 tags: ['Token'],
                 responses: [
-                    '201' => [
+                    '200' => [
                         'description' => 'Get JWT token',
                         'content' => [
                             'application/json' => [
@@ -107,7 +107,7 @@ final class JwtDecorator implements OpenApiFactoryInterface
                 operationId: 'postCredentialsItem',
                 tags: ['Token'],
                 responses: [
-                    '201' => [
+                    '200' => [
                         'description' => 'Get JWT token',
                         'content' => [
                             'application/json' => [
