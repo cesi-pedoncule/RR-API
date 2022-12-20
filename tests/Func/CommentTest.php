@@ -137,13 +137,12 @@ class CommentTest extends ApiTestCase
         $this->testGetComments(21);
         $last_comment = array_pop($this->comments);
 
-        // TODO : Fix this test
         // Test DELETE /api/comments/{id} without authentication
-        // $response = static::createClient()->request('DELETE', '/api/comments/' . $last_comment['id'], ['headers' => ['Accept' => 'application/json']]);
+        $response = static::createClient()->request('DELETE', '/api/comments/' . $last_comment['id'], ['headers' => ['Accept' => 'application/json']]);
 
-        // $this->assertResponseStatusCodeSame(401);
-        // $this->assertResponseHeaderSame('content-type', 'application/json');
-        // $this->assertJsonContains(['message' => 'JWT Token not found']);
+        $this->assertResponseStatusCodeSame(401);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+        $this->assertJsonContains(['message' => 'JWT Token not found']);
 
         // Test DELETE /api/comments/{id} with authentication
         $this->jwtToken = UserTest::userLoggedIn();
