@@ -11,16 +11,16 @@ class ValidationStateTest extends ApiTestCase
 
     public function testGetValidationStates(int $nbValidationStates = 3): void
     {
-        // Test GET /api/validation_states without authentication
-        $response = static::createClient()->request('GET', '/api/validation_states', ['headers' => ['Accept' => 'application/json']]);
+        // Test GET /validation_states without authentication
+        $response = static::createClient()->request('GET', '/validation_states', ['headers' => ['Accept' => 'application/json']]);
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
         $this->assertCount($nbValidationStates, $response->toArray());
         
-        // Test GET /api/validation_states with authentication
+        // Test GET /validation_states with authentication
         $this->jwtToken = UserTest::userLoggedIn();
-        $response = static::createClient()->request('GET', '/api/validation_states', ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
+        $response = static::createClient()->request('GET', '/validation_states', ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
@@ -36,16 +36,16 @@ class ValidationStateTest extends ApiTestCase
         $firstValidationState = array_shift($this->validationStates);
 
         $this->testGetValidationStates();
-        // Test GET /api/validation_states/{id} without authentication
-        $response = static::createClient()->request('GET', '/api/validation_states/' . $firstValidationState['id'], ['headers' => ['Accept' => 'application/json']]);
+        // Test GET /validation_states/{id} without authentication
+        $response = static::createClient()->request('GET', '/validation_states/' . $firstValidationState['id'], ['headers' => ['Accept' => 'application/json']]);
         
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
         $this->assertJsonContains(['id' => $firstValidationState['id'], 'state' => $firstValidationState['state']]);
 
-        // Test GET /api/validation_states/{id} with authentication
+        // Test GET /validation_states/{id} with authentication
         $this->jwtToken = UserTest::userLoggedIn();
-        $response = static::createClient()->request('GET', '/api/validation_states/' . $firstValidationState['id'], ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
+        $response = static::createClient()->request('GET', '/validation_states/' . $firstValidationState['id'], ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
@@ -55,17 +55,17 @@ class ValidationStateTest extends ApiTestCase
     public function testCreateValidationState(): void
     {
         $jsonValidationState = [
-            'state' => '/api/states/' . StateTest::getStateTestId(),
-            'moderator' => '/api/users/' . UserTest::getUserTestId(),
+            'state' => '/states/' . StateTest::getStateTestId(),
+            'moderator' => '/users/' . UserTest::getUserTestId(),
         ];
 
-        // Test POST /api/validation_states without authentication
-        $response = static::createClient()->request('POST', '/api/validation_states', ['headers' => ['Accept' => 'application/json'], 'json' => $jsonValidationState ]);
+        // Test POST /validation_states without authentication
+        $response = static::createClient()->request('POST', '/validation_states', ['headers' => ['Accept' => 'application/json'], 'json' => $jsonValidationState ]);
         $this->assertResponseStatusCodeSame(401);
 
-        // Test POST /api/validation_states with authentication
+        // Test POST /validation_states with authentication
         $this->jwtToken = UserTest::userLoggedIn();
-        $response = static::createClient()->request('POST', '/api/validation_states', ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken, 'json' => $jsonValidationState ]);
+        $response = static::createClient()->request('POST', '/validation_states', ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken, 'json' => $jsonValidationState ]);
 
         $this->assertResponseStatusCodeSame(201);
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
@@ -79,19 +79,19 @@ class ValidationStateTest extends ApiTestCase
         $lastValidationState = array_pop($this->validationStates);
 
         $jsonValidationState = [
-            'state' => '/api/states/' . StateTest::getStateTestId(),
-            'moderator' => '/api/users/' . UserTest::getUserTestId(),
+            'state' => '/states/' . StateTest::getStateTestId(),
+            'moderator' => '/users/' . UserTest::getUserTestId(),
         ];
 
-        // Test PUT /api/validation_states/{id} without authentication
-        $response = static::createClient()->request('PUT', '/api/validation_states/' . $lastValidationState['id'], ['headers' => ['Accept' => 'application/json'], 'json' => $jsonValidationState ]);
+        // Test PUT /validation_states/{id} without authentication
+        $response = static::createClient()->request('PUT', '/validation_states/' . $lastValidationState['id'], ['headers' => ['Accept' => 'application/json'], 'json' => $jsonValidationState ]);
 
         $this->assertResponseStatusCodeSame(401);
 
-        // Test PUT /api/validation_states/{id} with authentication
+        // Test PUT /validation_states/{id} with authentication
         $this->jwtToken = UserTest::userLoggedIn();
 
-        $response = static::createClient()->request('PUT', '/api/validation_states/' . $lastValidationState['id'], ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken, 'json' => $jsonValidationState ]);
+        $response = static::createClient()->request('PUT', '/validation_states/' . $lastValidationState['id'], ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken, 'json' => $jsonValidationState ]);
 
         $this->assertResponseStatusCodeSame(200);
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
@@ -104,14 +104,14 @@ class ValidationStateTest extends ApiTestCase
         $this->testGetValidationStates(4);
         $lastValidationState = array_pop($this->validationStates);
 
-        // Test DELETE /api/validation_states/{id} without authentication
-        $response = static::createClient()->request('DELETE', '/api/validation_states/' . $lastValidationState['id'], ['headers' => ['Accept' => 'application/json']]);
+        // Test DELETE /validation_states/{id} without authentication
+        $response = static::createClient()->request('DELETE', '/validation_states/' . $lastValidationState['id'], ['headers' => ['Accept' => 'application/json']]);
 
         $this->assertResponseStatusCodeSame(401);
 
-        // Test DELETE /api/validation_states/{id} with authentication
+        // Test DELETE /validation_states/{id} with authentication
         $this->jwtToken = UserTest::userLoggedIn();
-        $response = static::createClient()->request('DELETE', '/api/validation_states/' . $lastValidationState['id'], ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
+        $response = static::createClient()->request('DELETE', '/validation_states/' . $lastValidationState['id'], ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
 
         $this->assertResponseStatusCodeSame(204);
     }

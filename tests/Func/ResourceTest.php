@@ -11,8 +11,8 @@ class ResourceTest extends ApiTestCase
 
     public function testGetResources(int $nbResources = 20): void
     {
-        // Test GET /api/resources without authentication
-        $response = static::createClient()->request('GET', '/api/resources', ['headers' => ['Accept' => 'application/json']]);
+        // Test GET /resources without authentication
+        $response = static::createClient()->request('GET', '/resources', ['headers' => ['Accept' => 'application/json']]);
 
         $this->resources = $response->toArray();
 
@@ -20,9 +20,9 @@ class ResourceTest extends ApiTestCase
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
         $this->assertCount($nbResources, $response->toArray());
 
-        // Test GET /api/resources with authentication
+        // Test GET /resources with authentication
         $this->jwtToken = UserTest::userLoggedIn();
-        $response = static::createClient()->request('GET', '/api/resources', ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
+        $response = static::createClient()->request('GET', '/resources', ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
@@ -36,16 +36,16 @@ class ResourceTest extends ApiTestCase
         $firstResource = array_shift($this->resources);
 
 
-        // Test GET /api/resources/{id} without authentication
-        $response = static::createClient()->request('GET', '/api/resources/' . $firstResource['id'], ['headers' => ['Accept' => 'application/json']]);
+        // Test GET /resources/{id} without authentication
+        $response = static::createClient()->request('GET', '/resources/' . $firstResource['id'], ['headers' => ['Accept' => 'application/json']]);
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
         $this->assertJsonContains(['title' => $firstResource['title'], 'description' => $firstResource['description'], 'createdAt' => $firstResource['createdAt'], 'isPublic' => $firstResource['isPublic'], 'isDeleted' => $firstResource['isDeleted']]);
         
-        // Test GET /api/resources/{id} with authentication
+        // Test GET /resources/{id} with authentication
         $this->jwtToken = UserTest::userLoggedIn();
-        $response = static::createClient()->request('GET', '/api/resources/' . $firstResource['id'], ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
+        $response = static::createClient()->request('GET', '/resources/' . $firstResource['id'], ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
         
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
@@ -62,16 +62,16 @@ class ResourceTest extends ApiTestCase
             'isDeleted' => false
         ];
 
-        // Test POST /api/resources without authentication
-        $response = static::createClient()->request('POST', '/api/resources', ['headers' => ['Accept' => 'application/json'], 'json' => $json_value]);
+        // Test POST /resources without authentication
+        $response = static::createClient()->request('POST', '/resources', ['headers' => ['Accept' => 'application/json'], 'json' => $json_value]);
         $this->assertResponseStatusCodeSame(401);
         $this->assertResponseHeaderSame('content-type', 'application/json');
         $this->assertJsonContains(['code' => 401, 'message' => 'JWT Token not found']);
 
-        // Test POST /api/resources with authentication
+        // Test POST /resources with authentication
         $this->jwtToken = UserTest::userLoggedIn();
 
-        $response = static::createClient()->request('POST', '/api/resources', ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken, 'json' => $json_value]);
+        $response = static::createClient()->request('POST', '/resources', ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken, 'json' => $json_value]);
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
         $this->assertJsonContains(['title' => $json_value['title'], 'description' => $json_value['description'], 'isPublic' => $json_value['isPublic'], 'isDeleted' => $json_value['isDeleted']]);
@@ -91,16 +91,16 @@ class ResourceTest extends ApiTestCase
         ];
 
         // TODO : Fix this test
-        // Test PUT /api/resources/{id} without authentication
-        // $response = static::createClient()->request('PUT', '/api/resources/' . $last_resource['id'], ['headers' => ['Accept' => 'application/json'], 'json' => $json_value]);
+        // Test PUT /resources/{id} without authentication
+        // $response = static::createClient()->request('PUT', '/resources/' . $last_resource['id'], ['headers' => ['Accept' => 'application/json'], 'json' => $json_value]);
         // $this->assertResponseStatusCodeSame(401);
         // $this->assertResponseHeaderSame('content-type', 'application/json');
         // $this->assertJsonContains(['code' => 401, 'message' => 'JWT Token not found']);
 
-        // Test PUT /api/resources/{id} with authentication
+        // Test PUT /resources/{id} with authentication
         $this->jwtToken = UserTest::userLoggedIn();
 
-        $response = static::createClient()->request('PUT', '/api/resources/' . $last_resource['id'], ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken, 'json' => $json_value]);
+        $response = static::createClient()->request('PUT', '/resources/' . $last_resource['id'], ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken, 'json' => $json_value]);
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
         $this->assertJsonContains(['title' => $json_value['title'], 'description' => $json_value['description'], 'isPublic' => $json_value['isPublic'], 'isDeleted' => $json_value['isDeleted']]);
@@ -112,16 +112,16 @@ class ResourceTest extends ApiTestCase
         $last_resource = array_pop($this->resources);
 
         // TODO: Fix this test
-        // Test DELETE /api/resources/{id} without authentication
-        $response = static::createClient()->request('DELETE', '/api/resources/' . $last_resource['id'], ['headers' => ['Accept' => 'application/json']]);
+        // Test DELETE /resources/{id} without authentication
+        $response = static::createClient()->request('DELETE', '/resources/' . $last_resource['id'], ['headers' => ['Accept' => 'application/json']]);
         $this->assertResponseStatusCodeSame(401);
         $this->assertResponseHeaderSame('content-type', 'application/json');
         $this->assertJsonContains(['code' => 401, 'message' => 'JWT Token not found']);
 
-        // Test DELETE /api/resources/{id} with authentication
+        // Test DELETE /resources/{id} with authentication
         $this->jwtToken = UserTest::userLoggedIn();
 
-        $response = static::createClient()->request('DELETE', '/api/resources/' . $last_resource['id'], ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
+        $response = static::createClient()->request('DELETE', '/resources/' . $last_resource['id'], ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
         $this->assertResponseStatusCodeSame(204);
     }
 }

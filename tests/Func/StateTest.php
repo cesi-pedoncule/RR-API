@@ -16,7 +16,7 @@ class StateTest extends ApiTestCase
      */
     public static function getStateTestId(): string
     {
-        $response = static::createClient()->request('GET', '/api/states', ['headers' => ['Accept' => 'application/json']]);
+        $response = static::createClient()->request('GET', '/states', ['headers' => ['Accept' => 'application/json']]);
         $states = $response->toArray();
         $first_state = array_shift($states);
         return $first_state['id'];
@@ -24,16 +24,16 @@ class StateTest extends ApiTestCase
 
     public function testGetStates(int $nbStates = 3): void
     {
-        // Test GET /api/states without authentication
-        $response = static::createClient()->request('GET', '/api/states', ['headers' => ['Accept' => 'application/json']]);
+        // Test GET /states without authentication
+        $response = static::createClient()->request('GET', '/states', ['headers' => ['Accept' => 'application/json']]);
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
         $this->assertCount($nbStates, $response->toArray());
 
-        // Test GET /api/states with authentication
+        // Test GET /states with authentication
         $this->jwtToken = UserTest::userLoggedIn();
-        $response = static::createClient()->request('GET', '/api/states', ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
+        $response = static::createClient()->request('GET', '/states', ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
@@ -49,16 +49,16 @@ class StateTest extends ApiTestCase
         $firstState = array_shift($this->states);
 
         $this->testGetStates();
-        // Test GET /api/states/{id} without authentication
-        $response = static::createClient()->request('GET', '/api/states/' . $firstState['id'], ['headers' => ['Accept' => 'application/json']]);
+        // Test GET /states/{id} without authentication
+        $response = static::createClient()->request('GET', '/states/' . $firstState['id'], ['headers' => ['Accept' => 'application/json']]);
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
         $this->assertJsonContains(['id' => $firstState['id'], 'label' => $firstState['label']]);
 
-        // Test GET /api/states/{id} with authentication
+        // Test GET /states/{id} with authentication
         $this->jwtToken = UserTest::userLoggedIn();
-        $response = static::createClient()->request('GET', '/api/states/' . $firstState['id'], ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
+        $response = static::createClient()->request('GET', '/states/' . $firstState['id'], ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
@@ -71,17 +71,17 @@ class StateTest extends ApiTestCase
             'label' => 'Test state',
         ];
 
-        // Test POST /api/states without authentication
-        $response = static::createClient()->request('POST', '/api/states', ['json' => $jsonValue, 'headers' => ['Accept' => 'application/json']]);
+        // Test POST /states without authentication
+        $response = static::createClient()->request('POST', '/states', ['json' => $jsonValue, 'headers' => ['Accept' => 'application/json']]);
 
         $this->assertResponseStatusCodeSame(401);
         $this->assertResponseHeaderSame('content-type', 'application/json');
         $this->assertJsonContains(['code' => 401, 'message' => 'JWT Token not found']);
 
-        // Test POST /api/states with authentication (Admin account)
+        // Test POST /states with authentication (Admin account)
         $this->jwtToken = UserTest::userLoggedIn();
 
-        $response = static::createClient()->request('POST', '/api/states', ['json' => $jsonValue, 'headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
+        $response = static::createClient()->request('POST', '/states', ['json' => $jsonValue, 'headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
 
         $this->assertResponseStatusCodeSame(201);
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
@@ -98,16 +98,16 @@ class StateTest extends ApiTestCase
         $this->testGetStates(4);
         $lastState = array_pop($this->states);
 
-        // Test PUT /api/states/{id} without authentication
-        $response = static::createClient()->request('PUT', '/api/states/' . $lastState['id'], ['json' => $newJsonValue, 'headers' => ['Accept' => 'application/json']]);
+        // Test PUT /states/{id} without authentication
+        $response = static::createClient()->request('PUT', '/states/' . $lastState['id'], ['json' => $newJsonValue, 'headers' => ['Accept' => 'application/json']]);
         $this->assertResponseStatusCodeSame(401);
         $this->assertResponseHeaderSame('content-type', 'application/json');
         $this->assertJsonContains(['code' => 401, 'message' => 'JWT Token not found']);
 
-        // Test PUT /api/states/{id} with authentication (Admin account)
+        // Test PUT /states/{id} with authentication (Admin account)
         $this->jwtToken = UserTest::userLoggedIn();
 
-        $response = static::createClient()->request('PUT', '/api/states/' . $lastState['id'], ['json' => $newJsonValue, 'headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
+        $response = static::createClient()->request('PUT', '/states/' . $lastState['id'], ['json' => $newJsonValue, 'headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
@@ -120,16 +120,16 @@ class StateTest extends ApiTestCase
         $this->testGetStates(4);
         $lastState = array_pop($this->states);
 
-        // Test DELETE /api/states/{id} without authentication
-        $response = static::createClient()->request('DELETE', '/api/states/' . $lastState['id'], ['headers' => ['Accept' => 'application/json']]);
+        // Test DELETE /states/{id} without authentication
+        $response = static::createClient()->request('DELETE', '/states/' . $lastState['id'], ['headers' => ['Accept' => 'application/json']]);
         $this->assertResponseStatusCodeSame(401);
         $this->assertResponseHeaderSame('content-type', 'application/json');
         $this->assertJsonContains(['code' => 401, 'message' => 'JWT Token not found']);
 
-        // Test DELETE /api/states/{id} with authentication (Admin account)
+        // Test DELETE /states/{id} with authentication (Admin account)
         $this->jwtToken = UserTest::userLoggedIn();
 
-        $response = static::createClient()->request('DELETE', '/api/states/' . $lastState['id'], ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
+        $response = static::createClient()->request('DELETE', '/states/' . $lastState['id'], ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
 
         $this->assertResponseStatusCodeSame(204);
     }

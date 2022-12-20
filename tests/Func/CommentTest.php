@@ -16,7 +16,7 @@ class CommentTest extends ApiTestCase
     {
         if (empty($this->userId)) {
             $this->jwtToken = UserTest::userLoggedIn();
-            $response = static::createClient()->request('GET', '/api/users', ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
+            $response = static::createClient()->request('GET', '/users', ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
             $this->userId = $response->toArray()[0]['id'];
         }
         return $this->userId;
@@ -26,7 +26,7 @@ class CommentTest extends ApiTestCase
     {
         if (empty($this->resourceID)) {
             $this->jwtToken = UserTest::userLoggedIn();
-            $response = static::createClient()->request('GET', '/api/resources', ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
+            $response = static::createClient()->request('GET', '/resources', ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
             $this->resourceID = $response->toArray()[0]['id'];
         }
         return $this->resourceID;
@@ -34,8 +34,8 @@ class CommentTest extends ApiTestCase
 
     public function testGetComments(int $nbComments = 20): void
     {
-        // Test GET /api/comments without authentication
-        $response = static::createClient()->request('GET', '/api/comments', ['headers' => ['Accept' => 'application/json']]);
+        // Test GET /comments without authentication
+        $response = static::createClient()->request('GET', '/comments', ['headers' => ['Accept' => 'application/json']]);
 
         $this->comments = $response->toArray();
 
@@ -43,10 +43,10 @@ class CommentTest extends ApiTestCase
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
         $this->assertCount($nbComments, $response->toArray());
 
-        // Test GET /api/comments with authentication
+        // Test GET /comments with authentication
         $this->jwtToken = UserTest::userLoggedIn();
         
-        $response = static::createClient()->request('GET', '/api/comments', ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
+        $response = static::createClient()->request('GET', '/comments', ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
@@ -60,16 +60,16 @@ class CommentTest extends ApiTestCase
         $this->testGetComments();
         $first_comment = array_shift($this->comments);
 
-        // Test GET /api/comments/{id} without authentication
-        $response = static::createClient()->request('GET', '/api/comments/' . $first_comment['id'], ['headers' => ['Accept' => 'application/json']]);
+        // Test GET /comments/{id} without authentication
+        $response = static::createClient()->request('GET', '/comments/' . $first_comment['id'], ['headers' => ['Accept' => 'application/json']]);
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
         // $this->assertJsonContains(array_shift($this->comments));
 
-        // Test GET /api/comments/{id} with authentication
+        // Test GET /comments/{id} with authentication
         $this->jwtToken = UserTest::userLoggedIn();
-        $response = static::createClient()->request('GET', '/api/comments/' . $first_comment['id'], ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
+        $response = static::createClient()->request('GET', '/comments/' . $first_comment['id'], ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
@@ -82,22 +82,22 @@ class CommentTest extends ApiTestCase
 
         $json_value = [
             'comment' => 'Test comment',
-            'resource' => '/api/resources/' . $this->getResourceId(),
-            'user' => '/api/users/' . UserTest::getUserTestId(),
+            'resource' => '/resources/' . $this->getResourceId(),
+            'user' => '/users/' . UserTest::getUserTestId(),
             'isDeleted' => false
         ];
 
-        // Test POST /api/comments without authentication
-        $response = static::createClient()->request('POST', '/api/comments', ['headers' => ['Accept' => 'application/json'], 'json' => $json_value]);
+        // Test POST /comments without authentication
+        $response = static::createClient()->request('POST', '/comments', ['headers' => ['Accept' => 'application/json'], 'json' => $json_value]);
 
         $this->assertResponseStatusCodeSame(401);
         $this->assertResponseHeaderSame('content-type', 'application/json');
         $this->assertJsonContains(['message' => 'JWT Token not found']);
 
-        // Test POST /api/comments with authentication
+        // Test POST /comments with authentication
         $this->jwtToken = UserTest::userLoggedIn();
 
-        $response = static::createClient()->request('POST', '/api/comments', ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken, 'json' => $json_value]);
+        $response = static::createClient()->request('POST', '/comments', ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken, 'json' => $json_value]);
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
@@ -111,21 +111,21 @@ class CommentTest extends ApiTestCase
 
         $json_value = [
             'comment' => 'Test new comment',
-            'resource' => '/api/resources/' . $this->getResourceId(),
-            'user' => '/api/users/' . UserTest::getUserTestId(),
+            'resource' => '/resources/' . $this->getResourceId(),
+            'user' => '/users/' . UserTest::getUserTestId(),
             'isDeleted' => false
         ];
 
-        // Test PUT /api/comments/{id} without authentication
-        $response = static::createClient()->request('PUT', '/api/comments/' . $first_comment['id'], ['headers' => ['Accept' => 'application/json'], 'json' => $json_value]);
+        // Test PUT /comments/{id} without authentication
+        $response = static::createClient()->request('PUT', '/comments/' . $first_comment['id'], ['headers' => ['Accept' => 'application/json'], 'json' => $json_value]);
 
         $this->assertResponseStatusCodeSame(401);
         $this->assertResponseHeaderSame('content-type', 'application/json');
         $this->assertJsonContains(['message' => 'JWT Token not found']);
 
-        // Test PUT /api/comments/{id} with authentication
+        // Test PUT /comments/{id} with authentication
         $this->jwtToken = UserTest::userLoggedIn();
-        $response = static::createClient()->request('PUT', '/api/comments/' . $first_comment['id'], ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken, 'json' => $json_value]);
+        $response = static::createClient()->request('PUT', '/comments/' . $first_comment['id'], ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken, 'json' => $json_value]);
 
         $this->assertResponseStatusCodeSame(200);
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
@@ -137,17 +137,17 @@ class CommentTest extends ApiTestCase
         $this->testGetComments(21);
         $last_comment = array_pop($this->comments);
 
-        // Test DELETE /api/comments/{id} without authentication
-        $response = static::createClient()->request('DELETE', '/api/comments/' . $last_comment['id'], ['headers' => ['Accept' => 'application/json']]);
+        // Test DELETE /comments/{id} without authentication
+        $response = static::createClient()->request('DELETE', '/comments/' . $last_comment['id'], ['headers' => ['Accept' => 'application/json']]);
 
         $this->assertResponseStatusCodeSame(401);
         $this->assertResponseHeaderSame('content-type', 'application/json');
         $this->assertJsonContains(['message' => 'JWT Token not found']);
 
-        // Test DELETE /api/comments/{id} with authentication
+        // Test DELETE /comments/{id} with authentication
         $this->jwtToken = UserTest::userLoggedIn();
 
-        $response = static::createClient()->request('DELETE', '/api/comments/' . $last_comment['id'], ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
+        $response = static::createClient()->request('DELETE', '/comments/' . $last_comment['id'], ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
 
         $this->assertResponseIsSuccessful();
     }

@@ -16,7 +16,7 @@ class UserTest extends ApiTestCase
      */
     public static function userLoggedIn(): string 
     {
-        $response = static::createClient()->request('POST', '/api/login_check', ['json' => [
+        $response = static::createClient()->request('POST', '/login_check', ['json' => [
             'username' => 'user0@example.com',
             'password' => 'password',
         ]]);
@@ -30,7 +30,7 @@ class UserTest extends ApiTestCase
      */
     public static function userRefresh(): string
     {
-        $response = static::createClient()->request('POST', '/api/login_check', ['json' => [
+        $response = static::createClient()->request('POST', '/login_check', ['json' => [
             'username' => 'user0@example.com',
             'password' => 'password',
         ]]);
@@ -45,7 +45,7 @@ class UserTest extends ApiTestCase
     public static function getUserTestId(): string
     {
         $jwtToken = self::userLoggedIn();
-        $response = static::createClient()->request('GET', '/api/users', ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $jwtToken]);
+        $response = static::createClient()->request('GET', '/users', ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $jwtToken]);
         $users = $response->toArray();
         $first_user = array_shift($users);
         return $first_user['id'];
@@ -53,16 +53,16 @@ class UserTest extends ApiTestCase
 
     public function testGetUsers(int $nbUsers = 10): void
     {
-        // Test GET /api/users without auth
-        $response = static::createClient()->request('GET', '/api/users', ['headers' => ['Accept' => 'application/json']]);
+        // Test GET /users without auth
+        $response = static::createClient()->request('GET', '/users', ['headers' => ['Accept' => 'application/json']]);
         $this->assertResponseStatusCodeSame(401);
         $this->assertResponseHeaderSame('content-type', 'application/json');
         $this->assertJsonContains(['code' => 401, 'message' => 'JWT Token not found']);
 
-        // Test GET /api/users with auth
+        // Test GET /users with auth
         $this->jwtToken = self::userLoggedIn();
 
-        $response = static::createClient()->request('GET', '/api/users', ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
+        $response = static::createClient()->request('GET', '/users', ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
         $this->assertCount($nbUsers, $response->toArray());
@@ -77,13 +77,13 @@ class UserTest extends ApiTestCase
         $this->testGetUsers();
         $first_user = array_shift($this->users);
 
-        // Test GET /api/users/{id} without auth
-        $response = static::createClient()->request('GET', '/api/users/'. $first_user['id'], ['headers' => ['Accept' => 'application/json']]);
+        // Test GET /users/{id} without auth
+        $response = static::createClient()->request('GET', '/users/'. $first_user['id'], ['headers' => ['Accept' => 'application/json']]);
         $this->assertResponseStatusCodeSame(200);
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
 
-        // Test GET /api/users/{id} with auth
-        $response = static::createClient()->request('GET', '/api/users/' . $first_user['id'], ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
+        // Test GET /users/{id} with auth
+        $response = static::createClient()->request('GET', '/users/' . $first_user['id'], ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
         $this->assertJsonContains(['id' => $first_user['id'], 'email' => $first_user['email']]);
@@ -91,16 +91,16 @@ class UserTest extends ApiTestCase
 
     public function testGetMe(): void
     {
-        // Test GET /api/users/me without auth
-        $response = static::createClient()->request('GET', '/api/users/me', ['headers' => ['Accept' => 'application/json']]);
+        // Test GET /users/me without auth
+        $response = static::createClient()->request('GET', '/users/me', ['headers' => ['Accept' => 'application/json']]);
         $this->assertResponseStatusCodeSame(401);
         $this->assertResponseHeaderSame('content-type', 'application/json');
         $this->assertJsonContains(['code' => 401, 'message' => 'JWT Token not found']);
 
-        // Test GET /api/users/me with auth
+        // Test GET /users/me with auth
         $this->jwtToken = self::userLoggedIn();
 
-        $response = static::createClient()->request('GET', '/api/users/me', ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
+        $response = static::createClient()->request('GET', '/users/me', ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
         $this->assertJsonContains(['email' => 'user0@example.com']);
@@ -108,8 +108,8 @@ class UserTest extends ApiTestCase
 
     public function testUserLogin(): void
     {
-        // Test POST /api/login_check without auth
-        $response = static::createClient()->request('POST', '/api/login_check', ['json' => [
+        // Test POST /login_check without auth
+        $response = static::createClient()->request('POST', '/login_check', ['json' => [
             'username' => 'user0@example.com',
             'password' => 'password',
         ]]);
@@ -120,8 +120,8 @@ class UserTest extends ApiTestCase
 
     public function testUserRefresh(): void
     {
-        // Test POST /api/token/refresh without auth
-        $response = static::createClient()->request('POST', '/api/token/refresh', ['json' => [
+        // Test POST /token/refresh without auth
+        $response = static::createClient()->request('POST', '/token/refresh', ['json' => [
             'refresh_token' => UserTest::userRefresh(),
         ]]);
 
@@ -131,8 +131,8 @@ class UserTest extends ApiTestCase
 
     public function testCreateUser(): void
     {
-        // Test POST /api/users without auth
-        $response = static::createClient()->request('POST', '/api/users', ['headers' => ['Accept' => 'application/json'], 'json' => [
+        // Test POST /users without auth
+        $response = static::createClient()->request('POST', '/users', ['headers' => ['Accept' => 'application/json'], 'json' => [
             'email' => 'test-new-user@example.com',
             'name' => 'test',
             'firstname' => 'test',
@@ -149,8 +149,8 @@ class UserTest extends ApiTestCase
         $this->testGetUsers(11);
         $last_user = array_pop($this->users);
 
-        // Test PUT /api/users/{id} without auth
-        $response = static::createClient()->request('PUT', '/api/users/' . $last_user['id'], ['headers' => ['Accept' => 'application/json'], 'json' => [
+        // Test PUT /users/{id} without auth
+        $response = static::createClient()->request('PUT', '/users/' . $last_user['id'], ['headers' => ['Accept' => 'application/json'], 'json' => [
             'email' => 'new-email@example.com',
             'name' => 'new-name',
             'firstname' => 'new-firstname',
@@ -162,10 +162,10 @@ class UserTest extends ApiTestCase
         $this->assertResponseHeaderSame('content-type', 'application/json');
         $this->assertJsonContains(['code' => 401, 'message' => 'JWT Token not found']);
 
-        // Test PUT /api/users/{id} with auth
+        // Test PUT /users/{id} with auth
         $this->jwtToken = self::userLoggedIn();
 
-        $response = static::createClient()->request('PUT', '/api/users/' . $last_user['id'], ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken, 'json' => [
+        $response = static::createClient()->request('PUT', '/users/' . $last_user['id'], ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken, 'json' => [
             'email' => 'new-email@example.com',
             'name' => 'new-name',
             'firstname' => 'new-firstname',
@@ -184,14 +184,14 @@ class UserTest extends ApiTestCase
         $this->testGetUsers(11);
         $last_user = array_pop($this->users);
 
-        // Test DELETE /api/users/{id} without auth
-        $response = static::createClient()->request('DELETE', '/api/users/' . $last_user['id'], ['headers' => ['Accept' => 'application/json']]);
+        // Test DELETE /users/{id} without auth
+        $response = static::createClient()->request('DELETE', '/users/' . $last_user['id'], ['headers' => ['Accept' => 'application/json']]);
         $this->assertResponseStatusCodeSame(401);
         $this->assertResponseHeaderSame('content-type', 'application/json');
         $this->assertJsonContains(['code' => 401, 'message' => 'JWT Token not found']);
 
-        // Test DELETE /api/users/{id} with auth
-        $response = static::createClient()->request('DELETE', '/api/users/' . $last_user['id'], ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
+        // Test DELETE /users/{id} with auth
+        $response = static::createClient()->request('DELETE', '/users/' . $last_user['id'], ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
         $this->assertResponseStatusCodeSame(204);
     }
 }
