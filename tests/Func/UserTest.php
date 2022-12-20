@@ -18,6 +18,15 @@ class UserTest extends ApiTestCase
         return $response->toArray()['token'];
     }
 
+    public static function getUserTestId(): string
+    {
+        $jwtToken = self::userLoggedIn();
+        $response = static::createClient()->request('GET', '/api/users', ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $jwtToken]);
+        $users = $response->toArray();
+        $first_user = array_shift($users);
+        return $first_user['id'];
+    }
+
     public function testGetUsers(int $nbUsers = 10): void
     {
         // Test GET /api/users without auth

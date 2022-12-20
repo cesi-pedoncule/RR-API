@@ -68,7 +68,7 @@ class Category
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['category:read', 'resource:read', 'category:write'])]
+    #[Groups(['category:read', 'category:write', 'resource:read'])]
     private ?string $name = null;
 
     #[ORM\ManyToMany(targetEntity: Resource::class, mappedBy: 'categories')]
@@ -76,7 +76,7 @@ class Category
     private Collection $resources;
 
     #[ORM\Column]
-    #[Groups(['category:read', 'resource:read'])]
+    #[Groups(['category:read', 'category:write', 'resource:read'])]
     private ?bool $isVisible = null;
 
     #[ORM\Column]
@@ -89,11 +89,11 @@ class Category
 
     #[ORM\ManyToOne(inversedBy: 'categories')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['category:read', 'resource:read'])]
+    #[Groups(['category:read', 'category:write', 'resource:read'])]
     private ?User $creator = null;
 
     #[ORM\Column]
-    #[Groups(['category:read', 'resource:read'])]
+    #[Groups(['category:read', 'category:write', 'resource:read'])]
     private ?bool $isDeleted = null;
 
     #[ORM\PrePersist]
