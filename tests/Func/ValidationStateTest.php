@@ -18,33 +18,37 @@ class ValidationStateTest extends ApiTestCase
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
         $this->assertCount($nbValidationStates, $response->toArray());
         
-        // // Test GET /api/validation_states with authentication
-        // $this->jwtToken = UserTest::userLoggedIn();
-        // $response = static::createClient()->request('GET', '/api/validation_states', ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
+        // Test GET /api/validation_states with authentication
+        $this->jwtToken = UserTest::userLoggedIn();
+        $response = static::createClient()->request('GET', '/api/validation_states', ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
 
-        // $this->assertResponseIsSuccessful();
-        // $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
-        // $this->assertCount($nbValidationStates, $response->toArray());
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
+        $this->assertCount($nbValidationStates, $response->toArray());
 
         $this->validationStates = $response->toArray();
     }
 
     public function testGetValidationState(): void
     {
+        // Getting first validation state
+        $this->testGetValidationStates();
+        $firstValidationState = array_shift($this->validationStates);
+
         $this->testGetValidationStates();
         // Test GET /api/validation_states/{id} without authentication
-        $response = static::createClient()->request('GET', '/api/validation_states/' . array_shift($this->validationStates[0]), ['headers' => ['Accept' => 'application/json']]);
+        $response = static::createClient()->request('GET', '/api/validation_states/' . $firstValidationState['id'], ['headers' => ['Accept' => 'application/json']]);
         
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
-        $this->assertJsonContains(array_shift($this->validationStates));
+        $this->assertJsonContains(['id' => $firstValidationState['id'], 'state' => $firstValidationState['state']]);
 
-        // // Test GET /api/validation_states/{id} with authentication
-        // $this->jwtToken = UserTest::userLoggedIn();
-        // $response = static::createClient()->request('GET', '/api/validation_states/' . array_shift($this->validationStates[0]), ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
+        // Test GET /api/validation_states/{id} with authentication
+        $this->jwtToken = UserTest::userLoggedIn();
+        $response = static::createClient()->request('GET', '/api/validation_states/' . $firstValidationState['id'], ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
 
-        // $this->assertResponseIsSuccessful();
-        // $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
-        // $this->assertJsonContains(array_shift($this->validationStates));
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
+        $this->assertJsonContains(['id' => $firstValidationState['id'], 'state' => $firstValidationState['state']]);
     }
 }

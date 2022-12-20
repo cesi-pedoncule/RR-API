@@ -45,13 +45,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
             normalizationContext: ['groups' => ['validationState:read']],
             name: 'put_validation_state',
             uriTemplate: '/validation_states/{id}',
-            security: 'is_granted("ROLE_ADMIN") or object.getCreator() == user',
+            security: 'is_granted("ROLE_ADMIN") or object.getModerator() == user',
             securityMessage: 'Only admins can edit other users validationStates.',
         ),
         new Delete(
             name: 'delete_validation_state',
             uriTemplate: '/validation_states/{id}',
-            security: 'is_granted("ROLE_ADMIN") or object.getCreator() == user',
+            security: 'is_granted("ROLE_ADMIN") or object.getModerator() == user',
             securityMessage: 'Only admins can delete other users validationStates.',
         )
     ]
