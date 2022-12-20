@@ -114,7 +114,7 @@ class UserTest extends ApiTestCase
         $this->assertJsonContains(['email' => 'new-email@example.com', 'name' => 'new-name', 'firstname' => 'new-firstname']);
     }
 
-    public function deleteUser(): void
+    public function testDeleteUser(): void
     {
         // Load users
         $this->testGetUsers(11);
@@ -129,6 +129,5 @@ class UserTest extends ApiTestCase
         // Test DELETE /api/users/{id} with auth
         $response = static::createClient()->request('DELETE', '/api/users/' . $last_user['id'], ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
         $this->assertResponseStatusCodeSame(204);
-        $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
     }
 }
