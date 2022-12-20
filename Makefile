@@ -16,7 +16,7 @@ init: ## Init the project
 	$(MAKE) start
 	$(MAKE) composer-install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 	$(MAKE) build-jwt-keys
-	@$(call GREEN,"The application is available at: http://localhost:8000/api.")
+	@$(call GREEN,"The application is available at: http://localhost:8000.")
 
 cache-clear: ## Clear cache
 	$(SYMFONY_CONSOLE) cache:clear

@@ -11,7 +11,7 @@ Run docker images :
 Load database :  
 ```make init```  
 
-Open the API doc with your web browser at : http://localhost:8000/api  
+Open the API doc with your web browser at : http://localhost:8000  
 
 ## Testing  
 
