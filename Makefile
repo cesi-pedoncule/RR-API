@@ -74,6 +74,7 @@ composer-update: ## Update dependencies
 database-init: ## Init database
 	$(MAKE) database-drop
 	$(MAKE) database-create
+	$(MAKE) database-migration
 	$(MAKE) database-migrate
 	$(MAKE) database-fixtures-load
 
