@@ -45,13 +45,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
             normalizationContext: ['groups' => ['comment:read']],
             name: 'put_comment',
             uriTemplate: '/comments/{id}',
-            security: 'is_granted("ROLE_ADMIN") or object.getCreator() == user',
+            security: 'is_granted("ROLE_ADMIN") or object.getUser() == user',
             securityMessage: 'Only admins can edit other users comments.',
         ),
         new Delete(
             name: 'delete_comment',
             uriTemplate: '/comments/{id}',
-            security: 'is_granted("ROLE_ADMIN") or object.getCreator() == user',
+            security: 'is_granted("ROLE_ADMIN") or object.getUser() == user',
             securityMessage: 'Only admins can delete other users comments.',
         )
     ],

@@ -83,7 +83,7 @@ class CommentTest extends ApiTestCase
         $json_value = [
             'comment' => 'Test comment',
             'resource' => '/api/resources/' . $this->getResourceId(),
-            'user' => '/api/users/' . $this->getUserId(),
+            'user' => '/api/users/' . UserTest::getUserTestId(),
             'isDeleted' => false
         ];
 
@@ -112,26 +112,24 @@ class CommentTest extends ApiTestCase
         $json_value = [
             'comment' => 'Test new comment',
             'resource' => '/api/resources/' . $this->getResourceId(),
-            'user' => '/api/users/' . $this->getUserId(),
+            'user' => '/api/users/' . UserTest::getUserTestId(),
             'isDeleted' => false
         ];
 
-        // TODO : Fix this test
         // Test PUT /api/comments/{id} without authentication
-        // $response = static::createClient()->request('PUT', '/api/comments/' . $first_comment['id'], ['headers' => ['Accept' => 'application/json'], 'json' => $json_value]);
+        $response = static::createClient()->request('PUT', '/api/comments/' . $first_comment['id'], ['headers' => ['Accept' => 'application/json'], 'json' => $json_value]);
 
-        // $this->assertResponseStatusCodeSame(401);
-        // $this->assertResponseHeaderSame('content-type', 'application/json');
-        // $this->assertJsonContains(['message' => 'JWT Token not found']);
+        $this->assertResponseStatusCodeSame(401);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+        $this->assertJsonContains(['message' => 'JWT Token not found']);
 
         // Test PUT /api/comments/{id} with authentication
         $this->jwtToken = UserTest::userLoggedIn();
-
         $response = static::createClient()->request('PUT', '/api/comments/' . $first_comment['id'], ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken, 'json' => $json_value]);
 
-        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(200);
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
-        $this->assertJsonContains(['comment' => 'Test new comment', 'isDeleted' => false]);
+        $this->assertJsonContains(['comment' => $json_value['comment'], 'isDeleted' => $json_value['isDeleted']]);
     }
 
     public function testDeleteComment(): void
