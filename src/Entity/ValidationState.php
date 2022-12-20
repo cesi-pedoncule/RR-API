@@ -69,7 +69,6 @@ class ValidationState
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
     #[Groups(['resource:read', 'validationState:read'])]
     private ?Uuid $id = null;
-
     
     #[ORM\ManyToOne(inversedBy: 'validationStates')]
     #[ORM\JoinColumn(nullable: false)]
@@ -82,7 +81,7 @@ class ValidationState
 
     #[ORM\ManyToOne(inversedBy: 'validationStates')]
     #[ORM\JoinColumn(nullable: true)]
-    #[Groups(['resource:read', 'validationState:read'])]
+    #[Groups(['resource:read', 'validationState:read', 'validationState:write'])]
     private ?User $moderator = null;
 
     #[ORM\ManyToOne(inversedBy: 'validationStates', cascade: ['persist'])]

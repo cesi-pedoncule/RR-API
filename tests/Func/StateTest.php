@@ -9,6 +9,19 @@ class StateTest extends ApiTestCase
     private string $jwtToken;
     private array $states;
 
+    /**
+     * Return the first state id
+     * 
+     * @return string
+     */
+    public static function getStateTestId(): string
+    {
+        $response = static::createClient()->request('GET', '/api/states', ['headers' => ['Accept' => 'application/json']]);
+        $states = $response->toArray();
+        $first_state = array_shift($states);
+        return $first_state['id'];
+    }
+
     public function testGetStates(int $nbStates = 3): void
     {
         // Test GET /api/states without authentication
