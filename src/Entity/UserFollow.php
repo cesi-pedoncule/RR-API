@@ -4,14 +4,17 @@ namespace App\Entity;
 
 use App\Repository\UserFollowRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Uid\UuidV6 as Uuid;
 
 #[ORM\Entity(repositoryClass: UserFollowRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class UserFollow
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Column(type: 'uuid', unique: true)]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
+    private ?Uuid $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'userFollows')]
     #[ORM\JoinColumn(nullable: false)]
@@ -24,7 +27,13 @@ class UserFollow
     #[ORM\Column]
     private ?\DateTimeImmutable $followAt = null;
 
-    public function getId(): ?int
+    #[ORM\PrePersist]
+    public function prePersist(): void
+    {
+        $this->followAt = new \DateTimeImmutable();
+    }
+
+    public function getId(): ?Uuid
     {
         return $this->id;
     }
