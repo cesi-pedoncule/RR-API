@@ -36,6 +36,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
             uriTemplate: '/resources',
             security: 'is_granted("ROLE_USER")',
             securityMessage: 'Only authenticated users can create resources.',
+            controller: PostResourceController::class,
             denormalizationContext: ['groups' => ['resource:post']]
         ),
         new Put(
@@ -104,7 +105,7 @@ class Resource
     private Collection $comments;
 
     #[ORM\OneToMany(mappedBy: 'validationState', targetEntity: ValidationState::class)]
-    #[Groups(['resource:write', 'resource:post'])]
+    #[Groups(['resource:write'])]
     private Collection $validationStates;
 
     #[ORM\OneToMany(mappedBy: 'resource', targetEntity: UserLike::class)]
