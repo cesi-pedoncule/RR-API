@@ -2,7 +2,10 @@
 
 namespace App\Service;
 
+use App\Entity\Resource;
 use App\Entity\User;
+use App\Entity\UserFollow;
+use App\Entity\UserLike;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
@@ -127,5 +130,108 @@ class UserManager {
     {
         $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
         return $user;
+    }
+
+    /**
+     * Follow an user
+     * 
+     * @param User $currentUser
+     * @param User $userToFollow
+     * @return UserFollow
+     */
+    public function followUser(User $currentUser, User $userToFollow): UserFollow
+    {
+        // Check if the current user is different from the user to follow
+        if ($currentUser === $userToFollow) {
+            throw new \Exception('You can\'t follow yourself');
+        }
+
+        // Check if the current user is already following the user to follow
+        if (in_array($currentUser, $userToFollow->getUserFollowers()->toArray())) {
+            throw new \Exception('You are already following this user');
+        }
+
+        // Add the current user to the user to follow followers
+        $follow = (new UserFollow())
+            ->setUser($userToFollow)
+            ->setFollower($currentUser);
+
+        $this->entityManager->persist($follow);
+        $this->entityManager->flush();
+
+        return $follow;
+    }
+
+    /**
+     * Unfollow an user
+     * 
+     * @param User $currentUser
+     * @param User $userToUnfollow
+     * @return void
+     */
+    public function unfollowUser(User $currentUser, User $userToUnfollow): void
+    {
+        // Check if the current user is different from the user to unfollow
+        if ($currentUser === $userToUnfollow) {
+            throw new \Exception('You can\'t unfollow yourself');
+        }
+
+        // Check if the current user is following the user to unfollow
+        if (!in_array($currentUser, $userToUnfollow->getUserFollowers()->toArray())) {
+            throw new \Exception('You are not following this user');
+        }
+
+        // Remove the current user from the user to unfollow followers
+        $follow = $this->entityManager->getRepository(UserFollow::class)->findOneBy(['user' => $userToUnfollow, 'follower' => $currentUser]);
+
+        $this->entityManager->remove($follow);
+        $this->entityManager->flush();
+    }
+
+    /**
+     * Like a resource
+     * 
+     * @param User $user
+     * @param Resource $resource
+     * @return UserLike
+     */
+    public function likeResource(User $user, Resource $resource): UserLike
+    {
+        // Check if the user is already liking the resource
+        $userLike = $this->entityManager->getRepository(UserLike::class)->findOneBy(['user' => $user, 'resource' => $resource]);
+
+        if ($userLike !== null) {
+            throw new \Exception('You are already liking this resource');
+        }
+
+        // Add the user to the resource liked users
+        $like = (new UserLike())
+            ->setUser($user)
+            ->setResource($resource);
+
+        $this->entityManager->persist($like);
+        $this->entityManager->flush();
+
+        return $like;
+    }
+
+    /**
+     * Unlike a resource
+     * 
+     * @param User $user
+     * @param Resource $resource
+     * @return void
+     */
+    public function unlikeResource(User $user, Resource $resource): void
+    {
+        // Check if the user is liking the resource
+        $userLike = $this->entityManager->getRepository(UserLike::class)->findOneBy(['user' => $user, 'resource' => $resource]);
+
+        if ($userLike !== null) {
+            $this->entityManager->remove($userLike);
+            $this->entityManager->flush();
+        } else {
+            throw new \Exception('You are not liking this resource');
+        }
     }
 }
