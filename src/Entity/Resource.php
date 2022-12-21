@@ -36,6 +36,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
             uriTemplate: '/resources',
             security: 'is_granted("ROLE_USER")',
             securityMessage: 'Only authenticated users can create resources.',
+            denormalizationContext: ['groups' => ['resource:post']]
         ),
         new Put(
             name: 'put_resource',
@@ -63,15 +64,15 @@ class Resource
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['resource:read', 'resource:write', 'user:read', 'attachment:read', 'category:read', 'comment:read'])]
+    #[Groups(['resource:read', 'resource:write', 'resource:post', 'user:read', 'attachment:read', 'category:read', 'comment:read'])]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['resource:read', 'resource:write', 'attachment:read', 'category:read', 'comment:read'])]
+    #[Groups(['resource:read', 'resource:write', 'resource:post', 'attachment:read', 'category:read', 'comment:read'])]
     private ?string $description = null;
 
     #[ORM\OneToMany(mappedBy: 'resource', targetEntity: Attachment::class)]
-    #[Groups(['resource:read', 'resource:write'])]
+    #[Groups(['resource:read', 'resource:write', 'resource:post'])]
     private Collection $attachments;
 
     #[ORM\Column]
@@ -87,7 +88,7 @@ class Resource
     private ?User $user = null;
 
     #[ORM\Column(options: ['default' => true])]
-    #[Groups(['resource:read', 'resource:write', 'attachment:read', 'category:read', 'comment:read'])]
+    #[Groups(['resource:read', 'resource:write', 'resource:post', 'attachment:read', 'category:read', 'comment:read'])]
     private ?bool $isPublic = null;
 
     #[ORM\Column(options: ['default' => false])]
@@ -95,7 +96,7 @@ class Resource
     private ?bool $isDeleted = null;
 
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'resources')]
-    #[Groups(['resource:read', 'resource:write'])]
+    #[Groups(['resource:read', 'resource:write', 'resource:post'])]
     private Collection $categories;
 
     #[ORM\OneToMany(mappedBy: 'resource', targetEntity: Comment::class)]
@@ -103,16 +104,17 @@ class Resource
     private Collection $comments;
 
     #[ORM\OneToMany(mappedBy: 'validationState', targetEntity: ValidationState::class)]
-    #[Groups(['resource:write'])]
+    #[Groups(['resource:write', 'resource:post'])]
     private Collection $validationStates;
 
     #[ORM\OneToMany(mappedBy: 'resource', targetEntity: UserLike::class)]
     private Collection $userLikes;
 
     #[ORM\PrePersist]
-    public function setCreatedAtValue()
+    public function setCreationValues()
     {
         $this->createdAt = new \DateTimeImmutable();
+        $this->setIsDeleted(false);
     }
 
     #[ORM\PreUpdate]
