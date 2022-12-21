@@ -72,7 +72,7 @@ class ValidationState
     
     #[ORM\ManyToOne(inversedBy: 'validationStates')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['resource:read', 'resource:write', 'resource:post', 'validationState:read', 'validationState:write'])]
+    #[Groups(['resource:read', 'resource:post', 'validationState:read', 'validationState:write'])]
     private ?State $state = null;
 
     #[ORM\Column]
@@ -81,7 +81,7 @@ class ValidationState
 
     #[ORM\ManyToOne(inversedBy: 'validationStates')]
     #[ORM\JoinColumn(nullable: true)]
-    #[Groups(['resource:read', 'validationState:read', 'validationState:write'])]
+    #[Groups(['validationState:read', 'validationState:write'])]
     private ?User $moderator = null;
 
     #[ORM\ManyToOne(inversedBy: 'validationStates', cascade: ['persist'])]

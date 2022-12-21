@@ -15,6 +15,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use App\Controller\Resource\DeleteResourceController;
+use App\Controller\Resource\PostResourceController;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ResourceRepository::class)]
@@ -37,7 +38,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
             security: 'is_granted("ROLE_USER")',
             securityMessage: 'Only authenticated users can create resources.',
             controller: PostResourceController::class,
-            denormalizationContext: ['groups' => ['resource:post']]
+            denormalizationContext: ['groups' => ['resource:post']],
         ),
         new Put(
             name: 'put_resource',
@@ -104,8 +105,8 @@ class Resource
     #[Groups(['resource:read'])]
     private Collection $comments;
 
-    #[ORM\OneToMany(mappedBy: 'validationState', targetEntity: ValidationState::class)]
-    #[Groups(['resource:write'])]
+    #[ORM\OneToMany(mappedBy: 'resource', targetEntity: ValidationState::class)]
+    #[Groups(['resource:read', 'resource:write'])]
     private Collection $validationStates;
 
     #[ORM\OneToMany(mappedBy: 'resource', targetEntity: UserLike::class)]

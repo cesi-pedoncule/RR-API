@@ -53,11 +53,11 @@ class State
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['state:read', 'validation:read'])]
+    #[Groups(['state:read', 'validation:read', 'resource:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['state:read', 'state:write', 'validation:read'])]
+    #[Groups(['state:read', 'state:write', 'validation:read', 'resource:read'])]
     private ?string $label = null;
 
     #[ORM\OneToMany(mappedBy: 'state', targetEntity: ValidationState::class)]

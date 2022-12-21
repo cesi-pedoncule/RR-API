@@ -111,7 +111,6 @@ class ResourceTest extends ApiTestCase
         $this->testGetResources(21);
         $last_resource = array_pop($this->resources);
 
-        // TODO: Fix this test
         // Test DELETE /resources/{id} without authentication
         $response = static::createClient()->request('DELETE', '/resources/' . $last_resource['id'], ['headers' => ['Accept' => 'application/json']]);
         $this->assertResponseStatusCodeSame(401);

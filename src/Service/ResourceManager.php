@@ -4,11 +4,12 @@ namespace App\Service;
 
 use App\Entity\Resource;
 use App\Entity\User;
+use App\Entity\ValidationState;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ResourceManager
 {
-    public function __construct(private EntityManagerInterface $em, private ValidationStateManager $validationStateManager)
+    public function __construct(private EntityManagerInterface $em, private ValidationStateManager $validationStateManager, private StateManager $stateManager)
     {
     }
 
@@ -77,10 +78,32 @@ class ResourceManager
         // Check if the user is the resource owner or an admin
         if (in_array('ROLE_ADMIN', $user->getRoles()) || $resource->getUser() === $user) {
             $resource->setIsDeleted(true);
+            $resource->setUpdatedAt(new \DateTimeImmutable());
+            // Delete all validation states
+            foreach ($resource->getValidationStates() as $validationState) {
+                $resource->removeValidationState($validationState);
+            }
+            // Delete all comments
+            foreach ($resource->getComments() as $comment) {
+                $resource->removeComment($comment);
+            }
             $this->em->persist($resource);
             $this->em->flush();
             return $resource;
         }
         return null;
+    }
+
+    public function createDefaultValidationState(Resource $resource): ?ValidationState
+    {
+        $validationState = (new ValidationState())
+            ->setResource($resource)
+            ->setState($this->stateManager->getStateByLabel('pending'))
+            ->setUpdatedAt(new \DateTimeImmutable());
+
+        $this->em->persist($validationState);
+        $this->em->flush();
+
+        return $validationState;
     }
 }
