@@ -58,6 +58,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             uriTemplate: '/attachments/{id}',
             security: 'is_granted("ROLE_ADMIN") or object.getUser() == user',
             securityMessage: 'Only admins can edit other users attachments.',
+            denormalizationContext: ['groups' => ['attachment:put']],
         ),
         new Delete(
             name: 'delete_attachment',
@@ -87,7 +88,7 @@ class Attachment
     private ?string $fileUrl = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['attachment:read', 'attachment:write', 'resource:read'])]
+    #[Groups(['attachment:read', 'attachment:write', 'attachment:put', 'resource:read'])]
     private ?string $fileName = null;
 
     #[ORM\Column(length: 255)]

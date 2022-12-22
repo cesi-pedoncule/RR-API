@@ -39,6 +39,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
             uriTemplate: '/comments/{id}',
             security: 'is_granted("ROLE_ADMIN") or object.getUser() == user',
             securityMessage: 'Only admins can edit other users comments.',
+            denormalizationContext: ['groups' => ['comment:put']],
         ),
         new Delete(
             name: 'delete_comment',
@@ -59,7 +60,7 @@ class Comment
     private ?Uuid $id = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['resource:read', 'comment:read', 'comment:write'])]
+    #[Groups(['resource:read', 'comment:read', 'comment:write', 'comment:put'])]
     private ?string $comment = null;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
@@ -76,7 +77,7 @@ class Comment
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
-    #[Groups(['resource:read', 'comment:read', 'comment:write'])]
+    #[Groups(['resource:read', 'comment:read', 'comment:write', 'comment:put'])]
     private ?bool $isDeleted = null;
 
     #[ORM\PrePersist]

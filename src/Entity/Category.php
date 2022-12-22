@@ -40,6 +40,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
             uriTemplate: '/categories/{id}',
             security: 'is_granted("ROLE_ADMIN")',
             securityMessage: 'Only admins can edit categories.',
+            denormalizationContext: ['groups' => ['category:put']],
         ),
         new Delete(
             name: 'delete_category',
@@ -60,7 +61,7 @@ class Category
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['category:read', 'category:write', 'resource:read'])]
+    #[Groups(['category:read', 'category:write', 'category:put', 'resource:read'])]
     private ?string $name = null;
 
     #[ORM\ManyToMany(targetEntity: Resource::class, mappedBy: 'categories')]
@@ -68,7 +69,7 @@ class Category
     private Collection $resources;
 
     #[ORM\Column]
-    #[Groups(['category:read', 'category:write', 'resource:read'])]
+    #[Groups(['category:read', 'category:write', 'category:put', 'resource:read'])]
     private ?bool $isVisible = null;
 
     #[ORM\Column]
@@ -85,7 +86,7 @@ class Category
     private ?User $creator = null;
 
     #[ORM\Column]
-    #[Groups(['category:read', 'category:write', 'resource:read'])]
+    #[Groups(['category:read', 'category:write', 'category:put', 'resource:read'])]
     private ?bool $isDeleted = null;
 
     #[ORM\PrePersist]

@@ -45,6 +45,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
             uriTemplate: '/resources/{id}',
             security: 'is_granted("ROLE_ADMIN") or object.getUser() == user',
             securityMessage: 'Only admins can edit other users resources.',
+            denormalizationContext: ['groups' => ['resource:put']],
         ),
         new Delete(
             name: 'delete_resource',
@@ -66,11 +67,11 @@ class Resource
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['resource:read', 'resource:write', 'resource:post', 'user:read', 'attachment:read', 'category:read', 'comment:read'])]
+    #[Groups(['resource:read', 'resource:write', 'resource:post', 'resource:put', 'user:read', 'attachment:read', 'category:read', 'comment:read'])]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['resource:read', 'resource:write', 'resource:post', 'attachment:read', 'category:read', 'comment:read'])]
+    #[Groups(['resource:read', 'resource:write', 'resource:put', 'resource:post', 'attachment:read', 'category:read', 'comment:read'])]
     private ?string $description = null;
 
     #[ORM\OneToMany(mappedBy: 'resource', targetEntity: Attachment::class)]
@@ -90,15 +91,15 @@ class Resource
     private ?User $user = null;
 
     #[ORM\Column(options: ['default' => true])]
-    #[Groups(['resource:read', 'resource:write', 'resource:post', 'attachment:read', 'category:read', 'comment:read'])]
+    #[Groups(['resource:read', 'resource:write', 'resource:post', 'resource:put', 'attachment:read', 'category:read', 'comment:read'])]
     private ?bool $isPublic = null;
 
     #[ORM\Column(options: ['default' => false])]
-    #[Groups(['resource:read', 'resource:write', 'attachment:read', 'category:read', 'comment:read'])]
+    #[Groups(['resource:read', 'resource:write', 'resource:put', 'attachment:read', 'category:read', 'comment:read'])]
     private ?bool $isDeleted = null;
 
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'resources')]
-    #[Groups(['resource:read', 'resource:write', 'resource:post'])]
+    #[Groups(['resource:read', 'resource:write', 'resource:put', 'resource:post'])]
     private Collection $categories;
 
     #[ORM\OneToMany(mappedBy: 'resource', targetEntity: Comment::class)]
