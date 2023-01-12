@@ -31,6 +31,9 @@ jobs:
     - name: Start containers
       run: docker-compose -f "docker-compose.yml" up -d --build
 
+    - name: Init porject
+      run: make init
+
     - name: Init Application in Test env
       run: make tests
 
