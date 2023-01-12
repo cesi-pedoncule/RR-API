@@ -14,7 +14,7 @@ RED = /bin/echo -e "\x1b[31m\#\# $1\x1b[0m"
 ## —— 🔥 App ——
 init: ## Init the project
 	$(MAKE) start
-	$(MAKE) composer-install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+	$(MAKE) composer-install
 	$(MAKE) build-jwt-keys
 	@$(call GREEN,"The application is available at: http://localhost:8000.")
 
