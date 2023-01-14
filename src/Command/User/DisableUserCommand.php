@@ -42,7 +42,5 @@ class DisableUserCommand extends Command
             $io->error('The user account has not been disabled.');
             return Command::FAILURE;
         }
-
-        return Command::SUCCESS;
     }
 }
