@@ -55,7 +55,7 @@ class UserManager {
         }
 
         // Check if the user is banned
-        if ($user->getIsBanned()) {
+        if ($user->isIsBanned()) {
             return false;
         }
 
@@ -98,9 +98,9 @@ class UserManager {
      * 
      * @param User $currentUser
      * @param User $userToDisable
-     * @return false|User
+     * @return User
      */
-    public function disableUser(User $currentUser, User $userToDisable): false|User
+    public function disableUser(User $currentUser, User $userToDisable): User
     {
         // Check if the current user is the user to disable or if the current user is an admin, disable the user else throw exception
         if ($currentUser === $userToDisable || in_array('ROLE_ADMIN', $currentUser->getRoles())) {
@@ -109,7 +109,6 @@ class UserManager {
             $this->entityManager->flush();
         } else {
             throw new \Exception('You are not allowed to disable this user');
-            return false;
         }
         
         // Disable the user
