@@ -445,7 +445,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getResourceLikes(): Collection
     {
-        return $this->ResourceLikes;
+        return $this->resourceLikes;
     }
 
     public function addResourceLike(UserLike $resourceLike): self
