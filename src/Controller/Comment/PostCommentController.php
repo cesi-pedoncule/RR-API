@@ -8,6 +8,7 @@ use App\Service\CommentManager;
 use App\Service\ResourceManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 
 #[AsController]
@@ -19,7 +20,7 @@ class PostCommentController extends AbstractController
         private CommentManager $commentManager,
     ){}
 
-    public function __invoke(Comment $data): ?Comment
+    public function __invoke(Comment $data): Comment|JsonResponse
     {
         // If the user is null ask jwt to throw an exception
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -28,8 +29,13 @@ class PostCommentController extends AbstractController
         $data->setUser($this->getUser());
 
         // Creating the new comment
-        $comment = $this->commentManager->createComment($data->getComment(), $data->getResource(), $this->getUser());
+        try {
+            $comment = $this->commentManager->createComment($data->getComment(), $data->getResource(), $this->getUser());
+            return $comment;
+        } catch (\Throwable $th) {
+            //throw $th;
+            return new JsonResponse(['error' => $th->getMessage()], 400);
+        }
 
-        return $comment;
     }
 }

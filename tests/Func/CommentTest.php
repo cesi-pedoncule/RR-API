@@ -102,6 +102,19 @@ class CommentTest extends ApiTestCase
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
         $this->assertJsonContains(['comment' => 'Test comment', 'isDeleted' => false]);
+
+        // Test POST /comments with authentication and bad words
+        $json_value = [
+            'comment' => 'Test comment with bad words : gros-mots-example-1',
+            'resource' => '/resources/' . $this->getResourceId(),
+            'user' => '/users/' . UserTest::getUserTestId(),
+            'isDeleted' => false
+        ];
+
+        $response = static::createClient()->request('POST', '/comments', ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken, 'json' => $json_value]);
+
+        $this->assertResponseStatusCodeSame(400);
+        $this->assertJsonContains(['error' => 'The comment content contain bad words']);
     }
 
     public function testUpdateComment(): void
