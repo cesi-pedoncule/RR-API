@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use App\Controller\Comment\PostCommentController;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
@@ -31,6 +32,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Post(
             name: 'post_comment',
             uriTemplate: '/comments',
+            controller: PostCommentController::class,
             security: 'is_granted("ROLE_USER")',
             securityMessage: 'Only authenticated users can create comments.',
         ),
