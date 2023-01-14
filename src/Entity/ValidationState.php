@@ -102,7 +102,6 @@ class ValidationState
 
     public function __construct()
     {
-        $this->resources = new ArrayCollection();
     }
 
     public function getId(): ?Uuid
