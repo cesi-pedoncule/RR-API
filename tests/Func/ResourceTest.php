@@ -90,12 +90,11 @@ class ResourceTest extends ApiTestCase
             'isDeleted' => false
         ];
 
-        // TODO : Fix this test
         // Test PUT /resources/{id} without authentication
-        // $response = static::createClient()->request('PUT', '/resources/' . $last_resource['id'], ['headers' => ['Accept' => 'application/json'], 'json' => $json_value]);
-        // $this->assertResponseStatusCodeSame(401);
-        // $this->assertResponseHeaderSame('content-type', 'application/json');
-        // $this->assertJsonContains(['code' => 401, 'message' => 'JWT Token not found']);
+        $response = static::createClient()->request('PUT', '/resources/' . $last_resource['id'], ['headers' => ['Accept' => 'application/json'], 'json' => $json_value]);
+        $this->assertResponseStatusCodeSame(401);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+        $this->assertJsonContains(['code' => 401, 'message' => 'JWT Token not found']);
 
         // Test PUT /resources/{id} with authentication
         $this->jwtToken = UserTest::userLoggedIn();
