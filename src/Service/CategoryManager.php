@@ -66,6 +66,15 @@ class CategoryManager {
     }
 
     /**
+     * Return all Active categories and visible
+     * @return array<Category>
+     */
+    public function findVisibleActivesCategories(): array
+    {
+        return $this->entityManager->getRepository(Category::class)->findBy(['isDeleted' => false, 'isVisible' => true]);
+    }
+
+    /**
      * Find a category by name property
      * 
      * @param string $name

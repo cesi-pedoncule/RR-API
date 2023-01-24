@@ -14,6 +14,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Controller\Category\GetCategoryController;
+use App\Controller\Category\GetCollectionCategoryController;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
@@ -29,7 +30,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
         ),
         new GetCollection(
             name: 'get_categories',
-            uriTemplate: '/categories'
+            uriTemplate: '/categories',
+            controller: GetCollectionCategoryController::class,
         ),
         new Post(
             name: 'post_category',
