@@ -24,6 +24,12 @@ class ResourceManager
         return $this->em->getRepository(Resource::class)->findOneBy(['title' => $resourceTitle]);
     }
 
+    /**
+     * Return a resource by id if it is active
+     * 
+     * @param string $id
+     * @return Resource|null
+     */
     public function findActiveResourceById(string $id): ?Resource
     {
         return $this->em->getRepository(Resource::class)->findOneBy(['id' => $id, 'isDeleted' => false]);
