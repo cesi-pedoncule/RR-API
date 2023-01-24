@@ -15,6 +15,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use App\Controller\Resource\DeleteResourceController;
+use App\Controller\Resource\GetCollectionResourceController;
 use App\Controller\Resource\PostResourceController;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -30,7 +31,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
         ),
         new GetCollection(
             name: 'get_resources',
-            uriTemplate: '/resources'
+            uriTemplate: '/resources',
+            controller: GetCollectionResourceController::class,
         ),
         new Post(
             name: 'post_resource',
