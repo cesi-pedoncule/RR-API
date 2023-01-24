@@ -25,6 +25,15 @@ class ResourceManager
     }
 
     /**
+     * Return all Active resources
+     * @return array<Resource>
+     */
+    public function findPublicActivesResources(): array
+    {
+        return $this->em->getRepository(Resource::class)->findBy(['isPublic' => true, 'isDeleted' => false]);
+    }
+
+    /**
      * Create a new resource
      *
      * @param string $title
