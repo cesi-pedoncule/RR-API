@@ -84,8 +84,8 @@ class CategoryTest extends ApiTestCase
 
         $updateCategorie = [
             'name' => 'Update Categorie of test',
-            'isVisible' => false,
-            'isDeleted' => true,
+            'isVisible' => true,
+            'isDeleted' => false,
             'creator' => '/users/' . UserTest::getUserTestId()
         ];
 
