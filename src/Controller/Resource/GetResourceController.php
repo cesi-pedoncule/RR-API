@@ -2,7 +2,6 @@
 
 namespace App\Controller\Resource;
 
-use App\Entity\Resource;
 use App\Entity\User;
 use App\Service\ResourceManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
