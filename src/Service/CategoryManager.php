@@ -55,6 +55,17 @@ class CategoryManager {
     }
 
     /**
+     * Return a category by id if it is active
+     * 
+     * @param string $id
+     * @return Category|null
+     */
+    public function findActiveCategoryById(string $id): ?Category
+    {
+        return $this->entityManager->getRepository(Category::class)->findOneBy(['id' => $id, 'isDeleted' => false]);
+    }
+
+    /**
      * Find a category by name property
      * 
      * @param string $name
