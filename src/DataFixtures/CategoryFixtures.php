@@ -13,10 +13,10 @@ class CategoryFixtures extends Fixture implements DependentFixtureInterface
     {
         $faker = \Faker\Factory::create('fr_FR');
         // Create 5 fake categories
-        for ($i=0; $i < 20; $i++) { 
+        for ($i=0; $i < 25; $i++) { 
             $category = (new Category())
                 ->setName($faker->sentence(3))
-                ->setIsVisible(true)
+                ->setIsVisible($i >= 20 ? false : true)
                 ->setCreator($this->getReference('user_' . rand(0, 9)))
                 ->setIsDeleted(false);
                 $this->addReference('category_' . $i, $category);
