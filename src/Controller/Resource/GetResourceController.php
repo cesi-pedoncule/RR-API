@@ -15,8 +15,11 @@ class GetResourceController extends AbstractController
     {
     }
 
-    public function __invoke(Resource $resource)
+    public function __invoke(string $id)
     {
+        // Get the resource
+        $resource = $this->resourceManager->findActiveResourceById($id);
+
         // Check if the resource exists
         if (!$resource) {
             throw $this->createNotFoundException();
@@ -38,11 +41,6 @@ class GetResourceController extends AbstractController
                     throw $this->createAccessDeniedException();
                 }
             }
-        }
-
-        // Check if the resource is deleted
-        if($resource->isIsDeleted()) {
-            throw $this->createNotFoundException();
         }
 
         return $resource;

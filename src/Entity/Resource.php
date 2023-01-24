@@ -16,6 +16,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use App\Controller\Resource\DeleteResourceController;
 use App\Controller\Resource\GetCollectionResourceController;
+use App\Controller\Resource\GetResourceController;
 use App\Controller\Resource\PostResourceController;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -27,7 +28,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
     operations: [
         new Get(
             name: 'get_resource',
-            uriTemplate: '/resources/{id}'
+            uriTemplate: '/resources/{id}',
+            controller: GetResourceController::class,
         ),
         new GetCollection(
             name: 'get_resources',
