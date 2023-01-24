@@ -38,6 +38,7 @@ use Symfony\Component\Uid\UuidV6 as Uuid;
         ),
         new Delete(
             name: 'delete_user_like',
+            security: 'is_granted("ROLE_USER") and object.getUser() == user',
         ),
     ]
 )]
