@@ -67,11 +67,11 @@ class Resource
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
-    #[Groups(['resource:read', 'user:read', 'attachment:read', 'category:read', 'comment:read'])]
+    #[Groups(['resource:read', 'user:read', 'user:me', 'attachment:read', 'category:read', 'comment:read'])]
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['resource:read', 'resource:write', 'resource:post', 'resource:put', 'user:read', 'attachment:read', 'category:read', 'comment:read'])]
+    #[Groups(['resource:read', 'resource:write', 'resource:post', 'resource:put', 'user:read', 'user:me', 'attachment:read', 'category:read', 'comment:read'])]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]

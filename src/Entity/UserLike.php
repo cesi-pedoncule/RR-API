@@ -48,7 +48,7 @@ class UserLike
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
-    #[Groups(['user_like:read'])]
+    #[Groups(['user_like:read', 'user:me', 'user:read', 'resource:read'])]
     private ?Uuid $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'resourceLikes')]
@@ -58,11 +58,11 @@ class UserLike
 
     #[ORM\ManyToOne(inversedBy: 'userLikes')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['user_like:read', 'user_like:write'])]
+    #[Groups(['user_like:read', 'user_like:write', 'user:me', 'user:read'])]
     private ?Resource $resource = null;
 
     #[ORM\Column]
-    #[Groups(['user_like:read', 'user_like:write'])]
+    #[Groups(['user_like:read', 'user_like:write', 'user:me', 'user:read'])]
     private ?\DateTimeImmutable $likeAt = null;
 
     #[ORM\PrePersist]

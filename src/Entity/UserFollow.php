@@ -48,7 +48,7 @@ class UserFollow
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
-    #[Groups(['user_follow:read'])]
+    #[Groups(['user_follow:read', 'user:me', 'user:read'])]
     private ?Uuid $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'userFollows')]
@@ -62,7 +62,7 @@ class UserFollow
     private ?user $follower = null;
 
     #[ORM\Column]
-    #[Groups(['user_follow:read'])]
+    #[Groups(['user_follow:read', 'user:me', 'user:read'])]
     private ?\DateTimeImmutable $followAt = null;
 
     #[ORM\PrePersist]
