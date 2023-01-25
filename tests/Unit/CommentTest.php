@@ -58,21 +58,4 @@ class CommentTest extends TestCase
         $this->assertInstanceOf(Comment::class, $response);
         $this->assertEquals($value, $this->comment->getCreatedAt());
     }
-
-    public function testIsIsDeleted(): void
-    {
-        $value = true;
-
-        $response = $this->comment->setIsDeleted($value);
-
-        $this->assertInstanceOf(Comment::class, $response);
-        $this->assertEquals($value, $this->comment->isIsDeleted());
-
-        $value = false;
-
-        $response = $this->comment->setIsDeleted($value);
-
-        $this->assertInstanceOf(Comment::class, $response);
-        $this->assertEquals($value, $this->comment->isIsDeleted());
-    }
 }

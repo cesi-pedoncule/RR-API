@@ -29,8 +29,7 @@ class UploadFileAttachmentController extends AbstractController
             ->setFile($file)
             ->setUser($this->getUser())
             ->setResource($resource)
-            ->setCreatedAt(new DateTimeImmutable())
-            ->setIsDeleted(false);
+            ->setCreatedAt(new DateTimeImmutable());
 
         return $attachment;
     }

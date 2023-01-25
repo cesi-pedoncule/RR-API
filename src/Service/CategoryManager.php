@@ -45,8 +45,7 @@ class CategoryManager {
             ->setName($name)
             ->setIsVisible($isVisible)
             ->setCreator($currentUser)
-            ->setCreatedAt(new DateTimeImmutable())
-            ->setIsDeleted(false);
+            ->setCreatedAt(new DateTimeImmutable());
 
         $this->entityManager->persist($category);
         $this->entityManager->flush();
@@ -62,7 +61,7 @@ class CategoryManager {
      */
     public function findActiveCategoryById(string $id): ?Category
     {
-        return $this->entityManager->getRepository(Category::class)->findOneBy(['id' => $id, 'isDeleted' => false]);
+        return $this->entityManager->getRepository(Category::class)->findOneBy(['id' => $id]);
     }
 
     /**
@@ -71,7 +70,7 @@ class CategoryManager {
      */
     public function findVisibleActivesCategories(): array
     {
-        return $this->entityManager->getRepository(Category::class)->findBy(['isDeleted' => false, 'isVisible' => true]);
+        return $this->entityManager->getRepository(Category::class)->findBy(['isVisible' => true]);
     }
 
     /**
@@ -83,20 +82,5 @@ class CategoryManager {
     public function findCategoryByName(string $name): ?Category
     {
         return $this->entityManager->getRepository(Category::class)->findOneBy(['name' => $name]);
-    }
-
-    /**
-     * Disable a category
-     * 
-     * @param Category $category
-     * @return void
-     */
-    public function disableCategory(Category $category): void
-    {
-        // Disable the category
-        ($category)
-            ->setIsVisible(false)
-            ->setIsDeleted(true);
-        $this->entityManager->flush();
     }
 }

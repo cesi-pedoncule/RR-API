@@ -9,7 +9,7 @@ class ValidationStateTest extends ApiTestCase
     private string $jwtToken;
     private array $validationStates;
 
-    public function testGetValidationStates(int $nbValidationStates = 4): void
+    public function testGetValidationStates(int $nbValidationStates = 3): void
     {
         // Test GET /validation_states without authentication
         $response = static::createClient()->request('GET', '/validation_states', ['headers' => ['Accept' => 'application/json']]);
@@ -75,7 +75,7 @@ class ValidationStateTest extends ApiTestCase
     public function testUpdateValidationState(): void
     {
         // Getting last validation state
-        $this->testGetValidationStates(5);
+        $this->testGetValidationStates(4);
         $lastValidationState = array_pop($this->validationStates);
 
         $jsonValidationState = [
@@ -101,7 +101,7 @@ class ValidationStateTest extends ApiTestCase
     public function testDeleteValidationState(): void
     {
         // Getting last validation state
-        $this->testGetValidationStates(5);
+        $this->testGetValidationStates(4);
         $lastValidationState = array_pop($this->validationStates);
 
         // Test DELETE /validation_states/{id} without authentication

@@ -98,9 +98,6 @@ class Resource
     #[Groups(['resource:read', 'resource:write', 'resource:post', 'resource:put', 'attachment:read', 'category:read', 'comment:read'])]
     private ?bool $isPublic = null;
 
-    #[ORM\Column(options: ['default' => false])]
-    private ?bool $isDeleted = null;
-
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'resources')]
     #[Groups(['resource:read', 'resource:write', 'resource:put', 'resource:post'])]
     private Collection $categories;
@@ -120,7 +117,6 @@ class Resource
     public function setCreationValues()
     {
         $this->createdAt = new \DateTimeImmutable();
-        $this->setIsDeleted(false);
     }
 
     #[ORM\PreUpdate]
@@ -241,18 +237,6 @@ class Resource
     public function setIsPublic(bool $isPublic): self
     {
         $this->isPublic = $isPublic;
-
-        return $this;
-    }
-
-    public function isIsDeleted(): ?bool
-    {
-        return $this->isDeleted;
-    }
-
-    public function setIsDeleted(bool $isDeleted): self
-    {
-        $this->isDeleted = $isDeleted;
 
         return $this;
     }

@@ -19,7 +19,6 @@ class ResourceFixtures extends Fixture implements DependentFixtureInterface
                 ->setDescription($faker->paragraph(3))
                 ->addCategory($this->getReference('category_' . rand(0, 4)))
                 ->setIsPublic($i >= 20 ? false : true)
-                ->setIsDeleted(false)
                 ->addValidationState($this->getReference('validationState_' . rand(1, 3)))
                 ->setUser($this->getReference('user_' . rand(0, 9)));
             $manager->persist($resource);

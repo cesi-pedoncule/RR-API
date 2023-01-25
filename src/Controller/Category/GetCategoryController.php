@@ -22,11 +22,6 @@ class GetCategoryController extends AbstractController
             return $this->createAccessDeniedException();
         }
 
-        // Check if the category is deleted
-        if($category->isIsDeleted()) {
-            return $this->createNotFoundException();
-        }
-
         // Check if the category is visible (Else only Admins can see it)
         if (!$category->isIsVisible()) {
             // Check if the user is logged in and is an Administrator

@@ -17,7 +17,7 @@ class GetResourceController extends AbstractController
     public function __invoke(string $id)
     {
         // Get the resource
-        $resource = $this->resourceManager->findActiveResourceById($id);
+        $resource = $this->resourceManager->findResourceById($id);
 
         // Check if the resource exists
         if (!$resource) {

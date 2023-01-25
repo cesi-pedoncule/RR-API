@@ -96,21 +96,4 @@ class CategoryTest extends TestCase
         $this->assertInstanceOf(Category::class, $response);
         $this->assertEquals($value, $this->category->getCreator());
     }
-
-    public function testIsIsDeleted(): void
-    {
-        $value = true;
-
-        $response = $this->category->setIsDeleted($value);
-
-        $this->assertInstanceOf(Category::class, $response);
-        $this->assertEquals($value, $this->category->isIsDeleted());
-
-        $value = false;
-
-        $response = $this->category->setIsDeleted($value);
-
-        $this->assertInstanceOf(Category::class, $response);
-        $this->assertEquals($value, $this->category->isIsDeleted());
-    }
 }

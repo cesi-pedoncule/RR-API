@@ -17,8 +17,7 @@ class CommentFixtures extends Fixture implements DependentFixtureInterface
             $resource = (new Comment())
                 ->setComment($faker->sentence(3))
                 ->setResource($this->getReference('resource_' . rand(0, 19)))
-                ->setUser($this->getReference('user_' . rand(0, 9)))
-                ->setIsDeleted(false);
+                ->setUser($this->getReference('user_' . rand(0, 9)));
                 $manager->persist($resource);
         }
         $manager->flush();

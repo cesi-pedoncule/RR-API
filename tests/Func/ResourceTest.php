@@ -41,7 +41,7 @@ class ResourceTest extends ApiTestCase
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
-        $this->assertJsonContains(['title' => $firstResource['title'], 'description' => $firstResource['description'], 'createdAt' => $firstResource['createdAt'], 'isPublic' => $firstResource['isPublic'], 'isDeleted' => $firstResource['isDeleted']]);
+        $this->assertJsonContains(['title' => $firstResource['title'], 'description' => $firstResource['description'], 'createdAt' => $firstResource['createdAt'], 'isPublic' => $firstResource['isPublic']]);
         
         // Test GET /resources/{id} with authentication
         $this->jwtToken = UserTest::userLoggedIn();
@@ -49,7 +49,7 @@ class ResourceTest extends ApiTestCase
         
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
-        $this->assertJsonContains(['title' => $firstResource['title'], 'description' => $firstResource['description'], 'createdAt' => $firstResource['createdAt'], 'isPublic' => $firstResource['isPublic'], 'isDeleted' => $firstResource['isDeleted']]);
+        $this->assertJsonContains(['title' => $firstResource['title'], 'description' => $firstResource['description'], 'createdAt' => $firstResource['createdAt'], 'isPublic' => $firstResource['isPublic']]);
     }
 
     public function testCreateResource(): void
@@ -59,7 +59,6 @@ class ResourceTest extends ApiTestCase
             'title' => 'test new resource',
             'description' => 'Description of test',
             'isPublic' => true,
-            'isDeleted' => false
         ];
 
         // Test POST /resources without authentication
@@ -74,7 +73,7 @@ class ResourceTest extends ApiTestCase
         $response = static::createClient()->request('POST', '/resources', ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken, 'json' => $json_value]);
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
-        $this->assertJsonContains(['title' => $json_value['title'], 'description' => $json_value['description'], 'isPublic' => $json_value['isPublic'], 'isDeleted' => $json_value['isDeleted']]);
+        $this->assertJsonContains(['title' => $json_value['title'], 'description' => $json_value['description'], 'isPublic' => $json_value['isPublic']]);
     }
 
     public function testEditResource(): void
@@ -87,7 +86,6 @@ class ResourceTest extends ApiTestCase
             'title' => 'test new resource title',
             'description' => 'Description of test',
             'isPublic' => true,
-            'isDeleted' => false
         ];
 
         // Test PUT /resources/{id} without authentication
@@ -102,7 +100,7 @@ class ResourceTest extends ApiTestCase
         $response = static::createClient()->request('PUT', '/resources/' . $last_resource['id'], ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken, 'json' => $json_value]);
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
-        $this->assertJsonContains(['title' => $json_value['title'], 'description' => $json_value['description'], 'isPublic' => $json_value['isPublic'], 'isDeleted' => $json_value['isDeleted']]);
+        $this->assertJsonContains(['title' => $json_value['title'], 'description' => $json_value['description'], 'isPublic' => $json_value['isPublic']]);
     }
 
     public function testDeleteResource(): void

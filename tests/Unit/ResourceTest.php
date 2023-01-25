@@ -111,23 +111,6 @@ class ResourceTest extends TestCase
         $this->assertEquals($value, $this->resource->isIsPublic());
     }
 
-    public function testIsIsDeleted(): void
-    {
-        $value = true;
-
-        $response = $this->resource->setIsDeleted($value);
-
-        $this->assertInstanceOf(Resource::class, $response);
-        $this->assertEquals($value, $this->resource->isIsDeleted());
-
-        $value = false;
-
-        $response = $this->resource->setIsDeleted($value);
-
-        $this->assertInstanceOf(Resource::class, $response);
-        $this->assertEquals($value, $this->resource->isIsDeleted());
-    }
-
     public function testGetComments(): void
     {
         $value = new Comment();

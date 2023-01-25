@@ -40,7 +40,7 @@ class CategoryTest extends ApiTestCase
         
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
-        $this->assertJsonContains(['id' => $firstCategory['id'], 'name' => $firstCategory['name'], 'isVisible' => $firstCategory['isVisible'], 'isDeleted' => $firstCategory['isDeleted']]);
+        $this->assertJsonContains(['id' => $firstCategory['id'], 'name' => $firstCategory['name'], 'isVisible' => $firstCategory['isVisible']]);
         
         // Test GET /categories/{id} with authentication
         $this->jwtToken = UserTest::userLoggedIn();
@@ -48,7 +48,7 @@ class CategoryTest extends ApiTestCase
         
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
-        $this->assertJsonContains(['id' => $firstCategory['id'], 'name' => $firstCategory['name'], 'isVisible' => $firstCategory['isVisible'], 'isDeleted' => $firstCategory['isDeleted']]);
+        $this->assertJsonContains(['id' => $firstCategory['id'], 'name' => $firstCategory['name'], 'isVisible' => $firstCategory['isVisible']]);
     }
 
     public function testCreateCategorie(): void
@@ -56,7 +56,6 @@ class CategoryTest extends ApiTestCase
         $newCategorie = [
             'name' => 'New Categorie of test',
             'isVisible' => true,
-            'isDeleted' => false,
             'creator' => '/users/' . UserTest::getUserTestId()
         ];
 
@@ -73,7 +72,7 @@ class CategoryTest extends ApiTestCase
 
         $this->assertResponseStatusCodeSame(201);
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
-        $this->assertJsonContains(['name' => $newCategorie['name'], 'isVisible' => $newCategorie['isVisible'], 'isDeleted' => $newCategorie['isDeleted']]);
+        $this->assertJsonContains(['name' => $newCategorie['name'], 'isVisible' => $newCategorie['isVisible']]);
     }
 
     public function testUpdateCategorie(): void
@@ -85,7 +84,6 @@ class CategoryTest extends ApiTestCase
         $updateCategorie = [
             'name' => 'Update Categorie of test',
             'isVisible' => true,
-            'isDeleted' => false,
             'creator' => '/users/' . UserTest::getUserTestId()
         ];
 
@@ -102,7 +100,7 @@ class CategoryTest extends ApiTestCase
 
         $this->assertResponseStatusCodeSame(200);
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
-        $this->assertJsonContains(['name' => $updateCategorie['name'], 'isVisible' => $updateCategorie['isVisible'], 'isDeleted' => $updateCategorie['isDeleted']]);
+        $this->assertJsonContains(['name' => $updateCategorie['name'], 'isVisible' => $updateCategorie['isVisible']]);
     }
 
     public function testDeleteCategorie(): void

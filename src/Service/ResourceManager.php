@@ -30,18 +30,18 @@ class ResourceManager
      * @param string $id
      * @return Resource|null
      */
-    public function findActiveResourceById(string $id): ?Resource
+    public function findResourceById(string $id): ?Resource
     {
-        return $this->em->getRepository(Resource::class)->findOneBy(['id' => $id, 'isDeleted' => false]);
+        return $this->em->getRepository(Resource::class)->findOneBy(['id' => $id]);
     }
 
     /**
      * Return all Active resources
      * @return array<Resource>
      */
-    public function findPublicActivesResources(): array
+    public function findPublicResources(): array
     {
-        return $this->em->getRepository(Resource::class)->findBy(['isPublic' => true, 'isDeleted' => false]);
+        return $this->em->getRepository(Resource::class)->findBy(['isPublic' => true]);
     }
 
     /**
@@ -66,8 +66,7 @@ class ResourceManager
             ->setDescription($description)
             ->setIsPublic($isPublic)
             ->setCreatedAt(new \DateTimeImmutable())
-            ->setUpdatedAt(new \DateTimeImmutable())
-            ->setIsDeleted(false);
+            ->setUpdatedAt(new \DateTimeImmutable());
 
 
         foreach ($attachments as $attachment) {
@@ -86,34 +85,6 @@ class ResourceManager
         return $resource;
     }
 
-    /**
-     * Disable a resource
-     * 
-     * @param User $user
-     * @param Resource $resource
-     * @return Resource|null
-     */
-    public function disableResource(User $user, Resource $resource): ?Resource
-    {
-        // Check if the user is the resource owner or an admin
-        if (in_array('ROLE_ADMIN', $user->getRoles()) || $resource->getUser() === $user) {
-            $resource->setIsDeleted(true);
-            $resource->setUpdatedAt(new \DateTimeImmutable());
-            // Delete all validation states
-            foreach ($resource->getValidationStates() as $validationState) {
-                $resource->removeValidationState($validationState);
-            }
-            // Delete all comments
-            foreach ($resource->getComments() as $comment) {
-                $resource->removeComment($comment);
-            }
-            $this->em->persist($resource);
-            $this->em->flush();
-            return $resource;
-        }
-        return null;
-    }
-
     public function createDefaultValidationState(Resource $resource): ?ValidationState
     {
         $validationState = (new ValidationState())
@@ -125,5 +96,29 @@ class ResourceManager
         $this->em->flush();
 
         return $validationState;
+    }
+
+    /**
+     * Delete a resource and childs items from the database
+     * 
+     * @param Resource $resource
+     * @return void
+     */
+    public function deleteResource(Resource $resource): void
+    {
+        // Delete all validation states of the resource
+        $validationStates = $resource->getValidationStates();
+        foreach ($validationStates as $validationState) {
+            $this->em->remove($validationState);
+        }
+
+        // Delete all attachments of the resource
+        $attachments = $resource->getAttachments();
+        foreach ($attachments as $attachment) {
+            $this->em->remove($attachment);
+        }
+
+        $this->em->remove($resource);
+        $this->em->flush();
     }
 }

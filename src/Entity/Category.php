@@ -89,9 +89,6 @@ class Category
     #[Groups(['category:read', 'category:write', 'resource:read'])]
     private ?User $creator = null;
 
-    #[ORM\Column]
-    private ?bool $isDeleted = null;
-
     #[ORM\PrePersist]
     public function setCreatedAtValue()
     {
@@ -197,18 +194,6 @@ class Category
     public function setCreator(?User $creator): self
     {
         $this->creator = $creator;
-
-        return $this;
-    }
-
-    public function isIsDeleted(): ?bool
-    {
-        return $this->isDeleted;
-    }
-
-    public function setIsDeleted(bool $isDeleted): self
-    {
-        $this->isDeleted = $isDeleted;
 
         return $this;
     }

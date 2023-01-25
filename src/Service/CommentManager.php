@@ -68,11 +68,6 @@ class CommentManager
             throw new \Exception('This user account is banned');
         }
 
-        // Check if the resource is deleted
-        if ($resource->isIsDeleted()) {
-            throw new \Exception('This resource is deleted');
-        }
-
         // Check if the comment content is valid
         $this->verifyCommentContent($content);
 
@@ -80,7 +75,6 @@ class CommentManager
         $comment = (new Comment())
             ->setComment($content)
             ->setCreatedAt(new \DateTimeImmutable())
-            ->setIsDeleted(false)
             ->setResource($resource)
             ->setUser($user);
 

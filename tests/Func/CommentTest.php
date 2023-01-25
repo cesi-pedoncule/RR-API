@@ -73,7 +73,7 @@ class CommentTest extends ApiTestCase
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
-        $this->assertJsonContains(['id' => $first_comment['id'], 'comment' => $first_comment['comment'], 'isDeleted' => $first_comment['isDeleted'], 'resource' => $first_comment['resource'], 'user' => $first_comment['user']]);
+        $this->assertJsonContains(['id' => $first_comment['id'], 'comment' => $first_comment['comment'], 'resource' => $first_comment['resource'], 'user' => $first_comment['user']]);
     }
 
     public function testCreateComment(): void
@@ -84,7 +84,6 @@ class CommentTest extends ApiTestCase
             'comment' => 'Test comment',
             'resource' => '/resources/' . $this->getResourceId(),
             'user' => '/users/' . UserTest::getUserTestId(),
-            'isDeleted' => false
         ];
 
         // Test POST /comments without authentication
@@ -101,14 +100,13 @@ class CommentTest extends ApiTestCase
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
-        $this->assertJsonContains(['comment' => 'Test comment', 'isDeleted' => false]);
+        $this->assertJsonContains(['comment' => 'Test comment']);
 
         // Test POST /comments with authentication and bad words
         $json_value = [
             'comment' => 'Test comment with bad words : gros-mots-example-1',
             'resource' => '/resources/' . $this->getResourceId(),
             'user' => '/users/' . UserTest::getUserTestId(),
-            'isDeleted' => false
         ];
 
         $response = static::createClient()->request('POST', '/comments', ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken, 'json' => $json_value]);
@@ -126,7 +124,6 @@ class CommentTest extends ApiTestCase
             'comment' => 'Test new comment',
             'resource' => '/resources/' . $this->getResourceId(),
             'user' => '/users/' . UserTest::getUserTestId(),
-            'isDeleted' => false
         ];
 
         // Test PUT /comments/{id} without authentication
@@ -142,7 +139,7 @@ class CommentTest extends ApiTestCase
 
         $this->assertResponseStatusCodeSame(200);
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
-        $this->assertJsonContains(['comment' => $json_value['comment'], 'isDeleted' => $json_value['isDeleted']]);
+        $this->assertJsonContains(['comment' => $json_value['comment']]);
     }
 
     public function testDeleteComment(): void

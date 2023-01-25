@@ -15,6 +15,6 @@ class GetCollectionResourceController extends AbstractController
 
     public function __invoke()
     {
-        return $this->resourceManager->findPublicActivesResources();
+        return $this->resourceManager->findPublicResources();
     }
 }

@@ -23,10 +23,9 @@ class AttachmentManager
      * @param string $fileUrl
      * @param string $fileName
      * @param string $type
-     * @param boolean $isDeleted
      * @return Attachment
      */
-    public function createNewAttachment(User $user, Resource $resource, File $file, string $filePath, string $fileUrl, string $fileName, string $type, bool $isDeleted = false): Attachment
+    public function createNewAttachment(User $user, Resource $resource, File $file, string $filePath, string $fileUrl, string $fileName, string $type): Attachment
     {
         $attachment = (new Attachment())
             ->setUser($user)
@@ -35,8 +34,7 @@ class AttachmentManager
             ->setFilePath($filePath)
             ->setFileUrl($fileUrl)
             ->setFileName($fileName)
-            ->setType($type)
-            ->setIsDeleted($isDeleted);
+            ->setType($type);
 
         $this->entityManager->persist($attachment);
         $this->entityManager->flush();
