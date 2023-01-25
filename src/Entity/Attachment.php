@@ -100,7 +100,6 @@ class Attachment
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
-    #[Groups(['attachment:read', 'resource:read'])]
     private ?bool $isDeleted = null;
 
     #[ORM\ManyToOne(inversedBy: 'attachments')]

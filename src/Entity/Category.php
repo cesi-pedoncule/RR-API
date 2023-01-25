@@ -90,7 +90,6 @@ class Category
     private ?User $creator = null;
 
     #[ORM\Column]
-    #[Groups(['category:read', 'category:write', 'category:put', 'resource:read'])]
     private ?bool $isDeleted = null;
 
     #[ORM\PrePersist]

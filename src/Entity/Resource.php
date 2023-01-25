@@ -99,7 +99,6 @@ class Resource
     private ?bool $isPublic = null;
 
     #[ORM\Column(options: ['default' => false])]
-    #[Groups(['resource:read', 'resource:write', 'resource:put', 'attachment:read', 'category:read', 'comment:read'])]
     private ?bool $isDeleted = null;
 
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'resources')]

@@ -79,7 +79,6 @@ class Comment
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
-    #[Groups(['resource:read', 'comment:read', 'comment:write', 'comment:put'])]
     private ?bool $isDeleted = null;
 
     #[ORM\PrePersist]
