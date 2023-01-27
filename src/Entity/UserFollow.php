@@ -7,7 +7,6 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
 use App\Repository\UserFollowRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -30,10 +29,6 @@ use Symfony\Component\Uid\UuidV6 as Uuid;
         ),
         new Post(
             name: 'post_user_follow',
-            denormalizationContext: ['groups' => ['user_follow:write']],
-        ),
-        new Put(
-            name: 'put_user_follow',
             denormalizationContext: ['groups' => ['user_follow:write']],
         ),
         new Delete(
