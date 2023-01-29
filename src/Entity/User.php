@@ -122,15 +122,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $comments;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserLike::class)]
-    #[Groups('user:read', 'user:me')]
+    #[Groups(['user:read', 'user:me'])]
     private Collection $resourceLikes;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserFollow::class)]
-    #[Groups('user:read', 'user:me')]
+    #[Groups(['user:read', 'user:me'])]
     private Collection $userFollows;
 
     #[ORM\OneToMany(mappedBy: 'follower', targetEntity: UserFollow::class)]
-    #[Groups('user:read', 'user:me')]
+    #[Groups(['user:read', 'user:me'])]
     private Collection $userFollowers;
 
     #[ORM\PrePersist]
