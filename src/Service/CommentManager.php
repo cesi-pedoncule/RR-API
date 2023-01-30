@@ -24,6 +24,13 @@ class CommentManager
         return $this->entityManager->getRepository(Comment::class)->find($id);
     }
 
+    /**
+     * Check if the comment content is valid to be posted
+     *  
+     * @param string $content
+     * @throws \Exception
+     * @return void
+     */
     public function verifyCommentContent(string $content): void
     {
         // Check if the content is empty
