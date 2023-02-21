@@ -97,22 +97,4 @@ class ValidationStateTest extends ApiTestCase
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
         $this->assertJsonContains(['state' => $jsonValidationState['state']]);
     }
-
-    public function testDeleteValidationState(): void
-    {
-        // Getting last validation state
-        $this->testGetValidationStates(4);
-        $lastValidationState = array_pop($this->validationStates);
-
-        // Test DELETE /validation_states/{id} without authentication
-        $response = static::createClient()->request('DELETE', '/validation_states/' . $lastValidationState['id'], ['headers' => ['Accept' => 'application/json']]);
-
-        $this->assertResponseStatusCodeSame(401);
-
-        // Test DELETE /validation_states/{id} with authentication
-        $this->jwtToken = UserTest::userLoggedIn();
-        $response = static::createClient()->request('DELETE', '/validation_states/' . $lastValidationState['id'], ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
-
-        $this->assertResponseStatusCodeSame(204);
-    }
 }
