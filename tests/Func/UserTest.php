@@ -55,9 +55,9 @@ class UserTest extends ApiTestCase
     {
         // Test GET /users without auth
         $response = static::createClient()->request('GET', '/users', ['headers' => ['Accept' => 'application/json']]);
-        $this->assertResponseStatusCodeSame(401);
-        $this->assertResponseHeaderSame('content-type', 'application/json');
-        $this->assertJsonContains(['code' => 401, 'message' => 'JWT Token not found']);
+        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
+        $this->assertCount($nbUsers, $response->toArray());
 
         // Test GET /users with auth
         $this->jwtToken = self::userLoggedIn();

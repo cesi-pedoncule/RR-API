@@ -41,8 +41,6 @@ use App\Controller\User\DeleteUserController;
         ),
         new GetCollection(
             uriTemplate: '/users', 
-            security: 'is_granted("ROLE_ADMIN")',
-            securityMessage: 'Only admins can access this resource.',
         ),
         new Put(
             uriTemplate: '/users/{id}',
