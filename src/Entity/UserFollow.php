@@ -7,6 +7,8 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use App\Controller\User\DeleteUserController;
+use App\Controller\UserFollow\PostUserFollowController;
 use App\Repository\UserFollowRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -30,10 +32,12 @@ use Symfony\Component\Uid\UuidV6 as Uuid;
         new Post(
             name: 'post_user_follow',
             denormalizationContext: ['groups' => ['user_follow:write']],
+            controller: PostUserFollowController::class,
         ),
         new Delete(
             name: 'delete_user_follow',
             security: 'is_granted("ROLE_USER") and object.getFollower() == user',
+            controller: DeleteUserController::class,
         )
     ]
 )]
