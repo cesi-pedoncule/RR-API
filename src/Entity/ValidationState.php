@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\ValidationStateRepository;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\UuidV6 as Uuid;
 use ApiPlatform\Metadata\ApiResource;
@@ -12,6 +11,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Delete;
+use App\Controller\ValidationState\PutValidationStateController;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ValidationStateRepository::class)]
@@ -37,8 +37,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Put(
             name: 'put_validation_state',
             uriTemplate: '/validation_states/{id}',
+            controller: PutValidationStateController::class,
             security: 'is_granted("ROLE_ADMIN") or object.getModerator() == user',
             securityMessage: 'Only admins can edit other users validationStates.',
+            denormalizationContext: ['groups' => ['validationState:put']],
         ),
         new Delete(
             name: 'delete_validation_state',
@@ -47,8 +49,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
             securityMessage: 'Only admins can delete other users validationStates.',
         )
     ]
-
-
 )]
 #[ORM\HasLifecycleCallbacks]
 class ValidationState
@@ -72,7 +72,7 @@ class ValidationState
     
     #[ORM\ManyToOne(inversedBy: 'validationStates')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['resource:read', 'resource:post', 'validationState:read', 'validationState:write'])]
+    #[Groups(['resource:read', 'resource:post', 'validationState:read', 'validationState:write', 'validationState:put'])]
     private ?State $state = null;
 
     #[ORM\Column]
@@ -86,7 +86,7 @@ class ValidationState
 
     #[ORM\ManyToOne(inversedBy: 'validationStates', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: true)]
-    #[Groups(['validationState:read'])]
+    #[Groups(['validationState:read', 'validationState:put'])]
     private ?Resource $resource = null;
 
     #[ORM\PrePersist]
