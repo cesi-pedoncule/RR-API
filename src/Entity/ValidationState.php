@@ -86,6 +86,7 @@ class ValidationState
 
     #[ORM\ManyToOne(inversedBy: 'validationStates', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: true)]
+    #[Groups(['validationState:read'])]
     private ?Resource $resource = null;
 
     #[ORM\PrePersist]
