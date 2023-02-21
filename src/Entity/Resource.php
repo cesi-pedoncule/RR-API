@@ -111,6 +111,7 @@ class Resource
     private Collection $validationStates;
 
     #[ORM\OneToMany(mappedBy: 'resource', targetEntity: UserLike::class)]
+    #[Groups(['resource:read'])]
     private Collection $userLikes;
 
     #[ORM\PrePersist]

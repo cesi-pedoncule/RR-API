@@ -48,7 +48,7 @@ class UserLike
 
     #[ORM\ManyToOne(inversedBy: 'resourceLikes')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['user_like:read', 'user_like:write'])]
+    #[Groups(['user_like:read', 'user_like:write', 'resource:read'])]
     private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'userLikes')]
