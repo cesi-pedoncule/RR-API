@@ -6,6 +6,7 @@ PHP = $(EXEC) php
 COMPOSER = $(EXEC) composer
 NPM = $(EXEC) npm
 SYMFONY_CONSOLE = $(PHP) bin/console
+RM = rm -rf
 
 # Colors
 GREEN = /bin/echo -e "\x1b[32m\#\# $1\x1b[0m"
@@ -76,6 +77,7 @@ composer-update: ## Update dependencies
 database-init: ## Init database
 	$(MAKE) database-drop
 	$(MAKE) database-create
+	$(MAKE) database-drop-migrations
 	$(MAKE) database-migration
 	$(MAKE) database-migrate
 	$(MAKE) database-fixtures-load
@@ -88,6 +90,9 @@ database-create: ## Create database
 
 database-remove: ## Drop database
 	$(SYMFONY_CONSOLE) d:d:d --force --if-exists
+
+database-drop-migrations: ## Drop migrations
+	$(RM) migrations/Version*.php
 
 database-migration: ## Make migration
 	$(SYMFONY_CONSOLE) make:migration
