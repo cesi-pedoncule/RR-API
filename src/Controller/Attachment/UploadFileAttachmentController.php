@@ -16,10 +16,14 @@ class UploadFileAttachmentController extends AbstractController
     {
     }
 
-    public function __invoke(Request $request)
+    public function __invoke(Request $request): Attachment
     {
         $file = $request->files->get('file');
+        if (!$file) {
+            throw new \Exception('File is required');
+        }
 
+        // dd($file);
         // get the last resource created
         $resource = $this->em->getRepository(Resource::class)->findOneBy([], ['id' => 'DESC']); // Todo : replace by the resource id
         

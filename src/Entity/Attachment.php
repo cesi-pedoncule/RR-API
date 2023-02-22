@@ -68,6 +68,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
         )
     ]
 )]
+#[Vich\Uploadable]
 #[ORM\HasLifecycleCallbacks]
 class Attachment
 {
@@ -79,6 +80,7 @@ class Attachment
     private ?Uuid $id = null;
 
     #[Vich\UploadableField(mapping: "attachment_file", fileNameProperty: "filePath")]
+    #Assert\NotNull(groups: ['attachment:write'])
     private ?File $file = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
