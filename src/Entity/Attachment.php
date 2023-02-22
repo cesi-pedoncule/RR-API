@@ -84,6 +84,7 @@ class Attachment
     private ?File $file = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Groups(['attachment:read', 'attachment:write', 'attachment:put', 'resource:read'])]
     private ?string $filePath = null;
 
     #[Groups(['attachment:read', 'resource:read'])]
