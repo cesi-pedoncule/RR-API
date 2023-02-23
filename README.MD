@@ -1,6 +1,6 @@
 # Cube CESI : Ressource Relationnel API  
   
-Current API Doc : http://api.ressourcesrelationnelles.social/  
+Current API Doc : https://api.ressourcesrelationnelles.social/  
 
 ## Installation :
 
