@@ -7,6 +7,8 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use App\Controller\UserLike\PostUserLike;
+use App\Controller\UserLike\PostUserLikeController;
 use App\Repository\UserLikeRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -30,6 +32,7 @@ use Symfony\Component\Uid\UuidV6 as Uuid;
         new Post(
             name: 'post_user_like',
             denormalizationContext: ['groups' => ['user_like:write']],
+            controller: PostUserLikeController::class,
         ),
         new Delete(
             name: 'delete_user_like',

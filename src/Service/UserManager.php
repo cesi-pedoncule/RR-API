@@ -188,6 +188,20 @@ class UserManager {
     }
 
     /**
+     * Check if the current user is liking the resource
+     *
+     * @param User $user
+     * @param Resource $resource
+     * @return UserLike|false
+     */
+    public function checkIfUserIsLikingResource(User $user, Resource $resource): UserLike | false
+    {
+        $userLike = $this->entityManager->getRepository(UserLike::class)->findOneBy(['user' => $user, 'resource' => $resource]);
+
+        return $userLike ? $userLike : false;
+    }
+
+    /**
      * Like a resource
      * 
      * @param User $user
@@ -197,9 +211,7 @@ class UserManager {
     public function likeResource(User $user, Resource $resource): UserLike
     {
         // Check if the user is already liking the resource
-        $userLike = $this->entityManager->getRepository(UserLike::class)->findOneBy(['user' => $user, 'resource' => $resource]);
-
-        if ($userLike !== null) {
+        if ($this->checkIfUserIsLikingResource($user, $resource)) {
             throw new \Exception('You are already liking this resource');
         }
 
@@ -224,13 +236,12 @@ class UserManager {
     public function unlikeResource(User $user, Resource $resource): void
     {
         // Check if the user is liking the resource
-        $userLike = $this->entityManager->getRepository(UserLike::class)->findOneBy(['user' => $user, 'resource' => $resource]);
-
-        if ($userLike !== null) {
-            $this->entityManager->remove($userLike);
-            $this->entityManager->flush();
-        } else {
+        $userLike = $this->checkIfUserIsLikingResource($user, $resource);
+        if (!$userLike) {
             throw new \Exception('You are not liking this resource');
         }
+        
+        $this->entityManager->remove($userLike);
+        $this->entityManager->flush();
     }
 }
