@@ -7,6 +7,7 @@ use App\Entity\Resource;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 class UploadFileAttachmentController extends AbstractController
@@ -16,16 +17,24 @@ class UploadFileAttachmentController extends AbstractController
     {
     }
 
-    public function __invoke(Request $request): Attachment
+    public function __invoke(Request $request): Attachment|JsonResponse
     {
-        $file = $request->files->get('file');
-        if (!$file) {
-            throw new \Exception('File is required');
+        // Check if the resource is send in the request
+        if (!$request->get('resource')) {
+            return new JsonResponse(['error' => 'Resource is required => send [resource => $id]'], 400);
         }
 
-        // dd($file);
-        // get the last resource created
-        $resource = $this->em->getRepository(Resource::class)->findOneBy([], ['id' => 'DESC']); // Todo : replace by the resource id
+        // Check if the user is logged in
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        // Get the file
+        $file = $request->files->get('file');
+        if (!$file) {
+            return new JsonResponse(['error' => 'File is required'], 400);
+        }
+
+        // Get the resource send in the request
+        $resource = $this->em->getRepository(Resource::class)->find($request->get('resource'));
         
         $attachment = (new Attachment())
             ->setFileName($file->getClientOriginalName())
