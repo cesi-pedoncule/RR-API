@@ -1,7 +1,8 @@
 # Variables
 DOCKER = docker
 DOCKER_COMPOSE = docker-compose
-EXEC = $(DOCKER) exec -w /var/www www_rr_api
+DOCKER_WWW = www_rr_api
+EXEC = $(DOCKER) exec -w /var/www $(DOCKER_WWW)
 PHP = $(EXEC) php
 COMPOSER = $(EXEC) composer
 NPM = $(EXEC) npm
@@ -24,6 +25,9 @@ cache-clear: ## Clear cache
 
 build-jwt-keys: ## Build JWT keys
 	$(SYMFONY_CONSOLE) lexik:jwt:generate-keypair --no-interaction --overwrite
+
+shell: ## Open a shell in the container
+	$(DOCKER) exec -it $(DOCKER_WWW) /bin/bash
 
 ## —— ✅ Test ——
 .PHONY: tests
@@ -81,6 +85,9 @@ database-init: ## Init database
 	$(MAKE) database-migration
 	$(MAKE) database-migrate
 	$(MAKE) database-fixtures-load
+
+database: ## Alias : database-init
+	$(MAKE) database-init
 
 database-drop: ## Create database
 	$(SYMFONY_CONSOLE) d:d:d --force --if-exists
