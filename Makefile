@@ -59,13 +59,18 @@ e2e-test: ## Run E2E tests
 	$(PHP) bin/phpunit --testdox tests/E2E/
 
 ## —— 🐳 Docker ——
+build: ## Build app
+	$(DOCKER) build ./docker --no-cache --network=host
+
 start: ## Start app
 	$(MAKE) docker-start 
+
 docker-start: 
 	$(DOCKER_COMPOSE) up -d
 
 stop: ## Stop app
 	$(MAKE) docker-stop
+
 docker-stop: 
 	$(DOCKER_COMPOSE) stop
 	@$(call RED,"The containers are now stopped.")
