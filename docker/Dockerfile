@@ -6,7 +6,8 @@ RUN apk add --update linux-headers;
 # Install dépeencies
 RUN set -ex \
   && apk --no-cache add \
-    postgresql-dev
+    postgresql-dev \
+    curl
 
 RUN docker-php-ext-install pdo pdo_pgsql
 
