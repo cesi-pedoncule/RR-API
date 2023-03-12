@@ -25,4 +25,7 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" &&
 # Install Symfony CLI
 RUN curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.alpine.sh' | bash && apk add symfony-cli
 
+# Add rights to www-data user on /var/www directory
+RUN chown -R www-data:www-data /var/www
+
 WORKDIR /var/www/
