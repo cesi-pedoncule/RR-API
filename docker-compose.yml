@@ -2,7 +2,8 @@ version: '3.3'
 
 services:
   www:
-    build: ./docker/
+    build: 
+      context: ./docker
     depends_on:
       - postgresql
     container_name: www_rr_api

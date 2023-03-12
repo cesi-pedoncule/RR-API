@@ -60,7 +60,7 @@ e2e-test: ## Run E2E tests
 
 ## —— 🐳 Docker ——
 build: ## Build app
-	$(DOCKER) build ./docker --no-cache --network=host
+	$$(DOCKER_COMPOSE) build --no-cache
 
 start: ## Start app
 	$(MAKE) docker-start 
