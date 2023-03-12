@@ -1,5 +1,8 @@
 FROM php:8.1-fpm-alpine
 
+# Install the Linux kernel headers 
+RUN apk add --update linux-headers;
+
 # Install dépeencies
 RUN set -ex \
   && apk --no-cache add \
