@@ -43,6 +43,9 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
                                     'file' => [
                                         'type' => 'string', 
                                         'format' => 'binary'
+                                    ],
+                                    'resource' => [
+                                        'type' => 'string'
                                     ]
                                 ]
                             ]
