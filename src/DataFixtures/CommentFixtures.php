@@ -14,11 +14,13 @@ class CommentFixtures extends Fixture implements DependentFixtureInterface
         $faker = \Faker\Factory::create('fr_FR');
         // Create 20 fake resources
         for ($i=0; $i < 20; $i++) { 
-            $resource = (new Comment())
+            $comment = (new Comment())
                 ->setComment($faker->sentence(3))
                 ->setResource($this->getReference('resource_' . rand(0, 19)))
                 ->setUser($this->getReference('user_' . rand(0, 9)));
-                $manager->persist($resource);
+            
+            $manager->persist($comment);
+            $this->addReference('comment_' . $i, $comment);
         }
         $manager->flush();
     }

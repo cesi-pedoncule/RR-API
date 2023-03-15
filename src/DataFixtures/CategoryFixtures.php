@@ -18,8 +18,9 @@ class CategoryFixtures extends Fixture implements DependentFixtureInterface
                 ->setName($faker->sentence(3))
                 ->setIsVisible($i >= 20 ? false : true)
                 ->setCreator($this->getReference('user_' . rand(0, 9)));
-                $this->addReference('category_' . $i, $category);
+            
                 $manager->persist($category);
+                $this->addReference('category_' . $i, $category);
         }
         $manager->flush();
     }
