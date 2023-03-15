@@ -136,6 +136,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->password = $this->hashPassword($this->password);
         $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();
     }
 
     #[ORM\PreUpdate]

@@ -118,6 +118,7 @@ class Resource
     public function setCreationValues()
     {
         $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();
     }
 
     #[ORM\PreUpdate]

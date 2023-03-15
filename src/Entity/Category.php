@@ -93,6 +93,7 @@ class Category
     public function setCreatedAtValue()
     {
         $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();
     }
 
     #[ORM\PreUpdate]
