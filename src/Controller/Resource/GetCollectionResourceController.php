@@ -3,6 +3,7 @@
 namespace App\Controller\Resource;
 
 use App\Service\ResourceManager;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 
@@ -15,6 +16,15 @@ class GetCollectionResourceController extends AbstractController
 
     public function __invoke()
     {
-        return $this->resourceManager->findPublicResources();
+        $resources = $this->resourceManager->findPublicResources();
+
+        // Reverse all comments of all resources
+        foreach ($resources as $resource) {
+            $comments = array_reverse($resource->getComments()->toArray());
+            $comments = new ArrayCollection($comments);
+            $resource->setComments($comments);
+        }
+
+        return $resources;
     }
 }

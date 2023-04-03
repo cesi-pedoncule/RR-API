@@ -4,6 +4,7 @@ namespace App\Controller\Resource;
 
 use App\Entity\User;
 use App\Service\ResourceManager;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 
@@ -23,6 +24,12 @@ class GetResourceController extends AbstractController
         if (!$resource) {
             throw $this->createNotFoundException();
         }
+
+        // Reverse the comments
+        $comments = array_reverse($resource->getComments()->toArray());
+        // Create a new ArrayCollection
+        $comments = new ArrayCollection($comments);
+        $resource->setComments($comments);
 
         // Check if the resource is public
         if (!$resource->isIsPublic()) {
