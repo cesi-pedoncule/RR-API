@@ -54,8 +54,10 @@ class ValidationStateTest extends ApiTestCase
 
     public function testCreateValidationState(): void
     {
+        $stateId = StateTest::getStateTestId();
+
         $jsonValidationState = [
-            'state' => '/states/' . StateTest::getStateTestId(),
+            'state' => '/states/' . $stateId,
             'moderator' => '/users/' . UserTest::getUserTestId(),
         ];
 
@@ -69,7 +71,7 @@ class ValidationStateTest extends ApiTestCase
 
         $this->assertResponseStatusCodeSame(201);
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
-        $this->assertJsonContains(['state' => $jsonValidationState['state']]);
+        $this->assertJsonContains(['state' => ['id' => intval($stateId)]]);
     }
 
     public function testUpdateValidationState(): void
@@ -78,8 +80,10 @@ class ValidationStateTest extends ApiTestCase
         $this->testGetValidationStates(29);
         $lastValidationState = array_pop($this->validationStates);
 
+        $stateId = StateTest::getStateTestId();
+
         $jsonValidationState = [
-            'state' => '/states/' . StateTest::getStateTestId(),
+            'state' => '/states/' . $stateId,
             'moderator' => '/users/' . UserTest::getUserTestId(),
         ];
 
@@ -95,6 +99,6 @@ class ValidationStateTest extends ApiTestCase
 
         $this->assertResponseStatusCodeSame(200);
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
-        $this->assertJsonContains(['state' => $jsonValidationState['state']]);
+        $this->assertJsonContains(['state' => ['id' => intval($stateId)]]);
     }
 }
