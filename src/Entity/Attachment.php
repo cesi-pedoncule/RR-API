@@ -110,7 +110,7 @@ class Attachment
     #[Groups(['attachment:read'])]
     private ?User $user = null;
 
-    #[ORM\ManyToOne(inversedBy: 'Attachments')]
+    #[ORM\ManyToOne(inversedBy: 'attachments')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['attachment:read', 'attachment:write'])]
     private ?Resource $resource = null;
