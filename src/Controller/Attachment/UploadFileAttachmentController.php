@@ -43,6 +43,13 @@ class UploadFileAttachmentController extends AbstractController
             ->setUser($this->getUser())
             ->setResource($resource)
             ->setCreatedAt(new DateTimeImmutable());
+            
+        $this->em->persist($attachment);
+        
+        $attachment->setFileUrl("https://api.ressourcesrelationnelles.social/attachments/{$attachment->getFilePath()}");
+
+        $this->em->persist($attachment);
+        $this->em->flush();
 
         return $attachment;
     }
