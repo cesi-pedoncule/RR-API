@@ -17,7 +17,7 @@ class ResourceFixtures extends Fixture implements DependentFixtureInterface
         for ($i=0; $i < 25; $i++) {
 
             $validationState = (new ValidationState())
-                ->setState($this->getReference('state_pending'))
+                ->setState($this->getReference('state_validated'))
                 ->setModerator($this->getReference('user_0'));
 
             $manager->persist($validationState);
