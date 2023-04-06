@@ -90,6 +90,7 @@ class Attachment
     #[Groups(['attachment:read', 'attachment:write', 'attachment:put', 'resource:read'])]
     private ?string $filePath = null;
 
+    #[ORM\Column()]
     #[Groups(['attachment:read', 'resource:read'])]
     private ?string $fileUrl = null;
 
