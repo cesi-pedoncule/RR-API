@@ -66,7 +66,7 @@ class ValidationState
     
     #[ORM\ManyToOne(inversedBy: 'validationStates')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['resource:read', 'resource:post', 'validationState:read', 'validationState:write', 'validationState:put'])]
+    #[Groups(['resource:read', 'validationState:read', 'validationState:write', 'validationState:put'])]
     private ?State $state = null;
 
     #[ORM\Column]
