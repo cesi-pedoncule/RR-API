@@ -86,7 +86,7 @@ class UserTest extends ApiTestCase
         $response = static::createClient()->request('GET', '/users/' . $first_user['id'], ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
-        $this->assertJsonContains(['id' => $first_user['id'], 'email' => $first_user['email']]);
+        $this->assertJsonContains(['id' => $first_user['id'], 'name' => $first_user['name']]);
     }
 
     public function testGetMe(): void
@@ -175,7 +175,7 @@ class UserTest extends ApiTestCase
         
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
-        $this->assertJsonContains(['email' => 'new-email@example.com', 'name' => 'new-name', 'firstname' => 'new-firstname']);
+        $this->assertJsonContains(['name' => 'new-name', 'firstname' => 'new-firstname']);
     }
 
     public function testDeleteUser(): void

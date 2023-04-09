@@ -69,7 +69,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['user:read', 'user:me', 'resource:read', 'user:write', 'validationState:read', 'comment:read'])]
+    #[Groups(['user:me', 'user:write'])]
     private ?string $email = null;
 
     #[ORM\Column]
