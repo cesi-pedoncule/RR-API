@@ -27,6 +27,9 @@ class CommentTest extends TestCase
 
         $this->assertInstanceOf(Comment::class, $response);
         $this->assertEquals($value, $this->comment->getComment());
+        $this->assertEmpty($this->comment->getUser());
+        $this->assertEmpty($this->comment->getResource());
+        $this->assertEmpty($this->comment->getCreatedAt());
     }
 
     public function testGetUser(): void
@@ -37,6 +40,9 @@ class CommentTest extends TestCase
 
         $this->assertInstanceOf(Comment::class, $response);
         $this->assertEquals($value, $this->comment->getUser());
+        $this->assertEmpty($this->comment->getComment());
+        $this->assertEmpty($this->comment->getResource());
+        $this->assertEmpty($this->comment->getCreatedAt());
     }
 
     public function testGetResource(): void
@@ -47,6 +53,9 @@ class CommentTest extends TestCase
 
         $this->assertInstanceOf(Comment::class, $response);
         $this->assertEquals($value, $this->comment->getResource());
+        $this->assertEmpty($this->comment->getComment());
+        $this->assertEmpty($this->comment->getUser());
+        $this->assertEmpty($this->comment->getCreatedAt());
     }
 
     public function testGetCreatedAt(): void
@@ -57,5 +66,8 @@ class CommentTest extends TestCase
 
         $this->assertInstanceOf(Comment::class, $response);
         $this->assertEquals($value, $this->comment->getCreatedAt());
+        $this->assertEmpty($this->comment->getComment());
+        $this->assertEmpty($this->comment->getUser());
+        $this->assertEmpty($this->comment->getResource());
     }
 }
