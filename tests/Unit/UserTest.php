@@ -518,4 +518,92 @@ class UserTest extends TestCase
         $this->assertEmpty($this->user->getResourceLikes());
         $this->assertEmpty($this->user->getUserFollowers());
     }
+
+    public function testPrePersist(): void
+    {
+        $this->user->setPassword('password');
+
+        $oldId = $this->user->getId();
+        $oldEmail = $this->user->getEmail();
+        $oldRoles = $this->user->getRoles();
+        $oldPassword = $this->user->getPassword();
+        $oldName = $this->user->getName();
+        $oldFirstname = $this->user->getFirstname();
+        $oldCreatedAt = $this->user->getCreatedAt();
+        $oldUpdatedAt = $this->user->getUpdatedAt();
+        $oldIsBanned = $this->user->isIsBanned();
+        $oldAttachments = $this->user->getAttachments();
+        $oldResources = $this->user->getResources();
+        $oldValidationStates = $this->user->getValidationStates();
+        $oldCategories = $this->user->getCategories();
+        $oldComments = $this->user->getComments();
+        $oldResourceLikes = $this->user->getResourceLikes();
+        $oldUserFollows = $this->user->getUserFollows();
+        $oldUserFollowers = $this->user->getUserFollowers();
+
+
+        $this->user->setCreatedAtValue();
+
+        $this->assertEquals($oldId, $this->user->getId());
+        $this->assertEquals($oldEmail, $this->user->getEmail());
+        $this->assertEquals($oldRoles, $this->user->getRoles());
+        $this->assertNotEquals($oldPassword, $this->user->getPassword());
+        $this->assertEquals($oldName, $this->user->getName());
+        $this->assertEquals($oldFirstname, $this->user->getFirstname());
+        $this->assertNotEquals($oldCreatedAt, $this->user->getCreatedAt());
+        $this->assertNotEquals($oldUpdatedAt, $this->user->getUpdatedAt());
+        $this->assertEquals($oldIsBanned, $this->user->isIsBanned());
+        $this->assertEquals($oldAttachments, $this->user->getAttachments());
+        $this->assertEquals($oldResources, $this->user->getResources());
+        $this->assertEquals($oldValidationStates, $this->user->getValidationStates());
+        $this->assertEquals($oldCategories, $this->user->getCategories());
+        $this->assertEquals($oldComments, $this->user->getComments());
+        $this->assertEquals($oldResourceLikes, $this->user->getResourceLikes());
+        $this->assertEquals($oldUserFollows, $this->user->getUserFollows());
+        $this->assertEquals($oldUserFollowers, $this->user->getUserFollowers());
+    }
+
+    public function testPreUpdate(): void
+    {
+        $this->user->setPassword('password');
+
+        $oldId = $this->user->getId();
+        $oldEmail = $this->user->getEmail();
+        $oldRoles = $this->user->getRoles();
+        $oldPassword = $this->user->getPassword();
+        $oldName = $this->user->getName();
+        $oldFirstname = $this->user->getFirstname();
+        $oldCreatedAt = $this->user->getCreatedAt();
+        $oldUpdatedAt = $this->user->getUpdatedAt();
+        $oldIsBanned = $this->user->isIsBanned();
+        $oldAttachments = $this->user->getAttachments();
+        $oldResources = $this->user->getResources();
+        $oldValidationStates = $this->user->getValidationStates();
+        $oldCategories = $this->user->getCategories();
+        $oldComments = $this->user->getComments();
+        $oldResourceLikes = $this->user->getResourceLikes();
+        $oldUserFollows = $this->user->getUserFollows();
+        $oldUserFollowers = $this->user->getUserFollowers();
+
+        $this->user->setUpdatedAtValue();
+
+        $this->assertEquals($oldId, $this->user->getId());
+        $this->assertEquals($oldEmail, $this->user->getEmail());
+        $this->assertEquals($oldRoles, $this->user->getRoles());
+        $this->assertEquals($oldPassword, $this->user->getPassword());
+        $this->assertEquals($oldName, $this->user->getName());
+        $this->assertEquals($oldFirstname, $this->user->getFirstname());
+        $this->assertEquals($oldCreatedAt, $this->user->getCreatedAt());
+        $this->assertInstanceOf(\DateTimeImmutable::class, $this->user->getUpdatedAt());
+        $this->assertNotEquals($oldUpdatedAt, $this->user->getUpdatedAt());
+        $this->assertEquals($oldIsBanned, $this->user->isIsBanned());
+        $this->assertEquals($oldAttachments, $this->user->getAttachments());
+        $this->assertEquals($oldResources, $this->user->getResources());
+        $this->assertEquals($oldValidationStates, $this->user->getValidationStates());
+        $this->assertEquals($oldCategories, $this->user->getCategories());
+        $this->assertEquals($oldComments, $this->user->getComments());
+        $this->assertEquals($oldResourceLikes, $this->user->getResourceLikes());
+        $this->assertEquals($oldUserFollows, $this->user->getUserFollows());
+        $this->assertEquals($oldUserFollowers, $this->user->getUserFollowers());
+    }
 }

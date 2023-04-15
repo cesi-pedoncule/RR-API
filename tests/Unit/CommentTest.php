@@ -70,4 +70,23 @@ class CommentTest extends TestCase
         $this->assertEmpty($this->comment->getUser());
         $this->assertEmpty($this->comment->getResource());
     }
+
+    public function testGetPrePersist(): void
+    {
+        $oldId = $this->comment->getId();
+        $oldComment = $this->comment->getComment();
+        $oldUser = $this->comment->getUser();
+        $oldResource = $this->comment->getResource();
+        $oldCreatedAt = $this->comment->getCreatedAt();
+
+        $this->comment->setCreatedAtValue();
+
+        $this->assertEquals($oldId, $this->comment->getId());
+        $this->assertEquals($oldComment, $this->comment->getComment());
+        $this->assertEquals($oldUser, $this->comment->getUser());
+        $this->assertEquals($oldResource, $this->comment->getResource());
+        $this->assertNotEmpty($this->comment->getCreatedAt());
+        $this->assertInstanceOf(DateTimeImmutable::class, $this->comment->getCreatedAt());
+        $this->assertNotEquals($oldCreatedAt, $this->comment->getCreatedAt());
+    }
 }

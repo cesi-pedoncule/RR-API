@@ -317,4 +317,66 @@ class ResourceTest extends TestCase
         $this->assertEmpty($this->resource->getUserLikes());
     }
 
+    public function testPrePersist(): void
+    {
+        $oldId = $this->resource->getId();
+        $oldTitle = $this->resource->getTitle();
+        $oldDescription = $this->resource->getDescription();
+        $oldAttachments = $this->resource->getAttachments();
+        $oldCreatedAt = $this->resource->getCreatedAt();
+        $oldUpdatedAt = $this->resource->getUpdatedAt();
+        $oldUser = $this->resource->getUser();
+        $oldIsPublic = $this->resource->isIsPublic();
+        $oldCategories = $this->resource->getCategories();
+        $oldComments = $this->resource->getComments();
+        $oldValidationStates = $this->resource->getValidationStates();
+        $oldUserLikes = $this->resource->getUserLikes();
+
+        $this->resource->setCreationValues();
+
+        $this->assertEquals($oldId, $this->resource->getId());
+        $this->assertEquals($oldTitle, $this->resource->getTitle());
+        $this->assertEquals($oldDescription, $this->resource->getDescription());
+        $this->assertEquals($oldAttachments, $this->resource->getAttachments());
+        $this->assertNotEquals($oldCreatedAt, $this->resource->getCreatedAt());
+        $this->assertNotEquals($oldUpdatedAt, $this->resource->getUpdatedAt());
+        $this->assertEquals($oldUser, $this->resource->getUser());
+        $this->assertEquals($oldIsPublic, $this->resource->isIsPublic());
+        $this->assertEquals($oldCategories, $this->resource->getCategories());
+        $this->assertEquals($oldComments, $this->resource->getComments());
+        $this->assertEquals($oldValidationStates, $this->resource->getValidationStates());
+        $this->assertEquals($oldUserLikes, $this->resource->getUserLikes());
+    }
+
+    public function testPreUpdate(): void
+    {
+        $oldId = $this->resource->getId();
+        $oldTitle = $this->resource->getTitle();
+        $oldDescription = $this->resource->getDescription();
+        $oldAttachments = $this->resource->getAttachments();
+        $oldCreatedAt = $this->resource->getCreatedAt();
+        $oldUpdatedAt = $this->resource->getUpdatedAt();
+        $oldUser = $this->resource->getUser();
+        $oldIsPublic = $this->resource->isIsPublic();
+        $oldCategories = $this->resource->getCategories();
+        $oldComments = $this->resource->getComments();
+        $oldValidationStates = $this->resource->getValidationStates();
+        $oldUserLikes = $this->resource->getUserLikes();
+
+        $this->resource->setUpdatedAtValue();
+
+        $this->assertEquals($oldId, $this->resource->getId());
+        $this->assertEquals($oldTitle, $this->resource->getTitle());
+        $this->assertEquals($oldDescription, $this->resource->getDescription());
+        $this->assertEquals($oldAttachments, $this->resource->getAttachments());
+        $this->assertEquals($oldCreatedAt, $this->resource->getCreatedAt());
+        $this->assertNotEquals($oldUpdatedAt, $this->resource->getUpdatedAt());
+        $this->assertEquals($oldUser, $this->resource->getUser());
+        $this->assertEquals($oldIsPublic, $this->resource->isIsPublic());
+        $this->assertEquals($oldCategories, $this->resource->getCategories());
+        $this->assertEquals($oldComments, $this->resource->getComments());
+        $this->assertEquals($oldValidationStates, $this->resource->getValidationStates());
+        $this->assertEquals($oldUserLikes, $this->resource->getUserLikes());
+    }
+
 }

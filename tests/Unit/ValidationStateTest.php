@@ -69,4 +69,40 @@ class ValidationStateTest extends TestCase
         $this->assertEmpty($this->validationState->getModerator());
     }
 
+    public function testPrePersist(): void
+    {
+        $oldId = $this->validationState->getId();
+        $oldState = $this->validationState->getState();
+        $oldUpdatedAt = $this->validationState->getUpdatedAt();
+        $oldModerator = $this->validationState->getModerator();
+        $oldResource = $this->validationState->getResource();
+
+        $this->validationState->setCreatedAtValue();
+
+        $this->assertInstanceOf(DateTimeImmutable::class, $this->validationState->getUpdatedAt());
+        $this->assertNotEquals($oldUpdatedAt, $this->validationState->getUpdatedAt());
+        $this->assertEquals($oldId, $this->validationState->getId());
+        $this->assertEquals($oldState, $this->validationState->getState());
+        $this->assertEquals($oldModerator, $this->validationState->getModerator());
+        $this->assertEquals($oldResource, $this->validationState->getResource());
+    }
+
+    public function testPreUpdate(): void
+    {
+        $oldId = $this->validationState->getId();
+        $oldState = $this->validationState->getState();
+        $oldUpdatedAt = $this->validationState->getUpdatedAt();
+        $oldModerator = $this->validationState->getModerator();
+        $oldResource = $this->validationState->getResource();
+
+        $this->validationState->setUpdatedAtValue();
+
+        $this->assertInstanceOf(DateTimeImmutable::class, $this->validationState->getUpdatedAt());
+        $this->assertNotEquals($oldUpdatedAt, $this->validationState->getUpdatedAt());
+        $this->assertEquals($oldId, $this->validationState->getId());
+        $this->assertEquals($oldState, $this->validationState->getState());
+        $this->assertEquals($oldModerator, $this->validationState->getModerator());
+        $this->assertEquals($oldResource, $this->validationState->getResource());
+    }
+
 }

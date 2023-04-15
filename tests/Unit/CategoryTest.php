@@ -138,4 +138,52 @@ class CategoryTest extends TestCase
         $this->assertEmpty($this->category->getUpdatedAt());
         $this->assertEmpty($this->category->isIsVisible());
     }
+
+    public function testPrePersist(): void
+    {
+        $oldId = $this->category->getId();
+        $oldName = $this->category->getName();
+        $oldResources = $this->category->getResources();
+        $oldIsVisible = $this->category->isIsVisible();
+        $oldCreatedAt = $this->category->getCreatedAt();
+        $oldUpdatedAt = $this->category->getUpdatedAt();
+        $oldCreator = $this->category->getCreator();
+
+        $this->category->setCreatedAtValue();
+
+        $this->assertEquals($oldId, $this->category->getId());
+        $this->assertEquals($oldName, $this->category->getName());
+        $this->assertEquals($oldResources, $this->category->getResources());
+        $this->assertEquals($oldIsVisible, $this->category->isIsVisible());
+        $this->assertNotEmpty($this->category->getCreatedAt());
+        $this->assertNotEquals($oldCreatedAt, $this->category->getCreatedAt());
+        $this->assertInstanceOf(DateTimeImmutable::class, $this->category->getCreatedAt());
+        $this->assertNotEmpty($this->category->getUpdatedAt());
+        $this->assertNotEquals($oldUpdatedAt, $this->category->getUpdatedAt());
+        $this->assertInstanceOf(DateTimeImmutable::class, $this->category->getUpdatedAt());
+        $this->assertEquals($oldCreator, $this->category->getCreator());
+    }
+
+    public function testPreUpdate(): void
+    {
+        $oldId = $this->category->getId();
+        $oldName = $this->category->getName();
+        $oldResources = $this->category->getResources();
+        $oldIsVisible = $this->category->isIsVisible();
+        $oldCreatedAt = $this->category->getCreatedAt();
+        $oldUpdatedAt = $this->category->getUpdatedAt();
+        $oldCreator = $this->category->getCreator();
+
+        $this->category->setUpdatedAtValue();
+
+        $this->assertEquals($oldId, $this->category->getId());
+        $this->assertEquals($oldName, $this->category->getName());
+        $this->assertEquals($oldResources, $this->category->getResources());
+        $this->assertEquals($oldIsVisible, $this->category->isIsVisible());
+        $this->assertEquals($oldCreatedAt, $this->category->getCreatedAt());
+        $this->assertNotEmpty($this->category->getUpdatedAt());
+        $this->assertInstanceOf(DateTimeImmutable::class, $this->category->getUpdatedAt());
+        $this->assertNotEquals($oldUpdatedAt, $this->category->getUpdatedAt());
+        $this->assertEquals($oldCreator, $this->category->getCreator());
+    }
 }
