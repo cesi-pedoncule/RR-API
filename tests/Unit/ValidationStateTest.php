@@ -28,6 +28,9 @@ class ValidationStateTest extends TestCase
 
         $this->assertInstanceOf(ValidationState::class, $response);
         $this->assertEquals($value, $this->validationState->getState());
+        $this->assertEmpty($this->validationState->getUpdatedAt());
+        $this->assertEmpty($this->validationState->getModerator());
+        $this->assertEmpty($this->validationState->getResource());
     }
 
     public function testGetUpdatedAt(): void
@@ -38,6 +41,9 @@ class ValidationStateTest extends TestCase
 
         $this->assertInstanceOf(ValidationState::class, $response);
         $this->assertEquals($value, $this->validationState->getUpdatedAt());
+        $this->assertEmpty($this->validationState->getState());
+        $this->assertEmpty($this->validationState->getModerator());
+        $this->assertEmpty($this->validationState->getResource());
     }
 
     public function testGetModerator(): void
@@ -58,6 +64,9 @@ class ValidationStateTest extends TestCase
 
         $this->assertInstanceOf(ValidationState::class, $response);
         $this->assertEquals($value, $this->validationState->getResource());
+        $this->assertEmpty($this->validationState->getState());
+        $this->assertEmpty($this->validationState->getUpdatedAt());
+        $this->assertEmpty($this->validationState->getModerator());
     }
 
 }
