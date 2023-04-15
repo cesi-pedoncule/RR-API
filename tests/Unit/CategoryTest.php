@@ -27,6 +27,11 @@ class CategoryTest extends TestCase
         
         $this->assertInstanceOf(Category::class, $response);
         $this->assertEquals($value, $this->category->getName());
+        $this->assertEmpty($this->category->getResources());
+        $this->assertEmpty($this->category->getCreator());
+        $this->assertEmpty($this->category->getCreatedAt());
+        $this->assertEmpty($this->category->getUpdatedAt());
+        $this->assertEmpty($this->category->isIsVisible());
     }
     
     public function testGetResources(): void
@@ -36,7 +41,13 @@ class CategoryTest extends TestCase
         $response = $this->category->addResource($value);
 
         $this->assertInstanceOf(Category::class, $response);
-        $this->assertTrue($this->category->getResources()->contains($value));        
+        $this->assertTrue($this->category->getResources()->contains($value));
+        $this->assertEquals($value, $this->category->getResources()->first());
+        $this->assertEquals(1, $this->category->getResources()->count());
+        $this->assertEmpty($this->category->getCreator());
+        $this->assertEmpty($this->category->getCreatedAt());
+        $this->assertEmpty($this->category->getUpdatedAt());
+        $this->assertEmpty($this->category->isIsVisible());
     }
 
     public function testRemoveResources(): void
@@ -44,10 +55,19 @@ class CategoryTest extends TestCase
         $value = new Resource();
 
         $this->category->addResource($value);
+        
+        $this->assertEquals(1, $this->category->getResources()->count());
+        $this->assertTrue($this->category->getResources()->contains($value));
+
         $response = $this->category->removeResource($value);
 
         $this->assertInstanceOf(Category::class, $response);
-        $this->assertFalse($this->category->getResources()->contains($value));        
+        $this->assertFalse($this->category->getResources()->contains($value));
+        $this->assertEquals(0, $this->category->getResources()->count());
+        $this->assertEmpty($this->category->getCreator());
+        $this->assertEmpty($this->category->getCreatedAt());
+        $this->assertEmpty($this->category->getUpdatedAt());
+        $this->assertEmpty($this->category->isIsVisible());
     }
 
     public function testIsIsVisible(): void
@@ -57,14 +77,24 @@ class CategoryTest extends TestCase
         $response = $this->category->setIsVisible($value);
 
         $this->assertInstanceOf(Category::class, $response);
+        $this->assertNotEmpty($this->category->isIsVisible());
         $this->assertEquals($value, $this->category->isIsVisible());
+        $this->assertEmpty($this->category->getResources());
+        $this->assertEmpty($this->category->getCreator());
+        $this->assertEmpty($this->category->getCreatedAt());
+        $this->assertEmpty($this->category->getUpdatedAt());
 
         $value = false;
 
         $response = $this->category->setIsVisible($value);
 
         $this->assertInstanceOf(Category::class, $response);
+        $this->assertEmpty($this->category->isIsVisible());
         $this->assertEquals($value, $this->category->isIsVisible());
+        $this->assertEmpty($this->category->getResources());
+        $this->assertEmpty($this->category->getCreator());
+        $this->assertEmpty($this->category->getCreatedAt());
+        $this->assertEmpty($this->category->getUpdatedAt());
     }
 
     public function testGetCreatedAt(): void
@@ -75,6 +105,10 @@ class CategoryTest extends TestCase
 
         $this->assertInstanceOf(Category::class, $response);
         $this->assertEquals($value, $this->category->getCreatedAt());
+        $this->assertEmpty($this->category->getResources());
+        $this->assertEmpty($this->category->getCreator());
+        $this->assertEmpty($this->category->getUpdatedAt());
+        $this->assertEmpty($this->category->isIsVisible());
     }
 
     public function testGetUpdatedAt(): void
@@ -85,6 +119,10 @@ class CategoryTest extends TestCase
 
         $this->assertInstanceOf(Category::class, $response);
         $this->assertEquals($value, $this->category->getUpdatedAt());
+        $this->assertEmpty($this->category->getResources());
+        $this->assertEmpty($this->category->getCreator());
+        $this->assertEmpty($this->category->getCreatedAt());
+        $this->assertEmpty($this->category->isIsVisible());
     }
 
     public function testGetCreator(): void
@@ -95,5 +133,9 @@ class CategoryTest extends TestCase
 
         $this->assertInstanceOf(Category::class, $response);
         $this->assertEquals($value, $this->category->getCreator());
+        $this->assertEmpty($this->category->getResources());
+        $this->assertEmpty($this->category->getCreatedAt());
+        $this->assertEmpty($this->category->getUpdatedAt());
+        $this->assertEmpty($this->category->isIsVisible());
     }
 }
