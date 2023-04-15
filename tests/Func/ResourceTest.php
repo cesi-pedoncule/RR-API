@@ -9,6 +9,20 @@ class ResourceTest extends ApiTestCase
     private string $jwtToken;
     private array $resources;
 
+    /**
+     * Return the first resource id
+     * 
+     * @return string
+     */
+    public static function getResourceTestId(): string
+    {
+        $jwtToken = UserTest::userLoggedIn();
+        $response = static::createClient()->request('GET', '/resources', ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $jwtToken]);
+        $resources = $response->toArray();
+        $first_resource = array_shift($resources);
+        return $first_resource['id'];
+    }
+
     public function testGetResources(int $nbResources = 20): void
     {
         // Test GET /resources without authentication
