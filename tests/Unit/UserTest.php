@@ -7,6 +7,8 @@ use App\Entity\Category;
 use App\Entity\Comment;
 use App\Entity\Resource;
 use App\Entity\User;
+use App\Entity\UserFollow;
+use App\Entity\UserLike;
 use App\Entity\ValidationState;
 use PHPUnit\Framework\TestCase;
 
@@ -30,6 +32,20 @@ class UserTest extends TestCase
         $this->assertInstanceOf(User::class, $response);
         $this->assertEquals($value, $this->user->getEmail());
         $this->assertEquals($value, $this->user->getUserIdentifier());
+        $this->assertEquals(['ROLE_USER'], $this->user->getRoles());
+        $this->assertEmpty($this->user->getName());
+        $this->assertEmpty($this->user->getFirstname());
+        $this->assertEmpty($this->user->getCreatedAt());
+        $this->assertEmpty($this->user->getUpdatedAt());
+        $this->assertEmpty($this->user->isIsBanned());
+        $this->assertEmpty($this->user->getAttachments());
+        $this->assertEmpty($this->user->getResources());
+        $this->assertEmpty($this->user->getValidationStates());
+        $this->assertEmpty($this->user->getCategories());
+        $this->assertEmpty($this->user->getComments());
+        $this->assertEmpty($this->user->getResourceLikes());
+        $this->assertEmpty($this->user->getUserFollows());
+        $this->assertEmpty($this->user->getUserFollowers());
     }
     
     public function testGetRoles(): void
@@ -41,6 +57,21 @@ class UserTest extends TestCase
         $this->assertInstanceOf(User::class, $response);
         $this->assertContains('ROLE_USER', $this->user->getRoles());
         $this->assertContains('ROLE_ADMIN', $this->user->getRoles());
+        $this->assertEquals(['ROLE_ADMIN', 'ROLE_USER'], $this->user->getRoles());
+        $this->assertEmpty($this->user->getEmail());
+        $this->assertEmpty($this->user->getName());
+        $this->assertEmpty($this->user->getFirstname());
+        $this->assertEmpty($this->user->getCreatedAt());
+        $this->assertEmpty($this->user->getUpdatedAt());
+        $this->assertEmpty($this->user->isIsBanned());
+        $this->assertEmpty($this->user->getAttachments());
+        $this->assertEmpty($this->user->getResources());
+        $this->assertEmpty($this->user->getValidationStates());
+        $this->assertEmpty($this->user->getCategories());
+        $this->assertEmpty($this->user->getComments());
+        $this->assertEmpty($this->user->getResourceLikes());
+        $this->assertEmpty($this->user->getUserFollows());
+        $this->assertEmpty($this->user->getUserFollowers());
     }
 
     public function testGetPassword(): void
@@ -61,6 +92,20 @@ class UserTest extends TestCase
         
         $this->assertInstanceOf(User::class, $response);
         $this->assertEquals($value, $this->user->getName());
+        $this->assertEmpty($this->user->getEmail());
+        $this->assertEquals(['ROLE_USER'], $this->user->getRoles());
+        $this->assertEmpty($this->user->getFirstname());
+        $this->assertEmpty($this->user->getCreatedAt());
+        $this->assertEmpty($this->user->getUpdatedAt());
+        $this->assertEmpty($this->user->isIsBanned());
+        $this->assertEmpty($this->user->getAttachments());
+        $this->assertEmpty($this->user->getResources());
+        $this->assertEmpty($this->user->getValidationStates());
+        $this->assertEmpty($this->user->getCategories());
+        $this->assertEmpty($this->user->getComments());
+        $this->assertEmpty($this->user->getResourceLikes());
+        $this->assertEmpty($this->user->getUserFollows());
+        $this->assertEmpty($this->user->getUserFollowers());
     }
 
     public function testGetFirstname(): void
@@ -71,6 +116,20 @@ class UserTest extends TestCase
         
         $this->assertInstanceOf(User::class, $response);
         $this->assertEquals($value, $this->user->getFirstname());
+        $this->assertEmpty($this->user->getEmail());
+        $this->assertEquals(['ROLE_USER'], $this->user->getRoles());
+        $this->assertEmpty($this->user->getName());
+        $this->assertEmpty($this->user->getCreatedAt());
+        $this->assertEmpty($this->user->getUpdatedAt());
+        $this->assertEmpty($this->user->isIsBanned());
+        $this->assertEmpty($this->user->getAttachments());
+        $this->assertEmpty($this->user->getResources());
+        $this->assertEmpty($this->user->getValidationStates());
+        $this->assertEmpty($this->user->getCategories());
+        $this->assertEmpty($this->user->getComments());
+        $this->assertEmpty($this->user->getResourceLikes());
+        $this->assertEmpty($this->user->getUserFollows());
+        $this->assertEmpty($this->user->getUserFollowers());
     }
 
     public function testGetCreatedAt(): void
@@ -81,6 +140,20 @@ class UserTest extends TestCase
         
         $this->assertInstanceOf(User::class, $response);
         $this->assertEquals($value, $this->user->getCreatedAt());
+        $this->assertEmpty($this->user->getEmail());
+        $this->assertEquals(['ROLE_USER'], $this->user->getRoles());
+        $this->assertEmpty($this->user->getName());
+        $this->assertEmpty($this->user->getFirstname());
+        $this->assertEmpty($this->user->getUpdatedAt());
+        $this->assertEmpty($this->user->isIsBanned());
+        $this->assertEmpty($this->user->getAttachments());
+        $this->assertEmpty($this->user->getResources());
+        $this->assertEmpty($this->user->getValidationStates());
+        $this->assertEmpty($this->user->getCategories());
+        $this->assertEmpty($this->user->getComments());
+        $this->assertEmpty($this->user->getResourceLikes());
+        $this->assertEmpty($this->user->getUserFollows());
+        $this->assertEmpty($this->user->getUserFollowers());
     }
 
     public function testGetUpdatedAt(): void
@@ -91,6 +164,20 @@ class UserTest extends TestCase
         
         $this->assertInstanceOf(User::class, $response);
         $this->assertEquals($value, $this->user->getUpdatedAt());
+        $this->assertEmpty($this->user->getEmail());
+        $this->assertEquals(['ROLE_USER'], $this->user->getRoles());
+        $this->assertEmpty($this->user->getName());
+        $this->assertEmpty($this->user->getFirstname());
+        $this->assertEmpty($this->user->getCreatedAt());
+        $this->assertEmpty($this->user->isIsBanned());
+        $this->assertEmpty($this->user->getAttachments());
+        $this->assertEmpty($this->user->getResources());
+        $this->assertEmpty($this->user->getValidationStates());
+        $this->assertEmpty($this->user->getCategories());
+        $this->assertEmpty($this->user->getComments());
+        $this->assertEmpty($this->user->getResourceLikes());
+        $this->assertEmpty($this->user->getUserFollows());
+        $this->assertEmpty($this->user->getUserFollowers());
     }
 
     public function testIsIsBanned(): void
@@ -101,6 +188,20 @@ class UserTest extends TestCase
         
         $this->assertInstanceOf(User::class, $response);
         $this->assertEquals($value, $this->user->isIsBanned());
+        $this->assertEmpty($this->user->getEmail());
+        $this->assertEquals(['ROLE_USER'], $this->user->getRoles());
+        $this->assertEmpty($this->user->getName());
+        $this->assertEmpty($this->user->getFirstname());
+        $this->assertEmpty($this->user->getCreatedAt());
+        $this->assertEmpty($this->user->getUpdatedAt());
+        $this->assertEmpty($this->user->getAttachments());
+        $this->assertEmpty($this->user->getResources());
+        $this->assertEmpty($this->user->getValidationStates());
+        $this->assertEmpty($this->user->getCategories());
+        $this->assertEmpty($this->user->getComments());
+        $this->assertEmpty($this->user->getResourceLikes());
+        $this->assertEmpty($this->user->getUserFollows());
+        $this->assertEmpty($this->user->getUserFollowers());
     }
 
     public function testGetAttachments(): void
@@ -112,12 +213,40 @@ class UserTest extends TestCase
         $this->assertInstanceOf(User::class, $response);
         $this->assertContains($value, $this->user->getAttachments());
         $this->assertCount(1, $this->user->getAttachments());
+        $this->assertEmpty($this->user->getEmail());
+        $this->assertEquals(['ROLE_USER'], $this->user->getRoles());
+        $this->assertEmpty($this->user->getName());
+        $this->assertEmpty($this->user->getFirstname());
+        $this->assertEmpty($this->user->getCreatedAt());
+        $this->assertEmpty($this->user->getUpdatedAt());
+        $this->assertEmpty($this->user->isIsBanned());
+        $this->assertEmpty($this->user->getResources());
+        $this->assertEmpty($this->user->getValidationStates());
+        $this->assertEmpty($this->user->getCategories());
+        $this->assertEmpty($this->user->getComments());
+        $this->assertEmpty($this->user->getResourceLikes());
+        $this->assertEmpty($this->user->getUserFollows());
+        $this->assertEmpty($this->user->getUserFollowers());
 
         $response = $this->user->removeAttachment($value);
 
         $this->assertInstanceOf(User::class, $response);
         $this->assertNotContains($value, $this->user->getAttachments());
         $this->assertCount(0, $this->user->getAttachments());
+        $this->assertEmpty($this->user->getEmail());
+        $this->assertEquals(['ROLE_USER'], $this->user->getRoles());
+        $this->assertEmpty($this->user->getName());
+        $this->assertEmpty($this->user->getFirstname());
+        $this->assertEmpty($this->user->getCreatedAt());
+        $this->assertEmpty($this->user->getUpdatedAt());
+        $this->assertEmpty($this->user->isIsBanned());
+        $this->assertEmpty($this->user->getResources());
+        $this->assertEmpty($this->user->getValidationStates());
+        $this->assertEmpty($this->user->getCategories());
+        $this->assertEmpty($this->user->getComments());
+        $this->assertEmpty($this->user->getResourceLikes());
+        $this->assertEmpty($this->user->getUserFollows());
+        $this->assertEmpty($this->user->getUserFollowers());
     }
 
     public function testGetResource(): void
@@ -129,12 +258,40 @@ class UserTest extends TestCase
         $this->assertInstanceOf(User::class, $response);
         $this->assertContains($value, $this->user->getResources());
         $this->assertCount(1, $this->user->getResources());
+        $this->assertEmpty($this->user->getEmail());
+        $this->assertEquals(['ROLE_USER'], $this->user->getRoles());
+        $this->assertEmpty($this->user->getName());
+        $this->assertEmpty($this->user->getFirstname());
+        $this->assertEmpty($this->user->getCreatedAt());
+        $this->assertEmpty($this->user->getUpdatedAt());
+        $this->assertEmpty($this->user->isIsBanned());
+        $this->assertEmpty($this->user->getAttachments());
+        $this->assertEmpty($this->user->getValidationStates());
+        $this->assertEmpty($this->user->getCategories());
+        $this->assertEmpty($this->user->getComments());
+        $this->assertEmpty($this->user->getResourceLikes());
+        $this->assertEmpty($this->user->getUserFollows());
+        $this->assertEmpty($this->user->getUserFollowers());
 
         $response = $this->user->removeResource($value);
 
         $this->assertInstanceOf(User::class, $response);
         $this->assertNotContains($value, $this->user->getResources());
         $this->assertCount(0, $this->user->getResources());
+        $this->assertEmpty($this->user->getEmail());
+        $this->assertEquals(['ROLE_USER'], $this->user->getRoles());
+        $this->assertEmpty($this->user->getName());
+        $this->assertEmpty($this->user->getFirstname());
+        $this->assertEmpty($this->user->getCreatedAt());
+        $this->assertEmpty($this->user->getUpdatedAt());
+        $this->assertEmpty($this->user->isIsBanned());
+        $this->assertEmpty($this->user->getAttachments());
+        $this->assertEmpty($this->user->getValidationStates());
+        $this->assertEmpty($this->user->getCategories());
+        $this->assertEmpty($this->user->getComments());
+        $this->assertEmpty($this->user->getResourceLikes());
+        $this->assertEmpty($this->user->getUserFollows());
+        $this->assertEmpty($this->user->getUserFollowers());
     }
 
     public function testGetValidationStates(): void
@@ -146,12 +303,40 @@ class UserTest extends TestCase
         $this->assertInstanceOf(User::class, $response);
         $this->assertContains($value, $this->user->getValidationStates());
         $this->assertCount(1, $this->user->getValidationStates());
+        $this->assertEmpty($this->user->getEmail());
+        $this->assertEquals(['ROLE_USER'], $this->user->getRoles());
+        $this->assertEmpty($this->user->getName());
+        $this->assertEmpty($this->user->getFirstname());
+        $this->assertEmpty($this->user->getCreatedAt());
+        $this->assertEmpty($this->user->getUpdatedAt());
+        $this->assertEmpty($this->user->isIsBanned());
+        $this->assertEmpty($this->user->getAttachments());
+        $this->assertEmpty($this->user->getResources());
+        $this->assertEmpty($this->user->getCategories());
+        $this->assertEmpty($this->user->getComments());
+        $this->assertEmpty($this->user->getResourceLikes());
+        $this->assertEmpty($this->user->getUserFollows());
+        $this->assertEmpty($this->user->getUserFollowers());
 
         $response = $this->user->removeValidationState($value);
 
         $this->assertInstanceOf(User::class, $response);
         $this->assertNotContains($value, $this->user->getValidationStates());
         $this->assertCount(0, $this->user->getValidationStates());
+        $this->assertEmpty($this->user->getEmail());
+        $this->assertEquals(['ROLE_USER'], $this->user->getRoles());
+        $this->assertEmpty($this->user->getName());
+        $this->assertEmpty($this->user->getFirstname());
+        $this->assertEmpty($this->user->getCreatedAt());
+        $this->assertEmpty($this->user->getUpdatedAt());
+        $this->assertEmpty($this->user->isIsBanned());
+        $this->assertEmpty($this->user->getAttachments());
+        $this->assertEmpty($this->user->getResources());
+        $this->assertEmpty($this->user->getCategories());
+        $this->assertEmpty($this->user->getComments());
+        $this->assertEmpty($this->user->getResourceLikes());
+        $this->assertEmpty($this->user->getUserFollows());
+        $this->assertEmpty($this->user->getUserFollowers());
     }
 
     public function testGetCategories(): void
@@ -163,12 +348,40 @@ class UserTest extends TestCase
         $this->assertInstanceOf(User::class, $response);
         $this->assertContains($value, $this->user->getCategories());
         $this->assertCount(1, $this->user->getCategories());
+        $this->assertEmpty($this->user->getEmail());
+        $this->assertEquals(['ROLE_USER'], $this->user->getRoles());
+        $this->assertEmpty($this->user->getName());
+        $this->assertEmpty($this->user->getFirstname());
+        $this->assertEmpty($this->user->getCreatedAt());
+        $this->assertEmpty($this->user->getUpdatedAt());
+        $this->assertEmpty($this->user->isIsBanned());
+        $this->assertEmpty($this->user->getAttachments());
+        $this->assertEmpty($this->user->getResources());
+        $this->assertEmpty($this->user->getValidationStates());
+        $this->assertEmpty($this->user->getComments());
+        $this->assertEmpty($this->user->getResourceLikes());
+        $this->assertEmpty($this->user->getUserFollows());
+        $this->assertEmpty($this->user->getUserFollowers());
 
         $response = $this->user->removeCategory($value);
 
         $this->assertInstanceOf(User::class, $response);
         $this->assertNotContains($value, $this->user->getCategories());
         $this->assertCount(0, $this->user->getCategories());
+        $this->assertEmpty($this->user->getEmail());
+        $this->assertEquals(['ROLE_USER'], $this->user->getRoles());
+        $this->assertEmpty($this->user->getName());
+        $this->assertEmpty($this->user->getFirstname());
+        $this->assertEmpty($this->user->getCreatedAt());
+        $this->assertEmpty($this->user->getUpdatedAt());
+        $this->assertEmpty($this->user->isIsBanned());
+        $this->assertEmpty($this->user->getAttachments());
+        $this->assertEmpty($this->user->getResources());
+        $this->assertEmpty($this->user->getValidationStates());
+        $this->assertEmpty($this->user->getComments());
+        $this->assertEmpty($this->user->getResourceLikes());
+        $this->assertEmpty($this->user->getUserFollows());
+        $this->assertEmpty($this->user->getUserFollowers());
     }
 
     public function testGetComments(): void
@@ -180,11 +393,129 @@ class UserTest extends TestCase
         $this->assertInstanceOf(User::class, $response);
         $this->assertContains($value, $this->user->getComments());
         $this->assertCount(1, $this->user->getComments());
+        $this->assertEmpty($this->user->getEmail());
+        $this->assertEquals(['ROLE_USER'], $this->user->getRoles());
+        $this->assertEmpty($this->user->getName());
+        $this->assertEmpty($this->user->getFirstname());
+        $this->assertEmpty($this->user->getCreatedAt());
+        $this->assertEmpty($this->user->getUpdatedAt());
+        $this->assertEmpty($this->user->isIsBanned());
+        $this->assertEmpty($this->user->getAttachments());
+        $this->assertEmpty($this->user->getResources());
+        $this->assertEmpty($this->user->getValidationStates());
+        $this->assertEmpty($this->user->getCategories());
+        $this->assertEmpty($this->user->getResourceLikes());
+        $this->assertEmpty($this->user->getUserFollows());
+        $this->assertEmpty($this->user->getUserFollowers());
 
         $response = $this->user->removeComment($value);
 
         $this->assertInstanceOf(User::class, $response);
         $this->assertNotContains($value, $this->user->getComments());
         $this->assertCount(0, $this->user->getComments());
+        $this->assertEmpty($this->user->getEmail());
+        $this->assertEquals(['ROLE_USER'], $this->user->getRoles());
+        $this->assertEmpty($this->user->getName());
+        $this->assertEmpty($this->user->getFirstname());
+        $this->assertEmpty($this->user->getCreatedAt());
+        $this->assertEmpty($this->user->getUpdatedAt());
+        $this->assertEmpty($this->user->isIsBanned());
+        $this->assertEmpty($this->user->getAttachments());
+        $this->assertEmpty($this->user->getResources());
+        $this->assertEmpty($this->user->getValidationStates());
+        $this->assertEmpty($this->user->getCategories());
+        $this->assertEmpty($this->user->getResourceLikes());
+        $this->assertEmpty($this->user->getUserFollows());
+        $this->assertEmpty($this->user->getUserFollowers());
+    }
+
+    public function testGetResourceLikes(): void
+    {
+        $value = new UserLike();
+
+        $response = $this->user->addResourceLike($value);
+
+        $this->assertInstanceOf(User::class, $response);
+        $this->assertContains($value, $this->user->getResourceLikes());
+        $this->assertCount(1, $this->user->getResourceLikes());
+        $this->assertEmpty($this->user->getEmail());
+        $this->assertEquals(['ROLE_USER'], $this->user->getRoles());
+        $this->assertEmpty($this->user->getName());
+        $this->assertEmpty($this->user->getFirstname());
+        $this->assertEmpty($this->user->getCreatedAt());
+        $this->assertEmpty($this->user->getUpdatedAt());
+        $this->assertEmpty($this->user->isIsBanned());
+        $this->assertEmpty($this->user->getAttachments());
+        $this->assertEmpty($this->user->getResources());
+        $this->assertEmpty($this->user->getValidationStates());
+        $this->assertEmpty($this->user->getCategories());
+        $this->assertEmpty($this->user->getComments());
+        $this->assertEmpty($this->user->getUserFollows());
+        $this->assertEmpty($this->user->getUserFollowers());
+
+        $response = $this->user->removeResourceLike($value);
+
+        $this->assertInstanceOf(User::class, $response);
+        $this->assertNotContains($value, $this->user->getResourceLikes());
+        $this->assertCount(0, $this->user->getResourceLikes());
+        $this->assertEmpty($this->user->getEmail());
+        $this->assertEquals(['ROLE_USER'], $this->user->getRoles());
+        $this->assertEmpty($this->user->getName());
+        $this->assertEmpty($this->user->getFirstname());
+        $this->assertEmpty($this->user->getCreatedAt());
+        $this->assertEmpty($this->user->getUpdatedAt());
+        $this->assertEmpty($this->user->isIsBanned());
+        $this->assertEmpty($this->user->getAttachments());
+        $this->assertEmpty($this->user->getResources());
+        $this->assertEmpty($this->user->getValidationStates());
+        $this->assertEmpty($this->user->getCategories());
+        $this->assertEmpty($this->user->getComments());
+        $this->assertEmpty($this->user->getUserFollows());
+        $this->assertEmpty($this->user->getUserFollowers());
+    }
+
+    public function testGetUserFollows(): void
+    {
+        $value = new UserFollow();
+
+        $response = $this->user->addUserFollow($value);
+
+        $this->assertInstanceOf(User::class, $response);
+        $this->assertContains($value, $this->user->getUserFollows());
+        $this->assertCount(1, $this->user->getUserFollows());
+        $this->assertEmpty($this->user->getEmail());
+        $this->assertEquals(['ROLE_USER'], $this->user->getRoles());
+        $this->assertEmpty($this->user->getName());
+        $this->assertEmpty($this->user->getFirstname());
+        $this->assertEmpty($this->user->getCreatedAt());
+        $this->assertEmpty($this->user->getUpdatedAt());
+        $this->assertEmpty($this->user->isIsBanned());
+        $this->assertEmpty($this->user->getAttachments());
+        $this->assertEmpty($this->user->getResources());
+        $this->assertEmpty($this->user->getValidationStates());
+        $this->assertEmpty($this->user->getCategories());
+        $this->assertEmpty($this->user->getComments());
+        $this->assertEmpty($this->user->getResourceLikes());
+        $this->assertEmpty($this->user->getUserFollowers());
+
+        $response = $this->user->removeUserFollow($value);
+
+        $this->assertInstanceOf(User::class, $response);
+        $this->assertNotContains($value, $this->user->getUserFollows());
+        $this->assertCount(0, $this->user->getUserFollows());
+        $this->assertEmpty($this->user->getEmail());
+        $this->assertEquals(['ROLE_USER'], $this->user->getRoles());
+        $this->assertEmpty($this->user->getName());
+        $this->assertEmpty($this->user->getFirstname());
+        $this->assertEmpty($this->user->getCreatedAt());
+        $this->assertEmpty($this->user->getUpdatedAt());
+        $this->assertEmpty($this->user->isIsBanned());
+        $this->assertEmpty($this->user->getAttachments());
+        $this->assertEmpty($this->user->getResources());
+        $this->assertEmpty($this->user->getValidationStates());
+        $this->assertEmpty($this->user->getCategories());
+        $this->assertEmpty($this->user->getComments());
+        $this->assertEmpty($this->user->getResourceLikes());
+        $this->assertEmpty($this->user->getUserFollowers());
     }
 }
