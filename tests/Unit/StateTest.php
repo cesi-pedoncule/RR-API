@@ -17,7 +17,7 @@ class StateTest extends TestCase
         $this->state = new State();
     }
 
-    public function testGetLable(): void
+    public function testGetLabel(): void
     {
         $value = 'Test state label';
 
@@ -25,6 +25,7 @@ class StateTest extends TestCase
 
         $this->assertInstanceOf(State::class, $response);
         $this->assertEquals($value, $this->state->getLabel());
+        $this->assertEmpty($this->state->getValidationStates());
     }
 
     public function testGetValidationStates(): void
@@ -34,11 +35,16 @@ class StateTest extends TestCase
         $response = $this->state->addValidationState($value);
 
         $this->assertInstanceOf(State::class, $response);
+        $this->assertEquals(1, $this->state->getValidationStates()->count());
+        $this->assertEquals($value, $this->state->getValidationStates()->first());
         $this->assertTrue($this->state->getValidationStates()->contains($value));  
+        $this->assertEmpty($this->state->getLabel());
         
         $response = $this->state->removeValidationState($value);
-
+        
         $this->assertInstanceOf(State::class, $response);
+        $this->assertEmpty($this->state->getValidationStates());
         $this->assertFalse($this->state->getValidationStates()->contains($value));
+        $this->assertEmpty($this->state->getLabel());
     }
 }
