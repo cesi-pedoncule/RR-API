@@ -31,6 +31,16 @@ class ResourceTest extends TestCase
 
         $this->assertInstanceOf(Resource::class, $response);
         $this->assertEquals($value, $this->resource->getTitle());
+        $this->assertEmpty($this->resource->getDescription());
+        $this->assertEmpty($this->resource->getAttachments());
+        $this->assertEmpty($this->resource->getCreatedAt());
+        $this->assertEmpty($this->resource->getUpdatedAt());
+        $this->assertEmpty($this->resource->getUser());
+        $this->assertEmpty($this->resource->isIsPublic());
+        $this->assertEmpty($this->resource->getCategories());
+        $this->assertEmpty($this->resource->getComments());
+        $this->assertEmpty($this->resource->getValidationStates());
+        $this->assertEmpty($this->resource->getUserLikes());
     }
 
     public function testGetDescription(): void
@@ -41,6 +51,16 @@ class ResourceTest extends TestCase
 
         $this->assertInstanceOf(Resource::class, $response);
         $this->assertEquals($value, $this->resource->getDescription());
+        $this->assertEmpty($this->resource->getTitle());
+        $this->assertEmpty($this->resource->getAttachments());
+        $this->assertEmpty($this->resource->getCreatedAt());
+        $this->assertEmpty($this->resource->getUpdatedAt());
+        $this->assertEmpty($this->resource->getUser());
+        $this->assertEmpty($this->resource->isIsPublic());
+        $this->assertEmpty($this->resource->getCategories());
+        $this->assertEmpty($this->resource->getComments());
+        $this->assertEmpty($this->resource->getValidationStates());
+        $this->assertEmpty($this->resource->getUserLikes());
     }
 
     public function testGetAttachments(): void
@@ -51,6 +71,16 @@ class ResourceTest extends TestCase
 
         $this->assertInstanceOf(Resource::class, $response);
         $this->assertTrue($this->resource->getAttachments()->contains($value));
+        $this->assertEmpty($this->resource->getTitle());
+        $this->assertEmpty($this->resource->getDescription());
+        $this->assertEmpty($this->resource->getCreatedAt());
+        $this->assertEmpty($this->resource->getUpdatedAt());
+        $this->assertEmpty($this->resource->getUser());
+        $this->assertEmpty($this->resource->isIsPublic());
+        $this->assertEmpty($this->resource->getCategories());
+        $this->assertEmpty($this->resource->getComments());
+        $this->assertEmpty($this->resource->getValidationStates());
+        $this->assertEmpty($this->resource->getUserLikes());
     }
 
     public function testRemoveAttachments(): void
@@ -62,6 +92,16 @@ class ResourceTest extends TestCase
 
         $this->assertInstanceOf(Resource::class, $response);
         $this->assertFalse($this->resource->getAttachments()->contains($value));
+        $this->assertEmpty($this->resource->getTitle());
+        $this->assertEmpty($this->resource->getDescription());
+        $this->assertEmpty($this->resource->getCreatedAt());
+        $this->assertEmpty($this->resource->getUpdatedAt());
+        $this->assertEmpty($this->resource->getUser());
+        $this->assertEmpty($this->resource->isIsPublic());
+        $this->assertEmpty($this->resource->getCategories());
+        $this->assertEmpty($this->resource->getComments());
+        $this->assertEmpty($this->resource->getValidationStates());
+        $this->assertEmpty($this->resource->getUserLikes());
     }
 
     public function testGetCreatedAt(): void
@@ -72,6 +112,16 @@ class ResourceTest extends TestCase
 
         $this->assertInstanceOf(Resource::class, $response);
         $this->assertEquals($value, $this->resource->getCreatedAt());
+        $this->assertEmpty($this->resource->getTitle());
+        $this->assertEmpty($this->resource->getDescription());
+        $this->assertEmpty($this->resource->getAttachments());
+        $this->assertEmpty($this->resource->getUpdatedAt());
+        $this->assertEmpty($this->resource->getUser());
+        $this->assertEmpty($this->resource->isIsPublic());
+        $this->assertEmpty($this->resource->getCategories());
+        $this->assertEmpty($this->resource->getComments());
+        $this->assertEmpty($this->resource->getValidationStates());
+        $this->assertEmpty($this->resource->getUserLikes());
     }
 
     public function testGetUpdatedAt(): void
@@ -82,6 +132,16 @@ class ResourceTest extends TestCase
 
         $this->assertInstanceOf(Resource::class, $response);
         $this->assertEquals($value, $this->resource->getUpdatedAt());
+        $this->assertEmpty($this->resource->getTitle());
+        $this->assertEmpty($this->resource->getDescription());
+        $this->assertEmpty($this->resource->getAttachments());
+        $this->assertEmpty($this->resource->getCreatedAt());
+        $this->assertEmpty($this->resource->getUser());
+        $this->assertEmpty($this->resource->isIsPublic());
+        $this->assertEmpty($this->resource->getCategories());
+        $this->assertEmpty($this->resource->getComments());
+        $this->assertEmpty($this->resource->getValidationStates());
+        $this->assertEmpty($this->resource->getUserLikes());
     }
 
     public function testGetUser(): void
@@ -92,6 +152,16 @@ class ResourceTest extends TestCase
 
         $this->assertInstanceOf(Resource::class, $response);
         $this->assertEquals($value, $this->resource->getUser());
+        $this->assertEmpty($this->resource->getTitle());
+        $this->assertEmpty($this->resource->getDescription());
+        $this->assertEmpty($this->resource->getAttachments());
+        $this->assertEmpty($this->resource->getCreatedAt());
+        $this->assertEmpty($this->resource->getUpdatedAt());
+        $this->assertEmpty($this->resource->isIsPublic());
+        $this->assertEmpty($this->resource->getCategories());
+        $this->assertEmpty($this->resource->getComments());
+        $this->assertEmpty($this->resource->getValidationStates());
+        $this->assertEmpty($this->resource->getUserLikes());
     }
 
     public function testIsIsPublic(): void
@@ -101,14 +171,36 @@ class ResourceTest extends TestCase
         $response = $this->resource->setIsPublic($value);
 
         $this->assertInstanceOf(Resource::class, $response);
+        $this->assertNotEmpty($this->resource->isIsPublic());
         $this->assertEquals($value, $this->resource->isIsPublic());
+        $this->assertEmpty($this->resource->getTitle());
+        $this->assertEmpty($this->resource->getDescription());
+        $this->assertEmpty($this->resource->getAttachments());
+        $this->assertEmpty($this->resource->getCreatedAt());
+        $this->assertEmpty($this->resource->getUpdatedAt());
+        $this->assertEmpty($this->resource->getUser());
+        $this->assertEmpty($this->resource->getCategories());
+        $this->assertEmpty($this->resource->getComments());
+        $this->assertEmpty($this->resource->getValidationStates());
+        $this->assertEmpty($this->resource->getUserLikes());
 
         $value = false;
 
         $response = $this->resource->setIsPublic($value);
 
         $this->assertInstanceOf(Resource::class, $response);
+        $this->assertEmpty($this->resource->isIsPublic());
         $this->assertEquals($value, $this->resource->isIsPublic());
+        $this->assertEmpty($this->resource->getTitle());
+        $this->assertEmpty($this->resource->getDescription());
+        $this->assertEmpty($this->resource->getAttachments());
+        $this->assertEmpty($this->resource->getCreatedAt());
+        $this->assertEmpty($this->resource->getUpdatedAt());
+        $this->assertEmpty($this->resource->getUser());
+        $this->assertEmpty($this->resource->getCategories());
+        $this->assertEmpty($this->resource->getComments());
+        $this->assertEmpty($this->resource->getValidationStates());
+        $this->assertEmpty($this->resource->getUserLikes());
     }
 
     public function testGetComments(): void
@@ -118,12 +210,35 @@ class ResourceTest extends TestCase
         $response = $this->resource->addComment($value);
 
         $this->assertInstanceOf(Resource::class, $response);
+        $this->assertNotEmpty($this->resource->getComments());
+        $this->assertEquals(1, $this->resource->getComments()->count());
         $this->assertTrue($this->resource->getComments()->contains($value));
+        $this->assertEmpty($this->resource->getTitle());
+        $this->assertEmpty($this->resource->getDescription());
+        $this->assertEmpty($this->resource->getAttachments());
+        $this->assertEmpty($this->resource->getCreatedAt());
+        $this->assertEmpty($this->resource->getUpdatedAt());
+        $this->assertEmpty($this->resource->getUser());
+        $this->assertEmpty($this->resource->isIsPublic());
+        $this->assertEmpty($this->resource->getCategories());
+        $this->assertEmpty($this->resource->getValidationStates());
+        $this->assertEmpty($this->resource->getUserLikes());
 
         $response = $this->resource->removeComment($value);
 
         $this->assertInstanceOf(Resource::class, $response);
+        $this->assertEmpty($this->resource->getComments());
         $this->assertFalse($this->resource->getComments()->contains($value));
+        $this->assertEmpty($this->resource->getTitle());
+        $this->assertEmpty($this->resource->getDescription());
+        $this->assertEmpty($this->resource->getAttachments());
+        $this->assertEmpty($this->resource->getCreatedAt());
+        $this->assertEmpty($this->resource->getUpdatedAt());
+        $this->assertEmpty($this->resource->getUser());
+        $this->assertEmpty($this->resource->isIsPublic());
+        $this->assertEmpty($this->resource->getCategories());
+        $this->assertEmpty($this->resource->getValidationStates());
+        $this->assertEmpty($this->resource->getUserLikes());
     }
 
     public function testGetValidationStates(): void
@@ -133,12 +248,35 @@ class ResourceTest extends TestCase
         $response = $this->resource->addValidationState($value);
 
         $this->assertInstanceOf(Resource::class, $response);
+        $this->assertNotEmpty($this->resource->getValidationStates());
+        $this->assertEquals(1, $this->resource->getValidationStates()->count());
         $this->assertTrue($this->resource->getValidationStates()->contains($value));
+        $this->assertEmpty($this->resource->getTitle());
+        $this->assertEmpty($this->resource->getDescription());
+        $this->assertEmpty($this->resource->getAttachments());
+        $this->assertEmpty($this->resource->getCreatedAt());
+        $this->assertEmpty($this->resource->getUpdatedAt());
+        $this->assertEmpty($this->resource->getUser());
+        $this->assertEmpty($this->resource->isIsPublic());
+        $this->assertEmpty($this->resource->getCategories());
+        $this->assertEmpty($this->resource->getComments());
+        $this->assertEmpty($this->resource->getUserLikes());
 
         $response = $this->resource->removeValidationState($value);
 
         $this->assertInstanceOf(Resource::class, $response);
+        $this->assertEmpty($this->resource->getValidationStates());
         $this->assertFalse($this->resource->getValidationStates()->contains($value));
+        $this->assertEmpty($this->resource->getTitle());
+        $this->assertEmpty($this->resource->getDescription());
+        $this->assertEmpty($this->resource->getAttachments());
+        $this->assertEmpty($this->resource->getCreatedAt());
+        $this->assertEmpty($this->resource->getUpdatedAt());
+        $this->assertEmpty($this->resource->getUser());
+        $this->assertEmpty($this->resource->isIsPublic());
+        $this->assertEmpty($this->resource->getCategories());
+        $this->assertEmpty($this->resource->getComments());
+        $this->assertEmpty($this->resource->getUserLikes());
     }
 
     public function testGetCategories(): void
@@ -148,12 +286,35 @@ class ResourceTest extends TestCase
         $response = $this->resource->addCategory($value);
 
         $this->assertInstanceOf(Resource::class, $response);
+        $this->assertNotEmpty($this->resource->getCategories());
+        $this->assertEquals(1, $this->resource->getCategories()->count());
         $this->assertTrue($this->resource->getCategories()->contains($value));
+        $this->assertEmpty($this->resource->getTitle());
+        $this->assertEmpty($this->resource->getDescription());
+        $this->assertEmpty($this->resource->getAttachments());
+        $this->assertEmpty($this->resource->getCreatedAt());
+        $this->assertEmpty($this->resource->getUpdatedAt());
+        $this->assertEmpty($this->resource->getUser());
+        $this->assertEmpty($this->resource->isIsPublic());
+        $this->assertEmpty($this->resource->getComments());
+        $this->assertEmpty($this->resource->getValidationStates());
+        $this->assertEmpty($this->resource->getUserLikes());
 
         $response = $this->resource->removeCategory($value);
 
         $this->assertInstanceOf(Resource::class, $response);
+        $this->assertEmpty($this->resource->getCategories());
         $this->assertFalse($this->resource->getCategories()->contains($value));
+        $this->assertEmpty($this->resource->getTitle());
+        $this->assertEmpty($this->resource->getDescription());
+        $this->assertEmpty($this->resource->getAttachments());
+        $this->assertEmpty($this->resource->getCreatedAt());
+        $this->assertEmpty($this->resource->getUpdatedAt());
+        $this->assertEmpty($this->resource->getUser());
+        $this->assertEmpty($this->resource->isIsPublic());
+        $this->assertEmpty($this->resource->getComments());
+        $this->assertEmpty($this->resource->getValidationStates());
+        $this->assertEmpty($this->resource->getUserLikes());
     }
 
 }
