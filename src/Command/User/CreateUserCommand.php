@@ -31,7 +31,7 @@ class CreateUserCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
     
-        // Ask userinformations before creating the user
+        // Ask user's information before creating the user
         $email = $io->ask('Email');
         $password = $io->askHidden('Password');
         $firstname = $io->ask('Firstname');
