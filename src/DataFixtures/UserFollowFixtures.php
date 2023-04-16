@@ -15,8 +15,8 @@ class UserFollowFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
         // Create 10 fake users
-        for ($i = 1; $i < 10; $i++) {
-            $this->userManager->followUser($this->getReference('user_0'), $this->getReference('user_' . $i));
+        for ($i = 1; $i <= 10; $i++) {
+            $this->userManager->followUser($this->getReference('user_0'), $this->getReference('user_' . rand(1, 9)));
         }
     }
 }
