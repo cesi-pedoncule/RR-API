@@ -194,4 +194,48 @@ class UserTest extends ApiTestCase
         $response = static::createClient()->request('DELETE', '/users/' . $last_user['id'], ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
         $this->assertResponseStatusCodeSame(204);
     }
+
+    public function testAuth(): void
+    {
+        // Test POST /login_check with bad password
+        $response = static::createClient()->request('POST', '/login_check', ['json' => [
+            'username' => 'user0@example.com',
+            'password' => 'bad-password',
+        ]]);
+
+        $this->assertResponseStatusCodeSame(401);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+        $this->assertJsonContains(['code' => 401, 'message' => 'Invalid credentials.']);
+
+        // Test POST /login_check with bad username
+        $response = static::createClient()->request('POST', '/login_check', ['json' => [
+            'username' => 'bad-username',
+            'password' => 'password',
+        ]]);
+
+        $this->assertResponseStatusCodeSame(401);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+        $this->assertJsonContains(['code' => 401, 'message' => 'Invalid credentials.']);
+
+        // Test POST /login_check with bad username and password
+        $response = static::createClient()->request('POST', '/login_check', ['json' => [
+            'username' => 'bad-username',
+            'password' => 'bad-password',
+        ]]);
+
+        $this->assertResponseStatusCodeSame(401);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+        $this->assertJsonContains(['code' => 401, 'message' => 'Invalid credentials.']);
+
+        // Test POST /login_check with correct username and password
+        $response = static::createClient()->request('POST', '/login_check', ['json' => [
+            'username' => 'user0@example.com',
+            'password' => 'password',
+        ]]);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+        $this->assertArrayHasKey('token', $response->toArray());
+        $this->assertArrayHasKey('refresh_token', $response->toArray());
+    }
 }
