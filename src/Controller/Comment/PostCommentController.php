@@ -3,7 +3,6 @@
 namespace App\Controller\Comment;
 
 use App\Entity\Comment;
-use App\Entity\Resource;
 use App\Service\CommentManager;
 use App\Service\ResourceManager;
 use Doctrine\ORM\EntityManagerInterface;

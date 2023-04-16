@@ -7,7 +7,6 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
-use App\Controller\UserLike\PostUserLike;
 use App\Controller\UserLike\PostUserLikeController;
 use App\Repository\UserLikeRepository;
 use Doctrine\ORM\Mapping as ORM;
