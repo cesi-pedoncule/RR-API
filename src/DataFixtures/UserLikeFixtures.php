@@ -16,7 +16,7 @@ class UserLikeFixtures extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $manager)
     {
         // Create 10 fake users likes
-        for ($i = 1; $i < 10; $i++) {
+        for ($i = 1; $i <= 10; $i++) {
             $this->userManager->likeResource($this->getReference('user_0'), $this->getReference('resource_' . $i));
         }
     }
