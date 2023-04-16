@@ -48,7 +48,6 @@ class StateTest extends ApiTestCase
         $this->testGetStates();
         $firstState = array_shift($this->states);
 
-        $this->testGetStates();
         // Test GET /states/{id} without authentication
         $response = static::createClient()->request('GET', '/states/' . $firstState['id'], ['headers' => ['Accept' => 'application/json']]);
 
