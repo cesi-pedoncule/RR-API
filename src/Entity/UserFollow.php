@@ -7,7 +7,7 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
-use App\Controller\User\DeleteUserController;
+use App\Controller\UserFollow\DeleteUserFollowController;
 use App\Controller\UserFollow\PostUserFollowController;
 use App\Repository\UserFollowRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -37,7 +37,7 @@ use Symfony\Component\Uid\UuidV6 as Uuid;
         new Delete(
             name: 'delete_user_follow',
             security: 'is_granted("ROLE_USER") and object.getFollower() == user',
-            controller: DeleteUserController::class,
+            controller: DeleteUserFollowController::class,
         )
     ]
 )]
@@ -58,7 +58,7 @@ class UserFollow
     #[ORM\ManyToOne(inversedBy: 'userFollowers')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['user_follow:read', 'user_follow:write'])]
-    private ?user $follower = null;
+    private ?User $follower = null;
 
     #[ORM\Column]
     #[Groups(['user_follow:read', 'user:me', 'user:read'])]
@@ -87,12 +87,12 @@ class UserFollow
         return $this;
     }
 
-    public function getFollower(): ?user
+    public function getFollower(): ?User
     {
         return $this->follower;
     }
 
-    public function setFollower(?user $follower): self
+    public function setFollower(?User $follower): self
     {
         $this->follower = $follower;
 
