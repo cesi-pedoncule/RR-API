@@ -10,7 +10,7 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 #[AsController]
 class DeleteUserFollowController extends AbstractController
 {
-    public function __invoke(UserFollow $data): ?UserFollow
+    public function __invoke(UserFollow $data): UserFollow|JsonResponse|null
     {
         // If the user is null ask jwt to throw an exception
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
