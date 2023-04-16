@@ -14,6 +14,17 @@ class UserManager {
     {
     }
 
+    private function generateRandomString(int $length = 10): string
+    {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@#&-+*';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+
     /**
      * Check if the user email is available
      *
@@ -34,7 +45,18 @@ class UserManager {
     }
 
     /**
-     * Check user informations and return true if the user is available to use the application
+     * Create a new user
+     *
+     * @param string $email
+     * @return void|User
+     */
+    public function getUserByEmail(string $email): ?User
+    {
+        return $this->entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
+    }
+
+    /**
+     * Check user information's and return true if the user is available to use the application
      * 
      * @param string $email
      * @param string $password
@@ -243,5 +265,24 @@ class UserManager {
         
         $this->entityManager->remove($userLike);
         $this->entityManager->flush();
+    }
+
+    /**
+     * Reset a user password
+     *
+     * @param User $user
+     * @return string
+     */
+    public function resetPassword(User $user): string
+    {
+        // Generate a new password
+        $newPassword = $this->generateRandomString(10);
+
+        // Update the user password
+        $user->setPassword($user->hashPassword($newPassword));
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
+
+        return $newPassword;
     }
 }
