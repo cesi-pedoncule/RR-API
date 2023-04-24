@@ -28,7 +28,11 @@ class UserFixtures extends Fixture
                 ->setIsBanned(false);
 
             if ($i == 0) {
-                $user->setRoles(['ROLE_ADMIN']);
+                $user->setRoles(['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_MODERATOR']);
+            } elseif ($i == 1) {
+                $user->setRoles(['ROLE_ADMIN', 'ROLE_MODERATOR']);
+            } elseif ($i == 2) {
+                $user->setRoles(['ROLE_MODERATOR']);
             }
 
             $manager->persist($user);
