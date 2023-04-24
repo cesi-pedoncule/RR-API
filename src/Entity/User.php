@@ -47,6 +47,7 @@ use App\Controller\User\DeleteUserController;
             name: 'user_put',
             security: 'is_granted("ROLE_ADMIN") or object == user',
             securityMessage: 'Only authenticated users can access this resource.',
+            denormalizationContext: ['groups' => ['user:put']],
         ),
         new Delete(
             uriTemplate: '/users/{id}', 
@@ -73,7 +74,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $email = null;
 
     #[ORM\Column]
-    #[Groups(['user:read', 'user:me', 'resource:read', 'validationState:read', 'comment:read'])]
+    #[Groups(['user:read', 'user:me', 'resource:read', 'validationState:read', 'comment:read', 'user:put'])]
     private array $roles = [];
 
     /**
@@ -84,11 +85,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['user:read', 'user:me', 'resource:read', 'user:write', 'category:read', 'validationState:read', 'comment:read'])]
+    #[Groups(['user:read', 'user:me', 'resource:read', 'user:write', 'category:read', 'validationState:read', 'comment:read', 'user:put'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['user:read', 'user:me', 'resource:read', 'user:write', 'category:read', 'validationState:read', 'comment:read'])]
+    #[Groups(['user:read', 'user:me', 'resource:read', 'user:write', 'category:read', 'validationState:read', 'comment:read', 'user:put'])]
     private ?string $firstname = null;
 
     #[ORM\Column]
@@ -100,7 +101,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column(options: ['default' => false])]
-    #[Groups(['user:read', 'user:me', 'resource:read', 'validationState:read', 'comment:read'])]
+    #[Groups(['user:read', 'user:me', 'resource:read', 'validationState:read', 'comment:read', 'user:put'])]
     private ?bool $isBanned = false;
 
     #[ORM\OneToMany(mappedBy: 'User', targetEntity: Attachment::class)]
