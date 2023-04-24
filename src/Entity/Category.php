@@ -15,6 +15,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Controller\Category\GetCategoryController;
 use App\Controller\Category\GetCollectionCategoryController;
+use App\Controller\Category\PostCategoryController;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
@@ -36,6 +37,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Post(
             name: 'post_category',
             uriTemplate: '/categories',
+            controller: PostCategoryController::class,
             security: 'is_granted("ROLE_ADMIN")',
             securityMessage: 'Only admins can create categories.',
         ),

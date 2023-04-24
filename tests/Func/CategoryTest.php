@@ -56,7 +56,6 @@ class CategoryTest extends ApiTestCase
         $newCategorie = [
             'name' => 'New Categorie of test',
             'isVisible' => true,
-            'creator' => '/users/' . UserTest::getUserTestId()
         ];
 
         // Test POST /categories without authentication
