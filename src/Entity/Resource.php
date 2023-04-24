@@ -80,7 +80,7 @@ class Resource
     #[Groups(['resource:read', 'resource:write', 'resource:put', 'resource:post', 'attachment:read', 'category:read', 'comment:read'])]
     private ?string $description = null;
 
-    #[ORM\OneToMany(mappedBy: 'resource', targetEntity: Attachment::class)]
+    #[ORM\OneToMany(mappedBy: 'resource', targetEntity: Attachment::class, cascade: ['remove'])]
     #[Groups(['resource:read', 'resource:write', 'resource:post'])]
     private Collection $attachments;
 
@@ -104,15 +104,15 @@ class Resource
     #[Groups(['resource:read', 'resource:write', 'resource:put', 'resource:post'])]
     private Collection $categories;
 
-    #[ORM\OneToMany(mappedBy: 'resource', targetEntity: Comment::class)]
+    #[ORM\OneToMany(mappedBy: 'resource', targetEntity: Comment::class, cascade: ['remove'])]
     #[Groups(['resource:read'])]
     private Collection $comments;
 
-    #[ORM\OneToMany(mappedBy: 'resource', targetEntity: ValidationState::class)]
+    #[ORM\OneToMany(mappedBy: 'resource', targetEntity: ValidationState::class, cascade: ['remove'])]
     #[Groups(['resource:read', 'resource:write'])]
     private Collection $validationStates;
 
-    #[ORM\OneToMany(mappedBy: 'resource', targetEntity: UserLike::class)]
+    #[ORM\OneToMany(mappedBy: 'resource', targetEntity: UserLike::class, cascade: ['remove'])]
     #[Groups(['resource:read'])]
     private Collection $userLikes;
 
