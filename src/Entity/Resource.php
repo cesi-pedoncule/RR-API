@@ -18,6 +18,7 @@ use App\Controller\Resource\DeleteResourceController;
 use App\Controller\Resource\GetCollectionResourceController;
 use App\Controller\Resource\GetResourceController;
 use App\Controller\Resource\PostResourceController;
+use App\Controller\Resource\PutResourceController;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ResourceRepository::class)]
@@ -47,7 +48,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Put(
             name: 'put_resource',
             uriTemplate: '/resources/{id}',
-            security: 'is_granted("ROLE_ADMIN") or object.getUser() == user',
+            security: 'is_granted("ROLE_USER") and object.getUser() == user',
+            controller: PutResourceController::class,
             securityMessage: 'Only admins can edit other users resources.',
             denormalizationContext: ['groups' => ['resource:put']],
         ),
