@@ -116,6 +116,36 @@ class UserTest extends ApiTestCase
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json');
+
+        // Test POST /login_check with auth and wrong password
+        $response = static::createClient()->request('POST', '/login_check', ['json' => [
+            'username' => 'user0@example.com',
+            'password' => 'wrong-password',
+        ]]);
+
+        $this->assertResponseStatusCodeSame(401);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+        $this->assertJsonContains(['code' => 401, 'message' => 'Invalid credentials.']);
+
+        // Test POST /login_check with auth and wrong username
+        $response = static::createClient()->request('POST', '/login_check', ['json' => [
+            'username' => 'wrong-username',
+            'password' => 'password',
+        ]]);
+
+        $this->assertResponseStatusCodeSame(401);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+        $this->assertJsonContains(['code' => 401, 'message' => 'Invalid credentials.']);
+
+        // Test POST /login_check with auth and wrong username and password
+        $response = static::createClient()->request('POST', '/login_check', ['json' => [
+            'username' => 'wrong-username',
+            'password' => 'wrong-password',
+        ]]);
+
+        $this->assertResponseStatusCodeSame(401);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+        $this->assertJsonContains(['code' => 401, 'message' => 'Invalid credentials.']);
     }
 
     public function testUserRefresh(): void
