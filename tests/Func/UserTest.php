@@ -81,12 +81,17 @@ class UserTest extends ApiTestCase
         $response = static::createClient()->request('GET', '/users/'. $first_user['id'], ['headers' => ['Accept' => 'application/json']]);
         $this->assertResponseStatusCodeSame(200);
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
-
+        $this->assertJsonContains(['id' => $first_user['id'], 'name' => $first_user['name']]);
+        $this->assertArrayNotHasKey('email', $response->toArray());
+        $this->assertArrayNotHasKey('password', $response->toArray());
+        
         // Test GET /users/{id} with auth
         $response = static::createClient()->request('GET', '/users/' . $first_user['id'], ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
         $this->assertJsonContains(['id' => $first_user['id'], 'name' => $first_user['name']]);
+        $this->assertArrayNotHasKey('email', $response->toArray());
+        $this->assertArrayNotHasKey('password', $response->toArray());
     }
 
     public function testGetMe(): void
@@ -104,6 +109,12 @@ class UserTest extends ApiTestCase
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
         $this->assertJsonContains(['email' => 'user0@example.com']);
+
+        // Test GET /users/me with auth and wrong token
+        $response = static::createClient()->request('GET', '/users/me', ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => 'wrong-token']);
+        $this->assertResponseStatusCodeSame(401);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+        $this->assertJsonContains(['code' => 401, 'message' => 'Invalid JWT Token']);
     }
 
     public function testUserLogin(): void
@@ -116,6 +127,8 @@ class UserTest extends ApiTestCase
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json');
+        $this->assertArrayHasKey('token', $response->toArray());
+        $this->assertArrayHasKey('refresh_token', $response->toArray());
 
         // Test POST /login_check with auth and wrong password
         $response = static::createClient()->request('POST', '/login_check', ['json' => [
@@ -157,36 +170,55 @@ class UserTest extends ApiTestCase
 
         $this->assertResponseStatusCodeSame(200);
         $this->assertResponseHeaderSame('content-type', 'application/json');
+        $this->assertArrayHasKey('token', $response->toArray());
+        $this->assertArrayHasKey('refresh_token', $response->toArray());
+
+        // Test POST /token/refresh with auth and wrong refresh token
+        $response = static::createClient()->request('POST', '/token/refresh', ['json' => [
+            'refresh_token' => 'wrong-refresh-token',
+        ]]);
+
+        $this->assertResponseStatusCodeSame(401);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+        $this->assertJsonContains(['code' => 401, 'message' => 'JWT Refresh Token Not Found']);
     }
 
     public function testCreateUser(): void
     {
-        // Test POST /users without auth
-        $response = static::createClient()->request('POST', '/users', ['headers' => ['Accept' => 'application/json'], 'json' => [
+        $jsonValue = [
             'email' => 'test-new-user@example.com',
             'name' => 'test',
             'firstname' => 'test',
             'password' => 'password',
-            'roles' => ['ROLE_USER'],
-        ]]);
+        ];
+
+        // Test POST /users without auth
+        $response = static::createClient()->request('POST', '/users', ['headers' => ['Accept' => 'application/json'], 'json' => $jsonValue]);
         $this->assertResponseStatusCodeSame(201);
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
+        $this->assertJsonContains(['firstname' => $jsonValue['firstname'], 'name' => $jsonValue['name']]);
+
+        // Test POST /users with email already used
+        $response = static::createClient()->request('POST', '/users', ['headers' => ['Accept' => 'application/json'], 'json' => $jsonValue]);
+        $this->assertResponseStatusCodeSame(500);
     }
 
     public function testUpdateUser(): void
     {
-        // Load users
-        $this->testGetUsers(11);
-        $last_user = array_pop($this->users);
-
-        // Test PUT /users/{id} without auth
-        $response = static::createClient()->request('PUT', '/users/' . $last_user['id'], ['headers' => ['Accept' => 'application/json'], 'json' => [
+        $jsonValue = [
             'email' => 'new-email@example.com',
             'name' => 'new-name',
             'firstname' => 'new-firstname',
             'password' => 'new-password',
             'roles' => ['ROLE_USER'],
-        ]]);
+        ];
+
+        // Load users
+        $this->testGetUsers(11);
+        $last_user = array_pop($this->users);
+
+        // Test PUT /users/{id} without auth
+        $response = static::createClient()->request('PUT', '/users/' . $last_user['id'], ['headers' => ['Accept' => 'application/json'], 'json' => $jsonValue]);
 
         $this->assertResponseStatusCodeSame(401);
         $this->assertResponseHeaderSame('content-type', 'application/json');
@@ -195,17 +227,11 @@ class UserTest extends ApiTestCase
         // Test PUT /users/{id} with auth
         $this->jwtToken = self::userLoggedIn();
 
-        $response = static::createClient()->request('PUT', '/users/' . $last_user['id'], ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken, 'json' => [
-            'email' => 'new-email@example.com',
-            'name' => 'new-name',
-            'firstname' => 'new-firstname',
-            'password' => 'new-password',
-            'roles' => ['ROLE_USER'],
-        ]]);
+        $response = static::createClient()->request('PUT', '/users/' . $last_user['id'], ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken, 'json' => $jsonValue]);
         
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
-        $this->assertJsonContains(['name' => 'new-name', 'firstname' => 'new-firstname']);
+        $this->assertJsonContains(['name' => $jsonValue['name'], 'firstname' => $jsonValue['firstname']]);
     }
 
     public function testDeleteUser(): void
