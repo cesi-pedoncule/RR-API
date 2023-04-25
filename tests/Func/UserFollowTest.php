@@ -64,10 +64,32 @@ class UserFollowTest extends ApiTestCase
         $this->assertJsonContains(['id' => $firstUserFollow['id'], 'user' => $firstUserFollow['user'], 'follower' => $firstUserFollow['follower']]);
     }
 
+    public function testPostUserFollow(): void
+    {
+        $jsonValue = [
+            'user' => '/users/' . UserTest::getUserTestId(),
+            'follower' => '/users/' .  UserTest::getUserTestId(),
+        ];
+
+        // Test POST /user_follows without authentication
+        $response = static::createClient()->request('POST', '/user_follows', ['headers' => ['Accept' => 'application/json'], 'json' => $jsonValue]);
+
+        $this->assertResponseStatusCodeSame(401);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+        $this->assertJsonContains(['code' => 401, 'message' => 'JWT Token not found']);
+
+        // Test POST /user_follows with authentication
+        $this->jwtToken = UserTest::userLoggedIn();
+        $response = static::createClient()->request('POST', '/user_follows', ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken, 'json' => $jsonValue]);
+
+        $this->assertResponseStatusCodeSame(201);
+        $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
+    }
+
     public function testDeleteUserFollow(): void
     {
         // Getting the last userFollow
-        $this->testGetUserFollows();
+        $this->testGetUserFollows(11);
         $lastUserFollow = array_pop($this->userFollows);
 
         // Test DELETE /user_follows/{id} without authentication

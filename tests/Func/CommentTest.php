@@ -9,18 +9,7 @@ class CommentTest extends ApiTestCase
     private string $jwtToken;
     private array $comments;
 
-    private string $userId;
     private string $resourceID;
-
-    private function getUserId(): string
-    {
-        if (empty($this->userId)) {
-            $this->jwtToken = UserTest::userLoggedIn();
-            $response = static::createClient()->request('GET', '/users', ['headers' => ['Accept' => 'application/json'], 'auth_bearer' => $this->jwtToken]);
-            $this->userId = $response->toArray()[0]['id'];
-        }
-        return $this->userId;
-    }
 
     private function getResourceId(): string
     {
@@ -65,7 +54,7 @@ class CommentTest extends ApiTestCase
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
-        // $this->assertJsonContains(array_shift($this->comments));
+        $this->assertJsonContains(['id' => $first_comment['id'], 'comment' => $first_comment['comment'], 'resource' => $first_comment['resource'], 'user' => $first_comment['user']]);
 
         // Test GET /comments/{id} with authentication
         $this->jwtToken = UserTest::userLoggedIn();
