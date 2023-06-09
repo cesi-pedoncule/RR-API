@@ -24,6 +24,7 @@
         "symfony/expression-language": "6.1.*",
         "symfony/flex": "^2",
         "symfony/framework-bundle": "6.1.*",
+        "symfony/mailer": "6.1.*",
         "symfony/property-access": "6.1.*",
         "symfony/property-info": "6.1.*",
         "symfony/proxy-manager-bridge": "6.1.*",
@@ -34,6 +35,7 @@
         "symfony/uid": "6.1.*",
         "symfony/validator": "6.1.*",
         "symfony/yaml": "6.1.*",
+        "tilleuls/forgot-password-bundle": "^1.4",
         "vich/uploader-bundle": "^1.21"
     },
     "config": {
