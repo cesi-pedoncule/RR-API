@@ -285,4 +285,12 @@ class UserManager {
 
         return $newPassword;
     }
+
+    public function updateUser(User $user): User
+    {
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
+
+        return $user;
+    }
 }
