@@ -2,22 +2,23 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Uid\UuidV6 as Uuid;
-use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\Delete;
-use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
-use Symfony\Component\Serializer\Annotation\Groups;
-use App\Controller\User\GetCurrentUserController;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Delete;
+use Doctrine\ORM\Mapping as ORM;
+use App\Repository\UserRepository;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
+use Symfony\Component\Uid\UuidV6 as Uuid;
+use Doctrine\Common\Collections\Collection;
 use App\Controller\User\DeleteUserController;
+use App\Controller\User\ResetPasswordController;
+use Doctrine\Common\Collections\ArrayCollection;
+use App\Controller\User\GetCurrentUserController;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ApiResource(
@@ -32,6 +33,13 @@ use App\Controller\User\DeleteUserController;
             controller: GetCurrentUserController::class,
             security: 'is_granted("ROLE_USER")',
             securityMessage: 'Only authenticated users can access this resource.',
+        ),
+        new Put(
+            uriTemplate: '/users/me/reset_password',
+            name: 'user_reset_password',
+            security: 'is_granted("ROLE_USER")',
+            securityMessage: 'Only authenticated users can access this resource.',
+            controller: ResetPasswordController::class,
         ),
         new Get(uriTemplate: '/users/{id}', name: 'user_get', normalizationContext: ['groups' => ['user:read']]),
         new Post(
@@ -216,6 +224,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function hashPassword(string $password): string
     {
         return password_hash($password, PASSWORD_BCRYPT);
+    }
+
+    public function verifyPassword(string $password): bool
+    {
+        return password_verify($password, $this->password);
     }
 
     public function setPassword(string $password): self
